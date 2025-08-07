@@ -1,0 +1,32 @@
+tsp_evolutionary/
+│
+├── code/
+│   ├── __init__.py
+│   ├── tsp.py                 # Exercise 1: TSP problem representation
+│   ├── local_search.py        # Exercise 2: Local search algorithms
+│   ├── individual.py          # Exercise 3: Individual representation
+│   ├── population.py          # Exercise 3: Population representation
+│   ├── mutations.py           # Exercise 4: Mutation operators
+│   ├── crossovers.py          # Exercise 4: Crossover operators
+│   ├── selection.py           # Exercise 5: Selection methods
+│   ├── evolutionary.py        # Exercise 6: EA implementations
+│   ├── inverover.py           # Exercise 7: Inver-over algorithm
+│   ├── experiments.py         # Running experiments
+│   └── utils.py               # Helper functions
+│
+├── data/                      
+│   └── [TSP files]
+│
+├── results/
+│   ├── local_search.txt
+│   ├── local_search_analysis.txt
+│   ├── your_EA.txt
+│   ├── inverover.txt
+│   └── your_EA_inverover_comparison.txt
+│
+├── doc/
+│   ├── readme.txt
+│   ├── team_contributions.txt
+│   └── algorithm_design.txt
+│
+└── main.py                    # Main Python script
