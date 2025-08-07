@@ -1,4 +1,2 @@
-"Crossover file worked on by xxx"
-
-# Any helper functions
+# Any helper functions - Please note name / ID if written a function here
 
