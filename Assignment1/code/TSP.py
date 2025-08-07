@@ -1,4 +1,5 @@
 import math
+import random
 
 class TSP:
     def __init__(self, filepath):
@@ -39,3 +40,7 @@ class TSP:
             length += self.euclidian_distance(tour[i], tour[i + 1])
         length += self.euclidian_distance(tour[-1], tour[0])
         return length
+
+    # Generate a random tour.
+    def random_tour(self):
+        return random.sample(self.location_ids, len(self.location_ids))
