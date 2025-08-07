@@ -7,17 +7,17 @@ tsp_evolutionary/
 ^^^ group / starting files -- Murad
 │   ├── individual.py          # Exercise 3: Individual representation
 │   ├── population.py          # Exercise 3: Population representation
-xxx
+^^^ xxx
 │   ├── mutations.py           # Exercise 4: Mutation operators
-Tyler
+^^^ Tyler
 │   ├── crossovers.py          # Exercise 4: Crossover operators
-Darcy
+^^^ Darcy
 │   ├── selection.py           # Exercise 5: Selection methods
-xxx
+^^^ Ian
 │   ├── evolutionary.py        # Exercise 6: EA implementations
-xxx
+^^^ xxx
 │   ├── inverover.py           # Exercise 7: Inver-over algorithm
-xxx
+^^^ xxx
 ^^^^^^ split between group members
 │   ├── experiments.py         # Running experiments
 │   └── utils.py               # Helper functions
