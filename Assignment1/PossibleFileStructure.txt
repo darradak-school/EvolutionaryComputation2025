@@ -4,21 +4,28 @@ tsp_evolutionary/
 │   ├── __init__.py
 │   ├── tsp.py                 # Exercise 1: TSP problem representation
 │   ├── local_search.py        # Exercise 2: Local search algorithms
-^^^ group / starting files -- Murad
+|^^^ Murad ^^^
+|
 │   ├── individual.py          # Exercise 3: Individual representation
 │   ├── population.py          # Exercise 3: Population representation
-^^^ xxx
+|^^^ Jerry / Carol ^^^
+|
 │   ├── mutations.py           # Exercise 4: Mutation operators
-^^^ Tyler
+|^^^ Tyler (mutations.py) ^^^
+|
 │   ├── crossovers.py          # Exercise 4: Crossover operators
-^^^ Darcy
+|^^^ Darcy (crossovers.py) ^^^
+|
 │   ├── selection.py           # Exercise 5: Selection methods
-^^^ Ian
+|^^^ Ian (selection.py) ^^^
+|
 │   ├── evolutionary.py        # Exercise 6: EA implementations
-^^^ xxx
+|^^^ xxx
+|
 │   ├── inverover.py           # Exercise 7: Inver-over algorithm
-^^^ xxx
-^^^^^^ split between group members
+|^^^ xxx
+|^^^^^^ split between group members
+|
 │   ├── experiments.py         # Running experiments
 │   └── utils.py               # Helper functions
 │
