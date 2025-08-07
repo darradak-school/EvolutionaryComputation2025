@@ -13,7 +13,7 @@ tsp_evolutionary/
 │   ├── crossovers.py          # Exercise 4: Crossover operators
 ^^^ Darcy
 │   ├── selection.py           # Exercise 5: Selection methods
-^^^ Ian
+^^^ Ian (selection.py)
 │   ├── evolutionary.py        # Exercise 6: EA implementations
 ^^^ xxx
 │   ├── inverover.py           # Exercise 7: Inver-over algorithm
