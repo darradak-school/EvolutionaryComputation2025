@@ -27,9 +27,20 @@ def insert_mutation(tour):
 # swap positions. I.e. exchange 
 
 def swap_mutation(tour):
+
     i, j = random.sample(range(len(tour)), 2)
     tour[i], tour[j] = tour[j], tour[i]
     return tour
 
 # inversion: pick two alleles at random, invert substring (inclusive)
 # preserves adjacency info, disruptive to order. 
+
+def inversion_mutation(tour):
+    i, j = sorted(random.sample(range(len(tour)), 2))
+    mutated = tour[:]
+    # Reverse the slice in place
+    while i < j:
+        mutated[i], mutated[j] = mutated[j], mutated[i]
+        i += 1
+        j -= 1
+    return mutated
