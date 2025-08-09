@@ -1,31 +1,35 @@
 # Mutations file to be completed by Tyler
 
+import random
+
 
 # insert: pick two random alleles, move second to follow first.
 # shift rest along. preserves order and adjacency info. 
 
-def insert(self, tour, i,  j):
-    if i == j:              # no change if i, j are equal
-        return tour[:]
-    if i > j:               # Validate which is first and which is second. 
-        i, j = j, i
+def insert_mutation(tour):
+    i, j = random.sample(range(len(tour)), 2)
     new_tour = tour[:]
-    city = new_tour.pop(j)
-    insert_index = (i + 1) % len(new_tour)
-    new_tour.insert(insert_index, city)
-    
+
+    if i > j:
+        to_move = new_tour.pop(i)
+        insert_pos = j + 1
+    else:
+        to_move = new_tour.pop(j)
+        insert_pos = i + 1
+
+    new_tour.insert(insert_pos, to_move)
+
+    return new_tour, i, j
+
 
 
 # swap: pick two alleles at random.
 # swap positions. I.e. exchange 
 
-def swap(self, tour, i, j):
-    if i == j:    
-        return tour[:] # no change if same position
-    new_tour = tour[:]
-    new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
-    return new_tour
+def swap_mutation(tour):
+    i, j = random.sample(range(len(tour)), 2)
+    tour[i], tour[j] = tour[j], tour[i]
+    return tour
 
 # inversion: pick two alleles at random, invert substring (inclusive)
 # preserves adjacency info, disruptive to order. 
-
