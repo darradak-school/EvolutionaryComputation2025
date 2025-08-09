@@ -2,3 +2,260 @@
 Averages and minimum results found by the local search algorithm, using the jump, exchange, and 2-opt methods.
 Shows cycles taken to reach final result, using two different tactics, first-improvement and best-improvement.
 
+
+######### eil51 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 1329.91 | First-improvement: 1375.25
+== Exchange ==
+Best-improvement: 1151.30 | First-improvement: 1069.16
+== 2-opt ==
+Best-improvement: 1050.50 | First-improvement: 1165.50
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 946.03 | First-improvement: 1075.35
+== Exchange ==
+Best-improvement: 820.84 | First-improvement: 761.22
+== 2-opt ==
+Best-improvement: 741.71 | First-improvement: 815.26
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 31.07 | First-improvement cycles: 28.00
+Best-improvement time: 0.01s | First-improvement time: 0.00s
+== Exchange ==
+Best-improvement cycles: 55.23 | First-improvement cycles: 60.53
+Best-improvement time: 0.01s | First-improvement time: 0.00s
+== 2-opt ==
+Best-improvement cycles: 54.80 | First-improvement cycles: 39.77
+Best-improvement time: 0.01s | First-improvement time: 0.00s
+
+######### st70 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 2955.52 | First-improvement: 3180.62
+== Exchange ==
+Best-improvement: 2327.60 | First-improvement: 2149.12
+== 2-opt ==
+Best-improvement: 2378.21 | First-improvement: 2593.18
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 1949.06 | First-improvement: 2416.23
+== Exchange ==
+Best-improvement: 1492.45 | First-improvement: 1500.47
+== 2-opt ==
+Best-improvement: 1712.25 | First-improvement: 1802.28
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 41.67 | First-improvement cycles: 30.70
+Best-improvement time: 0.01s | First-improvement time: 0.00s
+== Exchange ==
+Best-improvement cycles: 90.13 | First-improvement cycles: 103.87
+Best-improvement time: 0.03s | First-improvement time: 0.01s
+== 2-opt ==
+Best-improvement cycles: 70.50 | First-improvement cycles: 52.93
+Best-improvement time: 0.02s | First-improvement time: 0.01s
+
+######### eil76 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 1979.98 | First-improvement: 2224.70
+== Exchange ==
+Best-improvement: 1719.21 | First-improvement: 1632.44
+== 2-opt ==
+Best-improvement: 1620.79 | First-improvement: 1786.16
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 1459.86 | First-improvement: 1836.23
+== Exchange ==
+Best-improvement: 1081.89 | First-improvement: 1042.75
+== 2-opt ==
+Best-improvement: 1038.58 | First-improvement: 1324.95
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 54.57 | First-improvement cycles: 34.73
+Best-improvement time: 0.02s | First-improvement time: 0.00s
+== Exchange ==
+Best-improvement cycles: 94.87 | First-improvement cycles: 108.90
+Best-improvement time: 0.04s | First-improvement time: 0.01s
+== 2-opt ==
+Best-improvement cycles: 89.97 | First-improvement cycles: 65.10
+Best-improvement time: 0.04s | First-improvement time: 0.01s
+
+######### kroA100 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 133726.92 | First-improvement: 152339.42
+== Exchange ==
+Best-improvement: 97976.70 | First-improvement: 91425.22
+== 2-opt ==
+Best-improvement: 101362.69 | First-improvement: 110189.21
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 93162.04 | First-improvement: 122828.52
+== Exchange ==
+Best-improvement: 50852.39 | First-improvement: 57839.77
+== 2-opt ==
+Best-improvement: 58465.02 | First-improvement: 71550.29
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 69.50 | First-improvement cycles: 47.20
+Best-improvement time: 0.05s | First-improvement time: 0.01s
+== Exchange ==
+Best-improvement cycles: 194.23 | First-improvement cycles: 208.03
+Best-improvement time: 0.13s | First-improvement time: 0.04s
+== 2-opt ==
+Best-improvement cycles: 122.20 | First-improvement cycles: 98.17
+Best-improvement time: 0.09s | First-improvement time: 0.02s
+
+######### kroC100 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 136594.47 | First-improvement: 150083.37
+== Exchange ==
+Best-improvement: 102798.66 | First-improvement: 98140.53
+== 2-opt ==
+Best-improvement: 108200.09 | First-improvement: 120466.83
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 78924.51 | First-improvement: 116383.68
+== Exchange ==
+Best-improvement: 60327.23 | First-improvement: 51629.59
+== 2-opt ==
+Best-improvement: 61869.32 | First-improvement: 68736.73
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 64.00 | First-improvement cycles: 50.87
+Best-improvement time: 0.04s | First-improvement time: 0.01s
+== Exchange ==
+Best-improvement cycles: 169.70 | First-improvement cycles: 178.60
+Best-improvement time: 0.11s | First-improvement time: 0.04s
+== 2-opt ==
+Best-improvement cycles: 106.17 | First-improvement cycles: 77.87
+Best-improvement time: 0.07s | First-improvement time: 0.01s
+
+######### kroD100 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 124615.91 | First-improvement: 144910.29
+== Exchange ==
+Best-improvement: 97621.09 | First-improvement: 85464.04
+== 2-opt ==
+Best-improvement: 97415.72 | First-improvement: 106849.53
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 85238.25 | First-improvement: 125601.70
+== Exchange ==
+Best-improvement: 56606.80 | First-improvement: 57358.51
+== 2-opt ==
+Best-improvement: 64560.97 | First-improvement: 77725.65
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 74.83 | First-improvement cycles: 43.43
+Best-improvement time: 0.05s | First-improvement time: 0.00s
+== Exchange ==
+Best-improvement cycles: 168.63 | First-improvement cycles: 209.50
+Best-improvement time: 0.11s | First-improvement time: 0.05s
+== 2-opt ==
+Best-improvement cycles: 123.87 | First-improvement cycles: 97.93
+Best-improvement time: 0.09s | First-improvement time: 0.02s
+
+######### eil101 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 2722.30 | First-improvement: 3079.33
+== Exchange ==
+Best-improvement: 2289.55 | First-improvement: 1931.54
+== 2-opt ==
+Best-improvement: 2113.79 | First-improvement: 2326.85
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 2024.60 | First-improvement: 2680.97
+== Exchange ==
+Best-improvement: 1453.34 | First-improvement: 1253.43
+== 2-opt ==
+Best-improvement: 1510.32 | First-improvement: 1636.05
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 70.87 | First-improvement cycles: 38.77
+Best-improvement time: 0.05s | First-improvement time: 0.00s
+== Exchange ==
+Best-improvement cycles: 144.80 | First-improvement cycles: 193.67
+Best-improvement time: 0.10s | First-improvement time: 0.04s
+== 2-opt ==
+Best-improvement cycles: 122.03 | First-improvement cycles: 91.57
+Best-improvement time: 0.09s | First-improvement time: 0.02s
+
+######### lin105 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 94850.49 | First-improvement: 108891.23
+== Exchange ==
+Best-improvement: 69804.94 | First-improvement: 60315.86
+== 2-opt ==
+Best-improvement: 69572.01 | First-improvement: 82072.20
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 67915.90 | First-improvement: 90912.17
+== Exchange ==
+Best-improvement: 41924.53 | First-improvement: 37716.74
+== 2-opt ==
+Best-improvement: 44495.67 | First-improvement: 57639.62
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 76.40 | First-improvement cycles: 52.73
+Best-improvement time: 0.06s | First-improvement time: 0.01s
+== Exchange ==
+Best-improvement cycles: 216.67 | First-improvement cycles: 250.57
+Best-improvement time: 0.16s | First-improvement time: 0.06s
+== 2-opt ==
+Best-improvement cycles: 152.87 | First-improvement cycles: 100.47
+Best-improvement time: 0.12s | First-improvement time: 0.02s
+
+######### pcb442 #########
+===== MEAN =====
+== Jump ==
+Best-improvement: 617485.34 | First-improvement: 708031.18
+== Exchange ==
+Best-improvement: 378164.43 | First-improvement: 360783.15
+== 2-opt ==
+Best-improvement: 467976.36 | First-improvement: 515476.35
+===== MINIMUM =====
+== Jump ==
+Best-improvement: 424180.61 | First-improvement: 577175.65
+== Exchange ==
+Best-improvement: 197537.53 | First-improvement: 185562.91
+== 2-opt ==
+Best-improvement: 289340.57 | First-improvement: 330123.17
+===== MEAN TIMES =====
+== Jump ==
+Best-improvement cycles: 282.10 | First-improvement cycles: 212.87
+Best-improvement time: 4.26s | First-improvement time: 0.23s
+== Exchange ==
+Best-improvement cycles: 1654.57 | First-improvement cycles: 1705.60
+Best-improvement time: 24.83s | First-improvement time: 6.57s
+== 2-opt ==
+Best-improvement cycles: 631.73 | First-improvement cycles: 456.17
+Best-improvement time: 9.74s | First-improvement time: 0.94s
+
+######### pr2392 #########
+===== MEAN =====
+== Jump ==
+First-improvement: 14841027.59
+== Exchange ==
+First-improvement: 14184516.87
+== 2-opt ==
+First-improvement: 13508397.03
+===== MINIMUM =====
+== Jump ==
+First-improvement: 14368320.92
+== Exchange ==
+First-improvement: 13727683.42
+== 2-opt ==
+First-improvement: 12805328.29
+===== MEAN TIMES =====
+== Jump ==
+First-improvement cycles: 366.70 | First-improvement time: 7.63s
+== Exchange ==
+First-improvement cycles: 995.83 | First-improvement time: 33.75s
+== 2-opt ==
+First-improvement cycles: 812.03 | First-improvement time: 25.54s

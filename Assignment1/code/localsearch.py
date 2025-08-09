@@ -1,4 +1,3 @@
-from tsp import TSP
 import time
 
 class LocalSearch:
@@ -35,8 +34,9 @@ class LocalSearch:
     def neighbourhood(self, tour, search_type, max_neighbours = None):
         neighbours = []
         n = len(tour)
+        # If no max neighbours is provided, set it to infinity.
         if max_neighbours is None:
-            max_neighbours = n
+            max_neighbours = float('inf')
         if search_type == 'exchange':
             for i in range(n):
                 for j in range(i + 1, n):
@@ -66,8 +66,8 @@ class LocalSearch:
         return neighbours
 
     # Find the best neighbour using the tour length.
-    def best(self, tour, search_type, tsp):
-        neighbours = self.neighbourhood(tour, search_type)
+    def best(self, tour, search_type, tsp, max_neighbours=None):
+        neighbours = self.neighbourhood(tour, search_type, max_neighbours)
         tour_score = tsp.tour_length(tour)
         best_tour = tour
         for n_tour in neighbours:
@@ -77,8 +77,8 @@ class LocalSearch:
         return best_tour
 
     # Find the first better neighbour using the tour length, returns the first better neighbour.
-    def first(self, tour, search_type, tsp):
-        neighbours = self.neighbourhood(tour, search_type)
+    def first(self, tour, search_type, tsp, max_neighbours=None):
+        neighbours = self.neighbourhood(tour, search_type, max_neighbours)
         tour_score = tsp.tour_length(tour)
         for n_tour in neighbours:
             n_score = tsp.tour_length(n_tour)
@@ -87,15 +87,15 @@ class LocalSearch:
         return tour
 
     # Run the local search algorithm until no better neighbour is found, tracks cycles taken. Can be limited to a certain number of cycles.
-    def local_search(self, tour, search_type, search_method, tsp, limit=None):
+    def local_search(self, tour, search_type, search_method, tsp, limit=None, max_neighbours=None):
         start_time = time.time()
         cycles_taken = 0
         current_tour = tour
         while True:
             if search_method == 'best':
-                best_neighbour = self.best(current_tour, search_type, tsp)
+                best_neighbour = self.best(current_tour, search_type, tsp, max_neighbours)
             elif search_method == 'first':
-                best_neighbour = self.first(current_tour, search_type, tsp)
+                best_neighbour = self.first(current_tour, search_type, tsp, max_neighbours)
             if best_neighbour == current_tour:
                 return current_tour, cycles_taken, time.time() - start_time
             current_tour = best_neighbour

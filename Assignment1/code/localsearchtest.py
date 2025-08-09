@@ -3,12 +3,13 @@ from tsp import TSP
 import time
 
 # List of problems to test.
-problems = ["eil51", "st70", "eil76", "kroA100", "korC100", "kroD100", "eil101", "lin105", "pcb442", "pr2392", "usa13509"]
+problems = ["eil51", "st70", "eil76", "kroA100", "kroC100", "kroD100", "eil101", "lin105", "pcb442", "pr2392", "usa13509"]
 
 # Initialize the local search algorithm.
 local_search = LocalSearch()
 
 for problem in problems:
+    print(f"Running {problem}...")
     tsp = TSP(f"tsplib/{problem}.tsp")
     location_count = len(tsp.location_ids)
 
@@ -63,12 +64,12 @@ for problem in problems:
 
         # Run local search with best and first improvement for each search type. Only running best if locations are less than 1000.
         if location_count < 1000:
-            local_search_best_jump = local_search.local_search(random_tour, 'jump', 'best', tsp, max_cycles)
-            local_search_best_exchange = local_search.local_search(random_tour, 'exchange', 'best', tsp, max_cycles)
-            local_search_best_2opt = local_search.local_search(random_tour, 'two_opt', 'best', tsp, max_cycles)
-        local_search_first_jump = local_search.local_search(random_tour, 'jump', 'first', tsp, max_cycles)
-        local_search_first_exchange = local_search.local_search(random_tour, 'exchange', 'first', tsp, max_cycles)
-        local_search_first_2opt = local_search.local_search(random_tour, 'two_opt', 'first', tsp, max_cycles)
+            local_search_best_jump = local_search.local_search(random_tour, 'jump', 'best', tsp, max_cycles, max_neighbours)
+            local_search_best_exchange = local_search.local_search(random_tour, 'exchange', 'best', tsp, max_cycles, max_neighbours)
+            local_search_best_2opt = local_search.local_search(random_tour, 'two_opt', 'best', tsp, max_cycles, max_neighbours)
+        local_search_first_jump = local_search.local_search(random_tour, 'jump', 'first', tsp, max_cycles, max_neighbours)
+        local_search_first_exchange = local_search.local_search(random_tour, 'exchange', 'first', tsp, max_cycles, max_neighbours)
+        local_search_first_2opt = local_search.local_search(random_tour, 'two_opt', 'first', tsp, max_cycles, max_neighbours)
 
         # Tracking minimum tour length for each search type
         if location_count < 1000:
