@@ -31,27 +31,37 @@ class LocalSearch:
         new_tour = tour[:i] + tour[i:j+1][::-1] + tour[j+1:]
         return new_tour
     
-    # Generate a list of neighbours based on the search type.
-    def neighbourhood(self, tour, search_type):
+    # Generate a list of neighbours based on the search type. Can be limited to a certain number of neighbours.
+    def neighbourhood(self, tour, search_type, max_neighbours = None):
         neighbours = []
         n = len(tour)
+        if max_neighbours is None:
+            max_neighbours = n
         if search_type == 'exchange':
             for i in range(n):
                 for j in range(i + 1, n):
+                    if len(neighbours) >= max_neighbours:
+                        return neighbours
                     neighbours.append(self.exchange(tour, i, j))
         elif search_type == 'jump':
             for i in range(n):
                 for j in range(i + 1, n):
+                    if len(neighbours) >= max_neighbours:
+                        return neighbours
                     neighbours.append(self.jump(tour, i, j))
         elif search_type == 'inversion':
             for i in range(n):
                 for j in range(i + 1, n):
+                    if len(neighbours) >= max_neighbours:
+                        return neighbours
                     neighbours.append(self.inversion(tour, i, j))
         elif search_type == 'two_opt':
             for i in range(n):
                 for j in range(i + 1, n):
                     # Avoid invalid two-opt moves, adjacent edges or inverting the entire tour.
                     if j - i > 1 and not (i == 0 and j == n - 1):
+                        if len(neighbours) >= max_neighbours:
+                            return neighbours
                         neighbours.append(self.two_opt(tour, i, j))
         return neighbours
 
