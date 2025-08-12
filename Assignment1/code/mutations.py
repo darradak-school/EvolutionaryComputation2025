@@ -4,7 +4,8 @@ import random
 
 
 # insert: pick two random alleles, move second to follow first.
-# shift rest along. preserves order and adjacency info. 
+# shift rest along. preserves order and adjacency info.
+# For TSP, this will swap to elements in a tour.  
 
 def insert_mutation(tour):
     i, j = random.sample(range(len(tour)), 2)
@@ -25,6 +26,7 @@ def insert_mutation(tour):
 
 # swap: pick two alleles at random.
 # swap positions. I.e. exchange 
+# For TSP, this will swap two cities in tour
 
 def swap_mutation(tour):
 
@@ -34,6 +36,7 @@ def swap_mutation(tour):
 
 # inversion: pick two alleles at random, invert substring (inclusive)
 # preserves adjacency info, disruptive to order. 
+# For TSP, this will reverse a segment of the tour
 
 def inversion_mutation(tour):
     i, j = sorted(random.sample(range(len(tour)), 2))
