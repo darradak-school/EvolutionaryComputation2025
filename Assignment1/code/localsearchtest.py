@@ -2,194 +2,100 @@ from localsearch import LocalSearch
 from tsp import TSP
 import time
 
-# List of problems to test.
-problems = ["eil51", "st70", "eil76", "kroA100", "kroC100", "kroD100", "eil101", "lin105", "pcb442", "pr2392", "usa13509"]
+### CONFIGURATION VARIABLES ###
+PROBLEMS = [
+    "eil51",
+    "st70",
+    "eil76",
+    "kroA100",
+    "kroC100",
+    "kroD100",
+    "eil101",
+    "lin105",
+    "pcb442",
+    "pr2392",
+    "usa13509",
+]  # Problems to test.
 
-# Initialize the local search algorithm.
-local_search = LocalSearch()
+TYPES = ["jump", "exchange", "two_opt"]  # Search types to test.
+INSTANCES = 30  # Number of instances to run for each problem.
+STAG_LIMIT = 10000  # Max number of cycles without an improvement before stopping.
 
-for problem in problems:
+### SIMULATED ANNEALING VARIABLES ###
+COOLING = 0.9999  # How fast to cool the temp, 1.0 disables cooling.
+TARGET = 0.3  # Target chance to accept for an average tour with apositive diff.
+
+
+# Calculate statistics for results.
+def calc(data_list):
+    values = [r[0] for r in data_list]
+    cycles = [r[1] for r in data_list]
+    times = [r[2] for r in data_list]
+    return (
+        sum(values) / len(values),  # Mean tour length.
+        min(values),  # Minimum tour length.
+        sum(cycles) / len(cycles),  # Mean number of cycles.
+        sum(times) / len(times),  # Mean time taken.
+    )
+
+
+# Write results to file.
+def write_results(file, section_name, results, search_types):
+    file.write(f"===== {section_name} =====\n")
+    for search_type in search_types:
+        data = results[search_type]
+        avg, min_v, avg_cycles, avg_time = calc(data)
+        if section_name == "MEAN":
+            file.write(f"{search_type.title()}: {avg:.2f}\n")
+        elif section_name == "MINIMUM":
+            file.write(f"{search_type.title()}: {min_v:.2f}\n")
+        elif section_name == "MEAN TIMES":
+            file.write(f"{search_type.title()} cycles: {avg_cycles:.2f}\n")
+            file.write(f"{search_type.title()} time: {avg_time:.2f}s\n")
+            file.write("---------------------\n")
+
+
+# Run tests on all problems.
+for problem in PROBLEMS:
+    start = time.time()
     print(f"Running {problem}...")
+
+    # Create the problem instance.
     tsp = TSP(f"tsplib/{problem}.tsp")
     location_count = len(tsp.location_ids)
 
-    # Scaling max number of cycles and max number of neighbours based on location count.
-    if location_count > 1000:
-        max_cycles = 1000
-        max_neighbours = 1000
-    else:
-        max_cycles = None
-        max_neighbours = None
+    # Create random tours to get average unoptimised tour length.
+    tours = []
+    for i in range(10):
+        t = tsp.random_tour()
+        tours.append(tsp.tour_length(t))
 
-    # Initialize variables to track minimum and average tour lengths.
-    min_jump_best = float('inf')
-    min_jump_first = float('inf')
-    min_exchange_best = float('inf')
-    min_exchange_first = float('inf')
-    min_2opt_best = float('inf')
-    min_2opt_first = float('inf')
-    # Total tour lengths for calculating average
-    total_jump_best = 0
-    total_jump_first = 0
-    total_exchange_best = 0
-    total_exchange_first = 0
-    total_2opt_best = 0
-    total_2opt_first = 0
-    # Total cycle times for calculating average
-    total_jump_best_cycles = 0
-    total_jump_first_cycles = 0
-    total_exchange_best_cycles = 0
-    total_exchange_first_cycles = 0
-    total_2opt_best_cycles = 0
-    total_2opt_first_cycles = 0
-    # Total time taken for each search type
-    total_jump_best_time = 0
-    total_jump_first_time = 0
-    total_exchange_best_time = 0
-    total_exchange_first_time = 0
-    total_2opt_best_time = 0
-    total_2opt_first_time = 0
+    # Results dictionary for each search type.
+    results = {search_type: [] for search_type in TYPES}
 
-    # Start time tracker
-    start_time = time.time()
+    # Create local search object.
+    local_search = LocalSearch()
 
-    # Running local search with best and first improvement 30 times, using exchange, jump, and 2-opt.
-    # Tracking minimum and average tour lengths and cycle times for each search type.
-    for i in range(30):
-        # Generate a random tour.
-        random_tour = tsp.random_tour()
+    for search_type in TYPES:
+        # Run a few times to get average results.
+        for i in range(INSTANCES):
+            r_tour = tsp.random_tour()  # Create a random starting tour.
+            result = local_search.search(
+                r_tour, search_type, tsp, COOLING, TARGET, STAG_LIMIT
+            )
+            # Append the result to the results dictionary.
+            tour_length = tsp.tour_length(result[0])
+            results[search_type].append((tour_length, result[1], result[2]))
 
-        # Iteration tracker
-        print(f"Iteration {i + 1} of 30")
+    print(f"Time taken: {time.time() - start:.2f} seconds")
 
-        # Run local search with best and first improvement for each search type. Only running best if locations are less than 1000.
-        if location_count < 1000:
-            local_search_best_jump = local_search.local_search(random_tour, 'jump', 'best', tsp, max_cycles, max_neighbours)
-            local_search_best_exchange = local_search.local_search(random_tour, 'exchange', 'best', tsp, max_cycles, max_neighbours)
-            local_search_best_2opt = local_search.local_search(random_tour, 'two_opt', 'best', tsp, max_cycles, max_neighbours)
-        local_search_first_jump = local_search.local_search(random_tour, 'jump', 'first', tsp, max_cycles, max_neighbours)
-        local_search_first_exchange = local_search.local_search(random_tour, 'exchange', 'first', tsp, max_cycles, max_neighbours)
-        local_search_first_2opt = local_search.local_search(random_tour, 'two_opt', 'first', tsp, max_cycles, max_neighbours)
+    # Calculate average unoptimised tour length.
+    baseline_avg = sum(tours) / len(tours)
 
-        # Tracking minimum tour length for each search type
-        if location_count < 1000:
-            if tsp.tour_length(local_search_best_jump[0]) < min_jump_best:
-                min_jump_best = tsp.tour_length(local_search_best_jump[0])
-            if tsp.tour_length(local_search_best_exchange[0]) < min_exchange_best:
-                min_exchange_best = tsp.tour_length(local_search_best_exchange[0])
-            if tsp.tour_length(local_search_best_2opt[0]) < min_2opt_best:
-                min_2opt_best = tsp.tour_length(local_search_best_2opt[0])
-        if tsp.tour_length(local_search_first_jump[0]) < min_jump_first:
-            min_jump_first = tsp.tour_length(local_search_first_jump[0])
-        if tsp.tour_length(local_search_first_exchange[0]) < min_exchange_first:
-            min_exchange_first = tsp.tour_length(local_search_first_exchange[0])
-        if tsp.tour_length(local_search_first_2opt[0]) < min_2opt_first:
-            min_2opt_first = tsp.tour_length(local_search_first_2opt[0])
-        
-        # Tracking total tour length for each search type
-        if location_count < 1000:
-            total_jump_best += tsp.tour_length(local_search_best_jump[0])
-            total_exchange_best += tsp.tour_length(local_search_best_exchange[0])
-            total_2opt_best += tsp.tour_length(local_search_best_2opt[0])
-        total_jump_first += tsp.tour_length(local_search_first_jump[0])
-        total_exchange_first += tsp.tour_length(local_search_first_exchange[0])
-        total_2opt_first += tsp.tour_length(local_search_first_2opt[0])
-
-        # Tracking total cycle times for each search type
-        if location_count < 1000:
-            total_jump_best_cycles += local_search_best_jump[1]
-            total_exchange_best_cycles += local_search_best_exchange[1]
-            total_2opt_best_cycles += local_search_best_2opt[1]
-        total_jump_first_cycles += local_search_first_jump[1]
-        total_exchange_first_cycles += local_search_first_exchange[1]
-        total_2opt_first_cycles += local_search_first_2opt[1]
-
-        # Tracking total time taken for each search type
-        if location_count < 1000:
-            total_jump_best_time += local_search_best_jump[2]
-            total_exchange_best_time += local_search_best_exchange[2]
-            total_2opt_best_time += local_search_best_2opt[2]
-        total_jump_first_time += local_search_first_jump[2]
-        total_exchange_first_time += local_search_first_exchange[2]
-        total_2opt_first_time += local_search_first_2opt[2]
-
-        # Print time taken for each iteration
-        print(f'time taken: {time.time() - start_time:.2f} seconds')
-
-    # Calculate average tour length for each search type
-    if location_count < 1000:
-        avg_jump_best = total_jump_best / (i + 1)
-        avg_exchange_best = total_exchange_best / (i + 1)
-        avg_2opt_best = total_2opt_best / (i + 1)
-    avg_jump_first = total_jump_first / (i + 1)
-    avg_exchange_first = total_exchange_first / (i + 1)
-    avg_2opt_first = total_2opt_first / (i + 1)
-
-    # Calculate average cycle time for each search type
-    if location_count < 1000:
-        avg_jump_best_cycles = total_jump_best_cycles / (i + 1)
-        avg_exchange_best_cycles = total_exchange_best_cycles / (i + 1)
-        avg_2opt_best_cycles = total_2opt_best_cycles / (i + 1)
-    avg_jump_first_cycles = total_jump_first_cycles / (i + 1)
-    avg_exchange_first_cycles = total_exchange_first_cycles / (i + 1)
-    avg_2opt_first_cycles = total_2opt_first_cycles / (i + 1)
-
-    # Calculate average time taken for each search type
-    if location_count < 1000:
-        avg_jump_best_time = total_jump_best_time / (i + 1)
-        avg_exchange_best_time = total_exchange_best_time / (i + 1)
-        avg_2opt_best_time = total_2opt_best_time / (i + 1)
-    avg_jump_first_time = total_jump_first_time / (i + 1)
-    avg_exchange_first_time = total_exchange_first_time / (i + 1)
-    avg_2opt_first_time = total_2opt_first_time / (i + 1)
-
-    # Print results to local_search.txt
+    # Write results to file.
     with open("../results/local_search.txt", "a") as file:
         file.write(f"\n######### {problem} #########\n")
-        if location_count < 1000:
-            file.write(f"===== MEAN =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"Best-improvement: {avg_jump_best:.2f} | First-improvement: {avg_jump_first:.2f}\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"Best-improvement: {avg_exchange_best:.2f} | First-improvement: {avg_exchange_first:.2f}\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"Best-improvement: {avg_2opt_best:.2f} | First-improvement: {avg_2opt_first:.2f}\n")
-            file.write(f"===== MINIMUM =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"Best-improvement: {min_jump_best:.2f} | First-improvement: {min_jump_first:.2f}\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"Best-improvement: {min_exchange_best:.2f} | First-improvement: {min_exchange_first:.2f}\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"Best-improvement: {min_2opt_best:.2f} | First-improvement: {min_2opt_first:.2f}\n")
-            file.write(f"===== MEAN TIMES =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"Best-improvement cycles: {avg_jump_best_cycles:.2f} | First-improvement cycles: {avg_jump_first_cycles:.2f}\n")
-            file.write(f"Best-improvement time: {avg_jump_best_time:.2f}s | First-improvement time: {avg_jump_first_time:.2f}s\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"Best-improvement cycles: {avg_exchange_best_cycles:.2f} | First-improvement cycles: {avg_exchange_first_cycles:.2f}\n")
-            file.write(f"Best-improvement time: {avg_exchange_best_time:.2f}s | First-improvement time: {avg_exchange_first_time:.2f}s\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"Best-improvement cycles: {avg_2opt_best_cycles:.2f} | First-improvement cycles: {avg_2opt_first_cycles:.2f}\n")
-            file.write(f"Best-improvement time: {avg_2opt_best_time:.2f}s | First-improvement time: {avg_2opt_first_time:.2f}s\n")
-        else:
-            file.write(f"===== MEAN =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"First-improvement: {avg_jump_first:.2f}\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"First-improvement: {avg_exchange_first:.2f}\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"First-improvement: {avg_2opt_first:.2f}\n")
-            file.write(f"===== MINIMUM =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"First-improvement: {min_jump_first:.2f}\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"First-improvement: {min_exchange_first:.2f}\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"First-improvement: {min_2opt_first:.2f}\n")
-            file.write(f"===== MEAN TIMES =====\n")
-            file.write(f"== Jump ==\n")
-            file.write(f"First-improvement cycles: {avg_jump_first_cycles:.2f} | First-improvement time: {avg_jump_first_time:.2f}s\n")
-            file.write(f"== Exchange ==\n")
-            file.write(f"First-improvement cycles: {avg_exchange_first_cycles:.2f} | First-improvement time: {avg_exchange_first_time:.2f}s\n")
-            file.write(f"== 2-opt ==\n")
-            file.write(f"First-improvement cycles: {avg_2opt_first_cycles:.2f} | First-improvement time: {avg_2opt_first_time:.2f}s\n")
+        file.write(f"Average tour length before optimisation: {baseline_avg:.2f}\n")
+        write_results(file, "MEAN", results, TYPES)
+        write_results(file, "MINIMUM", results, TYPES)
+        write_results(file, "MEAN TIMES", results, TYPES)

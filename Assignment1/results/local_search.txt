@@ -1,261 +1,234 @@
 ######### LOCAL SEARCH #########
-Averages and minimum results found by the local search algorithm, using the jump, exchange, and 2-opt methods.
-Shows cycles taken to reach final result, using two different tactics, first-improvement and best-improvement.
-
+Averages and minimum results found by the local search algorithm, and the mean time taken to obtain them
+Using the jump, exchange, and 2-opt methods.
 
 ######### eil51 #########
+Average tour length before optimisation: 1610.03
 ===== MEAN =====
-== Jump ==
-Best-improvement: 1329.91 | First-improvement: 1375.25
-== Exchange ==
-Best-improvement: 1151.30 | First-improvement: 1069.16
-== 2-opt ==
-Best-improvement: 1050.50 | First-improvement: 1165.50
+Jump: 452.78
+Exchange: 501.21
+Two_Opt: 456.01
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 946.03 | First-improvement: 1075.35
-== Exchange ==
-Best-improvement: 820.84 | First-improvement: 761.22
-== 2-opt ==
-Best-improvement: 741.71 | First-improvement: 815.26
+Jump: 431.67
+Exchange: 467.19
+Two_Opt: 441.01
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 31.07 | First-improvement cycles: 28.00
-Best-improvement time: 0.01s | First-improvement time: 0.00s
-== Exchange ==
-Best-improvement cycles: 55.23 | First-improvement cycles: 60.53
-Best-improvement time: 0.01s | First-improvement time: 0.00s
-== 2-opt ==
-Best-improvement cycles: 54.80 | First-improvement cycles: 39.77
-Best-improvement time: 0.01s | First-improvement time: 0.00s
+Jump cycles: 50702.00
+Jump time: 0.08s
+---------------------
+Exchange cycles: 45982.53
+Exchange time: 0.07s
+---------------------
+Two_Opt cycles: 36672.50
+Two_Opt time: 0.04s
+---------------------
 
 ######### st70 #########
+Average tour length before optimisation: 3735.33
 ===== MEAN =====
-== Jump ==
-Best-improvement: 2955.52 | First-improvement: 3180.62
-== Exchange ==
-Best-improvement: 2327.60 | First-improvement: 2149.12
-== 2-opt ==
-Best-improvement: 2378.21 | First-improvement: 2593.18
+Jump: 755.38
+Exchange: 908.55
+Two_Opt: 733.59
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 1949.06 | First-improvement: 2416.23
-== Exchange ==
-Best-improvement: 1492.45 | First-improvement: 1500.47
-== 2-opt ==
-Best-improvement: 1712.25 | First-improvement: 1802.28
+Jump: 697.10
+Exchange: 797.01
+Two_Opt: 700.14
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 41.67 | First-improvement cycles: 30.70
-Best-improvement time: 0.01s | First-improvement time: 0.00s
-== Exchange ==
-Best-improvement cycles: 90.13 | First-improvement cycles: 103.87
-Best-improvement time: 0.03s | First-improvement time: 0.01s
-== 2-opt ==
-Best-improvement cycles: 70.50 | First-improvement cycles: 52.93
-Best-improvement time: 0.02s | First-improvement time: 0.01s
+Jump cycles: 67239.37
+Jump time: 0.10s
+---------------------
+Exchange cycles: 61944.33
+Exchange time: 0.09s
+---------------------
+Two_Opt cycles: 47440.77
+Two_Opt time: 0.05s
+---------------------
 
 ######### eil76 #########
+Average tour length before optimisation: 2488.32
 ===== MEAN =====
-== Jump ==
-Best-improvement: 1979.98 | First-improvement: 2224.70
-== Exchange ==
-Best-improvement: 1719.21 | First-improvement: 1632.44
-== 2-opt ==
-Best-improvement: 1620.79 | First-improvement: 1786.16
+Jump: 599.26
+Exchange: 674.52
+Two_Opt: 596.54
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 1459.86 | First-improvement: 1836.23
-== Exchange ==
-Best-improvement: 1081.89 | First-improvement: 1042.75
-== 2-opt ==
-Best-improvement: 1038.58 | First-improvement: 1324.95
+Jump: 554.96
+Exchange: 609.27
+Two_Opt: 580.67
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 54.57 | First-improvement cycles: 34.73
-Best-improvement time: 0.02s | First-improvement time: 0.00s
-== Exchange ==
-Best-improvement cycles: 94.87 | First-improvement cycles: 108.90
-Best-improvement time: 0.04s | First-improvement time: 0.01s
-== 2-opt ==
-Best-improvement cycles: 89.97 | First-improvement cycles: 65.10
-Best-improvement time: 0.04s | First-improvement time: 0.01s
+Jump cycles: 65570.30
+Jump time: 0.10s
+---------------------
+Exchange cycles: 56620.00
+Exchange time: 0.08s
+---------------------
+Two_Opt cycles: 46435.27
+Two_Opt time: 0.05s
+---------------------
 
 ######### kroA100 #########
+Average tour length before optimisation: 175385.01
 ===== MEAN =====
-== Jump ==
-Best-improvement: 133726.92 | First-improvement: 152339.42
-== Exchange ==
-Best-improvement: 97976.70 | First-improvement: 91425.22
-== 2-opt ==
-Best-improvement: 101362.69 | First-improvement: 110189.21
+Jump: 25910.40
+Exchange: 34040.09
+Two_Opt: 23671.84
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 93162.04 | First-improvement: 122828.52
-== Exchange ==
-Best-improvement: 50852.39 | First-improvement: 57839.77
-== 2-opt ==
-Best-improvement: 58465.02 | First-improvement: 71550.29
+Jump: 22786.14
+Exchange: 30140.57
+Two_Opt: 22593.80
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 69.50 | First-improvement cycles: 47.20
-Best-improvement time: 0.05s | First-improvement time: 0.01s
-== Exchange ==
-Best-improvement cycles: 194.23 | First-improvement cycles: 208.03
-Best-improvement time: 0.13s | First-improvement time: 0.04s
-== 2-opt ==
-Best-improvement cycles: 122.20 | First-improvement cycles: 98.17
-Best-improvement time: 0.09s | First-improvement time: 0.02s
+Jump cycles: 89494.20
+Jump time: 0.13s
+---------------------
+Exchange cycles: 78900.77
+Exchange time: 0.12s
+---------------------
+Two_Opt cycles: 58720.33
+Two_Opt time: 0.06s
+---------------------
 
 ######### kroC100 #########
+Average tour length before optimisation: 168499.27
 ===== MEAN =====
-== Jump ==
-Best-improvement: 136594.47 | First-improvement: 150083.37
-== Exchange ==
-Best-improvement: 102798.66 | First-improvement: 98140.53
-== 2-opt ==
-Best-improvement: 108200.09 | First-improvement: 120466.83
+Jump: 25417.18
+Exchange: 34137.17
+Two_Opt: 23741.35
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 78924.51 | First-improvement: 116383.68
-== Exchange ==
-Best-improvement: 60327.23 | First-improvement: 51629.59
-== 2-opt ==
-Best-improvement: 61869.32 | First-improvement: 68736.73
+Jump: 22732.69
+Exchange: 28704.23
+Two_Opt: 22064.62
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 64.00 | First-improvement cycles: 50.87
-Best-improvement time: 0.04s | First-improvement time: 0.01s
-== Exchange ==
-Best-improvement cycles: 169.70 | First-improvement cycles: 178.60
-Best-improvement time: 0.11s | First-improvement time: 0.04s
-== 2-opt ==
-Best-improvement cycles: 106.17 | First-improvement cycles: 77.87
-Best-improvement time: 0.07s | First-improvement time: 0.01s
+Jump cycles: 90022.57
+Jump time: 0.13s
+---------------------
+Exchange cycles: 82879.37
+Exchange time: 0.12s
+---------------------
+Two_Opt cycles: 57448.13
+Two_Opt time: 0.06s
+---------------------
 
 ######### kroD100 #########
+Average tour length before optimisation: 163048.42
 ===== MEAN =====
-== Jump ==
-Best-improvement: 124615.91 | First-improvement: 144910.29
-== Exchange ==
-Best-improvement: 97621.09 | First-improvement: 85464.04
-== 2-opt ==
-Best-improvement: 97415.72 | First-improvement: 106849.53
+Jump: 25613.12
+Exchange: 33755.74
+Two_Opt: 23894.42
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 85238.25 | First-improvement: 125601.70
-== Exchange ==
-Best-improvement: 56606.80 | First-improvement: 57358.51
-== 2-opt ==
-Best-improvement: 64560.97 | First-improvement: 77725.65
+Jump: 23773.00
+Exchange: 28651.91
+Two_Opt: 22395.15
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 74.83 | First-improvement cycles: 43.43
-Best-improvement time: 0.05s | First-improvement time: 0.00s
-== Exchange ==
-Best-improvement cycles: 168.63 | First-improvement cycles: 209.50
-Best-improvement time: 0.11s | First-improvement time: 0.05s
-== 2-opt ==
-Best-improvement cycles: 123.87 | First-improvement cycles: 97.93
-Best-improvement time: 0.09s | First-improvement time: 0.02s
+Jump cycles: 90482.57
+Jump time: 0.13s
+---------------------
+Exchange cycles: 79237.43
+Exchange time: 0.12s
+---------------------
+Two_Opt cycles: 60380.70
+Two_Opt time: 0.07s
+---------------------
 
 ######### eil101 #########
+Average tour length before optimisation: 3477.11
 ===== MEAN =====
-== Jump ==
-Best-improvement: 2722.30 | First-improvement: 3079.33
-== Exchange ==
-Best-improvement: 2289.55 | First-improvement: 1931.54
-== 2-opt ==
-Best-improvement: 2113.79 | First-improvement: 2326.85
+Jump: 722.48
+Exchange: 846.41
+Two_Opt: 708.52
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 2024.60 | First-improvement: 2680.97
-== Exchange ==
-Best-improvement: 1453.34 | First-improvement: 1253.43
-== 2-opt ==
-Best-improvement: 1510.32 | First-improvement: 1636.05
+Jump: 686.62
+Exchange: 789.37
+Two_Opt: 690.91
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 70.87 | First-improvement cycles: 38.77
-Best-improvement time: 0.05s | First-improvement time: 0.00s
-== Exchange ==
-Best-improvement cycles: 144.80 | First-improvement cycles: 193.67
-Best-improvement time: 0.10s | First-improvement time: 0.04s
-== 2-opt ==
-Best-improvement cycles: 122.03 | First-improvement cycles: 91.57
-Best-improvement time: 0.09s | First-improvement time: 0.02s
+Jump cycles: 84724.07
+Jump time: 0.12s
+---------------------
+Exchange cycles: 76195.80
+Exchange time: 0.11s
+---------------------
+Two_Opt cycles: 55799.80
+Two_Opt time: 0.06s
+---------------------
 
 ######### lin105 #########
+Average tour length before optimisation: 125176.42
 ===== MEAN =====
-== Jump ==
-Best-improvement: 94850.49 | First-improvement: 108891.23
-== Exchange ==
-Best-improvement: 69804.94 | First-improvement: 60315.86
-== 2-opt ==
-Best-improvement: 69572.01 | First-improvement: 82072.20
+Jump: 18266.50
+Exchange: 23910.85
+Two_Opt: 16154.61
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 67915.90 | First-improvement: 90912.17
-== Exchange ==
-Best-improvement: 41924.53 | First-improvement: 37716.74
-== 2-opt ==
-Best-improvement: 44495.67 | First-improvement: 57639.62
+Jump: 16279.76
+Exchange: 20938.87
+Two_Opt: 15356.66
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 76.40 | First-improvement cycles: 52.73
-Best-improvement time: 0.06s | First-improvement time: 0.01s
-== Exchange ==
-Best-improvement cycles: 216.67 | First-improvement cycles: 250.57
-Best-improvement time: 0.16s | First-improvement time: 0.06s
-== 2-opt ==
-Best-improvement cycles: 152.87 | First-improvement cycles: 100.47
-Best-improvement time: 0.12s | First-improvement time: 0.02s
+Jump cycles: 101294.33
+Jump time: 0.15s
+---------------------
+Exchange cycles: 90224.33
+Exchange time: 0.13s
+---------------------
+Two_Opt cycles: 60711.33
+Two_Opt time: 0.07s
+---------------------
 
 ######### pcb442 #########
+Average tour length before optimisation: 779396.81
 ===== MEAN =====
-== Jump ==
-Best-improvement: 617485.34 | First-improvement: 708031.18
-== Exchange ==
-Best-improvement: 378164.43 | First-improvement: 360783.15
-== 2-opt ==
-Best-improvement: 467976.36 | First-improvement: 515476.35
+Jump: 92208.76
+Exchange: 142504.92
+Two_Opt: 64285.24
 ===== MINIMUM =====
-== Jump ==
-Best-improvement: 424180.61 | First-improvement: 577175.65
-== Exchange ==
-Best-improvement: 197537.53 | First-improvement: 185562.91
-== 2-opt ==
-Best-improvement: 289340.57 | First-improvement: 330123.17
+Jump: 86893.74
+Exchange: 131562.50
+Two_Opt: 62099.48
 ===== MEAN TIMES =====
-== Jump ==
-Best-improvement cycles: 282.10 | First-improvement cycles: 212.87
-Best-improvement time: 4.26s | First-improvement time: 0.23s
-== Exchange ==
-Best-improvement cycles: 1654.57 | First-improvement cycles: 1705.60
-Best-improvement time: 24.83s | First-improvement time: 6.57s
-== 2-opt ==
-Best-improvement cycles: 631.73 | First-improvement cycles: 456.17
-Best-improvement time: 9.74s | First-improvement time: 0.94s
+Jump cycles: 346760.50
+Jump time: 0.53s
+---------------------
+Exchange cycles: 347773.33
+Exchange time: 0.53s
+---------------------
+Two_Opt cycles: 263821.47
+Two_Opt time: 0.29s
+---------------------
 
 ######### pr2392 #########
+Average tour length before optimisation: 15276587.30
 ===== MEAN =====
-== Jump ==
-First-improvement: 14841027.59
-== Exchange ==
-First-improvement: 14184516.87
-== 2-opt ==
-First-improvement: 13508397.03
+Jump: 2792474.86
+Exchange: 3681191.12
+Two_Opt: 1436543.35
 ===== MINIMUM =====
-== Jump ==
-First-improvement: 14368320.92
-== Exchange ==
-First-improvement: 13727683.42
-== 2-opt ==
-First-improvement: 12805328.29
+Jump: 2683999.27
+Exchange: 3567953.43
+Two_Opt: 1407511.88
 ===== MEAN TIMES =====
-== Jump ==
-First-improvement cycles: 366.70 | First-improvement time: 7.63s
-== Exchange ==
-First-improvement cycles: 995.83 | First-improvement time: 33.75s
-== 2-opt ==
-First-improvement cycles: 812.03 | First-improvement time: 25.54s
+Jump cycles: 360079.20
+Jump time: 0.58s
+---------------------
+Exchange cycles: 360826.47
+Exchange time: 0.59s
+---------------------
+Two_Opt cycles: 357395.90
+Two_Opt time: 0.46s
+---------------------
+
+######### usa13509 #########
+Average tour length before optimisation: 2150480634.08
+===== MEAN =====
+Jump: 626504441.97
+Exchange: 725567949.91
+Two_Opt: 433234946.26
+===== MINIMUM =====
+Jump: 617174543.93
+Exchange: 714025981.90
+Two_Opt: 426676543.21
+===== MEAN TIMES =====
+Jump cycles: 392203.60
+Jump time: 1.12s
+---------------------
+Exchange cycles: 392950.50
+Exchange time: 1.09s
+---------------------
+Two_Opt cycles: 389199.57
+Two_Opt time: 1.53s
+---------------------

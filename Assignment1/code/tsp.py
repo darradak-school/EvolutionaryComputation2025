@@ -1,65 +1,51 @@
 import math
 import random
 
+
 class TSP:
     def __init__(self, filepath):
-        # Read the TSP file and store the coordinates of locations.
-        self.location_coords = self.read_tsp_file(filepath)
+        # Read the TSP file using read_tsp and store the information in a dictionary {key: location id, value: coordinates}.
+        self.locations = self.read_tsp(filepath)
         # Extract location IDs from the coordinates dictionary.
-        self.location_ids = list(self.location_coords.keys())
-        # Calculates the distances between all locations and stores them in a dictionary.
-        self.distances = self.calculate_distances()
+        self.location_ids = list(self.locations.keys())
 
-    # This function reads a TSP file and extracts the coordinates of the nodes in a dictionary as {location id : coordinates in tuple}.
-    def read_tsp_file(self, file_path):
+    # Read TSP file and extract coordinates, puts results into a dictionary that it returns.
+    def read_tsp(self, file_path):
         locations = {}
-        with open(file_path, 'r') as tsp:
+        with open(file_path, "r") as tsp:
             read = False
             for line in tsp:
                 line = line.strip()
-                if line == 'EOF' or line == '':
+                if line == "EOF":  # End of file, break loop.
                     break
-                if read:
-                    parts = line.split()
-                    loc_id = int(parts[0])
-                    x_coord = float(parts[1])
-                    y_coord = float(parts[2])
-                    locations[loc_id] = (x_coord, y_coord)
-                if line == 'NODE_COORD_SECTION':
+                if line == "NODE_COORD_SECTION":  # Start of coordinates section.
                     read = True
+                    continue
+                if read and line:
+                    loc_parts = (
+                        line.split()
+                    )  # Splitting the line and storing in locations dictionary.
+                    if len(loc_parts) >= 3:
+                        loc_id, x_coord, y_coord = (
+                            int(loc_parts[0]),
+                            float(loc_parts[1]),
+                            float(loc_parts[2]),
+                        )
+                        locations[loc_id] = (x_coord, y_coord)  # Store the coordinates.
         return locations
 
-    # Calculate the distances between all locations, storing them in a dictionary.
-    def calculate_distances(self):
-        distances = {}
-        for i in self.location_ids:
-            for j in self.location_ids:
-                if i == j:
-                    distances[i, j] = 0.0
-                elif (j, i) in distances:
-                    distances[i, j] = distances[j, i]
-                else:
-                    distances[i, j] = self.euclidian_distance(i, j)
-        return distances
-    
-    # Get the distance between two locations.
-    def distance(self, location1, location2):
-        return self.distances[location1, location2]
-    
-    # Calculate the Euclidean distance between two points.
-    def euclidian_distance(self, location1, location2):
-        x1, y1 = self.location_coords[location1]
-        x2, y2 = self.location_coords[location2]
-        return math.hypot(x2 - x1, y2 - y1)
+    # Calculate euclidean distance between two points.
+    def dist(self, location1, location2):
+        x1, y1 = self.locations[location1]  # Get coordinates of first location.
+        x2, y2 = self.locations[location2]  # Get coordinates of second location.
+        return math.hypot(x2 - x1, y2 - y1)  # Calculate euclidean distance.
 
-    # Calculate the tour length given a list of locations.
+    # Calculate entire tour length.
     def tour_length(self, tour):
-        length = 0
-        for i in range(len(tour) - 1):
-            length += self.distance(tour[i], tour[i + 1])
-        length += self.distance(tour[-1], tour[0])
-        return length
+        total = sum(self.dist(tour[i], tour[i + 1]) for i in range(len(tour) - 1))
+        total += self.dist(tour[-1], tour[0])  # Add distance to return to start.
+        return total
 
-    # Generate a random tour.
+    # Create a random tour.
     def random_tour(self):
         return random.sample(self.location_ids, len(self.location_ids))
