@@ -410,6 +410,6 @@ class Mutation:
 
 
 # ========================================
-File_Path="/Users/zebb/Library/Mobile Documents/com~apple~CloudDocs/Documents/University Of Adelaide/Error404/Semester 1/COMP SCI 1015/Interpreter/PyCharm (history)/Project Advantage/-Pycharm-uni-Examination:Testing/uni-Examination/ - Testing - COMP SCI 3316/Assignment·1/ALL_tsp"
+File_Path=""
 TSP(File_Path)
-```
+``` ------- By Ian
