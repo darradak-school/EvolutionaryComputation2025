@@ -3,7 +3,7 @@ import numpy as np
 class TSP:
     def __init__(self, File_Path=None):
         TSP.Clear_Memory()
-        self.TSP_File_Path_List = [f"../Assignment·1/ALL_tsp/{i}" for i in os.listdir(File_Path) if i.endswith(".tsp")]
+        self.TSP_File_Path_List = [f"{File_Path}/{i}" for i in os.listdir(File_Path) if i.endswith(".tsp")]
         # TSP.Evolution_Strategies_Process(self.TSP_File_Path_List[0], Generation_Iteration=1500, Selection_Operator="Fitness Proportional", Crossover_Operator='cycle', Mutation_Operator='Insert')
         TSP.Process_Benchmark_ALL_FILE(self.TSP_File_Path_List)
     @classmethod
@@ -408,5 +408,5 @@ class Mutation:
 
 
 # ========================================
-File_Path=""
+File_Path="../Assignment1/code/tsplib"
 TSP(File_Path)
