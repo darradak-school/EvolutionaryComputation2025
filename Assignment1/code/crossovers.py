@@ -1,34 +1,106 @@
 # Crossover file to be completed by Darcy
 
+from tsp import TSP
 
-from TSP import TSP
-
-
-# • Implement the different crossover operators 
-# (Order Crossover, PMX Crossover, Cycle Crossover, Edge Recombination) 
-# for permutations given in the lecture.
+import random
 
 
+# Crossover functions implemented as per assignment specs
 # Order Crossover 
-# • Informal procedure:
-# 1. Choose an arbitrary part from the first parent
-# 2. Copy this part to the first child
-# 3. Copy the numbers that are not in the first part, to the first child:
-#   • starting right from cut point of the copied part,
-#   • using the order of the second parent
-#   • and wrapping around at the end
-# 4. Analogous for the second child, with parent roles reversed
-
+def order_crossover(parent1, parent2):
+    """
+    Order Crossover (OX)
+    Preserves relative order of cities from parents
+    """
+    size = len(parent1)
+    
+    # Choose random segment from parent1
+    start = random.randint(0, size - 2)
+    end = random.randint(start + 1, size - 1)
+    
+    # Create children
+    child1 = [-1] * size
+    child2 = [-1] * size
+    
+    # Copy segment from parents to children
+    child1[start:end+1] = parent1[start:end+1]
+    child2[start:end+1] = parent2[start:end+1]
+    
+    # Fill child1 with remaining cities from parent2
+    segment1 = set(parent1[start:end+1])
+    pointer = (end + 1) % size
+    
+    for city in parent2[end+1:] + parent2[:end+1]:
+        if city not in segment1:
+            child1[pointer] = city
+            pointer = (pointer + 1) % size
+    
+    # Fill child2 with remaining cities from parent1
+    segment2 = set(parent2[start:end+1])
+    pointer = (end + 1) % size
+    
+    for city in parent1[end+1:] + parent1[:end+1]:
+        if city not in segment2:
+            child2[pointer] = city
+            pointer = (pointer + 1) % size
+    
+    return child1, child2
 
 # PMX Crossover
-# • Informal procedure for parents P1 and P2:
-# 1. Choose random segment and copy it from P1
-# 2. Starting from the first crossover point look for elements in that segment of P2 that have not been copied
-# 3. For each of these i look in the offspring to see what element j has been copied in its place from P1
-# 4. Place i into the position occupied j in P2, since we know that we will not be putting j there (as is already in offspring)
-# 5. If the place occupied by j in P2 has already been filled in the offspring k, put i in the position occupied by k in P2
-# 6. Having dealt with the elements from the crossover segment, the rest of theoffspring can be filled from P2.
-# Second child is created analogously
+def pmx_crossover(parent1, parent2):
+    """
+    Partially Mapped Crossover (PMX)
+    Creates mapping between segment positions
+    """
+    size = len(parent1)
+    
+    # Choose random segment
+    start = random.randint(0, size - 2)
+    end = random.randint(start + 1, size - 1)
+    
+    # Initialize children with -1 (empty positions)
+    child1 = [-1] * size
+    child2 = [-1] * size
+    
+    # Copy the segment from parents to opposite children
+    child1[start:end+1] = parent2[start:end+1]
+    child2[start:end+1] = parent1[start:end+1]
+    
+    # Create mapping dictionaries for the segments
+    mapping1 = {}  # Maps from parent2 to parent1 in segment
+    mapping2 = {}  # Maps from parent1 to parent2 in segment
+    
+    for i in range(start, end + 1):
+        mapping1[parent2[i]] = parent1[i]
+        mapping2[parent1[i]] = parent2[i]
+    
+    # Fill remaining positions for child1
+    for i in range(size):
+        if i < start or i > end:  # Outside the crossover segment
+            # Try to place parent1[i] in child1[i]
+            value = parent1[i]
+            
+            # Check if this value conflicts (already in segment)
+            while value in parent2[start:end+1]:
+                # Follow the mapping to find non-conflicting value
+                value = mapping1[value]
+            
+            child1[i] = value
+    
+    # Fill remaining positions for child2
+    for i in range(size):
+        if i < start or i > end:  # Outside the crossover segment
+            # Try to place parent2[i] in child2[i]
+            value = parent2[i]
+            
+            # Check if this value conflicts (already in segment)
+            while value in parent1[start:end+1]:
+                # Follow the mapping to find non-conflicting value
+                value = mapping2[value]
+            
+            child2[i] = value
+    
+    return child1, child2
 
 
 # Cycle Crossover
@@ -63,4 +135,64 @@ from TSP import TSP
 
 
 
+# Testing current crossover functions
+# Test functions for verification
+def is_valid_tour(tour, original_tour):
+    """Check if tour is valid permutation"""
+    return sorted(tour) == sorted(original_tour) and len(tour) == len(original_tour)
 
+
+def test_crossovers():
+    """Test all crossover operators"""
+    # Create sample parent tours
+    parent1 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    parent2 = [9, 3, 7, 8, 2, 6, 5, 1, 4]
+    
+    print("Testing Crossover Operators")
+    print("=" * 40)
+    print(f"Parent 1: {parent1}")
+    print(f"Parent 2: {parent2}")
+    print()
+    
+    # Test Order Crossover
+    print("Order Crossover (OX):")
+    child1, child2 = order_crossover(parent1[:], parent2[:])
+    print(f"  Child 1: {child1} - Valid: {is_valid_tour(child1, parent1)}")
+    print(f"  Child 2: {child2} - Valid: {is_valid_tour(child2, parent1)}")
+    print()
+    
+    # Test PMX Crossover
+    print("PMX Crossover:")
+    child1, child2 = pmx_crossover(parent1[:], parent2[:])
+    print(f"  Child 1: {child1} - Valid: {is_valid_tour(child1, parent1)}")
+    print(f"  Child 2: {child2} - Valid: {is_valid_tour(child2, parent1)}")
+    print()
+    
+    # Run multiple tests to check consistency
+    print("Running 100 tests for each operator...")
+    operators = [
+        ("Order Crossover", order_crossover, True),
+        ("PMX Crossover", pmx_crossover, True)
+        # Add Cycle and Edge funcs to test
+        #("Cycle Crossover", cycle_crossover, True),
+        #("Edge Recombination", edge_recombination, False)
+    ]
+    
+    for name, func, returns_pair in operators:
+        success_count = 0
+        for _ in range(100):
+            if returns_pair:
+                c1, c2 = func(parent1[:], parent2[:])
+                if is_valid_tour(c1, parent1) and is_valid_tour(c2, parent1):
+                    success_count += 1
+            else:
+                c = func(parent1[:], parent2[:])
+                if is_valid_tour(c, parent1):
+                    success_count += 1
+        
+        print(f"  {name}: {success_count}/100 valid tours")
+
+
+# Run tests if this file is executed directly
+if __name__ == "__main__":
+    test_crossovers()
