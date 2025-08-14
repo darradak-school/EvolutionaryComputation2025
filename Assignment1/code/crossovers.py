@@ -54,7 +54,7 @@ def pmx_crossover(parent1, parent2):
     """
     size = len(parent1)
     
-    # Choose random segment
+    # Choose random segment 
     start = random.randint(0, size - 2)
     end = random.randint(start + 1, size - 1)
     
@@ -82,7 +82,7 @@ def pmx_crossover(parent1, parent2):
             
             # Check if this value conflicts (already in segment)
             while value in parent2[start:end+1]:
-                # Follow the mapping to find non-conflicting value
+                # Find non-conflicting value
                 value = mapping1[value]
             
             child1[i] = value
@@ -95,7 +95,7 @@ def pmx_crossover(parent1, parent2):
             
             # Check if this value conflicts (already in segment)
             while value in parent1[start:end+1]:
-                # Follow the mapping to find non-conflicting value
+                # Find non-conflicting value
                 value = mapping2[value]
             
             child2[i] = value
@@ -103,48 +103,159 @@ def pmx_crossover(parent1, parent2):
     return child1, child2
 
 
-# Cycle Crossover
-# Basic idea: Each allele comes from one parent together with its position.
-# • Informal procedure:
-# 1. Make a cycle of alleles from P1 in the following way.
-#   (a) Start with the first allele of P1.
-#   (b) Look at the allele at the same position in P2.
-#   (c) Go to the position with the same allele in P1.
-#   (d) Add this allele to the cycle.
-#   (e) Repeat step b through d until you arrive at the first allele of P1.
-# 2. Put the alleles of the cycle in the first child on the positions theyhave in the first parent.
-# 3. Take next cycle from second parent
+def cycle_crossover(parent1, parent2):
+    
+    size = len(parent1)
+
+    child1 = [None] * size
+    child2 = [None] * size
+    
+    # Track which positions have been assigned
+    visited = [False] * size
+    
+    while not all(visited):
+        # Find first unvisited position
+        start = visited.index(False)
+        cycle = []
+        current = start
+        
+        # Build the cycle
+        while current not in cycle:
+            cycle.append(current)
+            visited[current] = True
+            # Find position of parent1[current] in parent2
+            value = parent1[current]
+            current = parent2.index(value)
+            # If back to start, cycle is complete
+            if current == start:
+                break
+        
+        # Alternate between parents for different cycles
+        if len([c for c in cycle if child1[c] is not None]) == 0:
+            # First cycle or even cycle - copy from parent1 to child1
+            use_parent1_for_child1 = len([i for i in range(size) if child1[i] is not None]) % (size * 2) < size
+        else:
+            use_parent1_for_child1 = not use_parent1_for_child1
+        
+        # Simpler approach: alternate cycles
+        cycle_num = sum(1 for i in range(start) if visited[i])
+        
+        if cycle_num % 2 == 0:
+            # Even cycle: parent1 -> child1, parent2 -> child2
+            for pos in cycle:
+                child1[pos] = parent1[pos]
+                child2[pos] = parent2[pos]
+        else:
+            # Odd cycle: vice versa
+            for pos in cycle:
+                child1[pos] = parent2[pos]
+                child2[pos] = parent1[pos]
+    
+    return child1, child2
 
 
 # Edge Recombination
-# First Contrust Edge Table -- Refer to Lecture notes
+def edge_recombination(parent1, parent2):
+    
+    size = len(parent1)
+
+    # Build edge table
+    edge_table = {}
+    
+    # Initialize edge table for all cities
+    for city in parent1:
+        edge_table[city] = set()
+    
+    # Add edges from parent1
+    for i in range(size):
+        current = parent1[i]
+        prev_city = parent1[(i - 1) % size]
+        next_city = parent1[(i + 1) % size]
+        edge_table[current].add(prev_city)
+        edge_table[current].add(next_city)
+    
+    # Add edges from parent2 and mark common edges
+    common_edges = {}
+    for city in parent1:
+        common_edges[city] = set()
+    
+    for i in range(size):
+        current = parent2[i]
+        prev_city = parent2[(i - 1) % size]
+        next_city = parent2[(i + 1) % size]
+        
+        # Check if edges are common (already in table)
+        if prev_city in edge_table[current]:
+            common_edges[current].add(prev_city)
+        else:
+            edge_table[current].add(prev_city)
+            
+        if next_city in edge_table[current]:
+            common_edges[current].add(next_city)
+        else:
+            edge_table[current].add(next_city)
+    
 
 
-# Informal procedure once edge table is constructed
-# 1. Pick an initial element at random and put it in the offspring
-# 2. Set the variable current element = entry
-# 3. Remove all references to current element from the table
-# 4. Examine list for current element:
-#   – If there is a common edge, pick that to be next element
-#   – Otherwise pick the entry in the list which itself has the shortest list
-#   – Ties are split at random
-# 5. In the case of reaching an empty list:
-#   – Examine the other end of the offspring is for extension
-#   – Otherwise a new element is chosen at random
+    # Build offspring
+    offspring = []
+    
+    # Pick initial element at random
+    current = random.choice(parent1)
+    offspring.append(current)
+    
+    # Remove current from all edge lists
+    for city in edge_table:
+        edge_table[city].discard(current)
+        common_edges[city].discard(current)
+    
+    # Build rest of tour
+    while len(offspring) < size:
+        # Get candidates from current's edge list
+        candidates = list(edge_table.get(current, []))
+        
+        if candidates:
+            # Check for common edges (marked earlier)
+            common = [c for c in candidates if c in common_edges.get(current, [])]
+            
+            if common:
+                # Prefer common edge
+                next_city = random.choice(common)
+            else:
+                # Choose entry with shortest edge list
+                min_edges = min(len(edge_table.get(c, [])) for c in candidates)
+                shortest = [c for c in candidates if len(edge_table.get(c, [])) == min_edges]
+                next_city = random.choice(shortest)
+        else:
+            # Empty list - choose random unvisited city
+            remaining = [city for city in parent1 if city not in offspring]
+            if not remaining:
+                break
+            next_city = random.choice(remaining)
+        
+        # Add to offspring
+        offspring.append(next_city)
+        
+        # Remove from all edge lists
+        for city in edge_table:
+            edge_table[city].discard(next_city)
+            common_edges[city].discard(next_city)
+        
+        current = next_city
+    
+    return offspring
 
 
 
 
 # Testing current crossover functions
-# Test functions for verification
 def is_valid_tour(tour, original_tour):
-    """Check if tour is valid permutation"""
+    # Check if tour is valid permutation
     return sorted(tour) == sorted(original_tour) and len(tour) == len(original_tour)
 
 
 def test_crossovers():
-    """Test all crossover operators"""
-    # Create sample parent tours
+    # Sample parent tours
     parent1 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     parent2 = [9, 3, 7, 8, 2, 6, 5, 1, 4]
     
@@ -167,15 +278,26 @@ def test_crossovers():
     print(f"  Child 1: {child1} - Valid: {is_valid_tour(child1, parent1)}")
     print(f"  Child 2: {child2} - Valid: {is_valid_tour(child2, parent1)}")
     print()
+
+    # Test Cycle Crossover
+    print("Cycle Crossover:")
+    child1, child2 = cycle_crossover(parent1[:], parent2[:])
+    print(f"  Child 1: {child1} - Valid: {is_valid_tour(child1, parent1)}")
+    print(f"  Child 2: {child2} - Valid: {is_valid_tour(child2, parent1)}")
+    print()
     
-    # Run multiple tests to check consistency
+    # Test Edge Recombination
+    print("Edge Recombination:")
+    child = edge_recombination(parent1[:], parent2[:])
+    print(f"  Child: {child} - Valid: {is_valid_tour(child, parent1)}")
+    print()
+    
     print("Running 100 tests for each operator...")
     operators = [
         ("Order Crossover", order_crossover, True),
-        ("PMX Crossover", pmx_crossover, True)
-        # Add Cycle and Edge funcs to test
-        #("Cycle Crossover", cycle_crossover, True),
-        #("Edge Recombination", edge_recombination, False)
+        ("PMX Crossover", pmx_crossover, True),
+        ("Cycle Crossover", cycle_crossover, True),
+        ("Edge Recombination", edge_recombination, False)
     ]
     
     for name, func, returns_pair in operators:
@@ -193,6 +315,6 @@ def test_crossovers():
         print(f"  {name}: {success_count}/100 valid tours")
 
 
-# Run tests if this file is executed directly
+# Run tests if executed as file
 if __name__ == "__main__":
     test_crossovers()
