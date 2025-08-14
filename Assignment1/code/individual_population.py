@@ -4,7 +4,6 @@ from typing import List, Optional, Iterable, Tuple, Callable
 import random
 
 from tsp import TSP
-from individual import Individual
 
 #The individual class represents one possible solution to the TSP
 class Individual:
@@ -23,28 +22,23 @@ class Individual:
     def evaluate(self):
         return self.tsp.tour_length(self.tour)
 
-#Generates a random TSP solution
-@classmethod
-def random(cls,tsp:TSP,rng:Optional[random.Random] = None) -> "Individual":
-    rng = rng or random
-    return cls(tsp=tsp,tour=tsp.random_tour())
+    @classmethod
+    def random(cls, tsp: TSP, rng: Optional[random.Random] = None) -> "Individual":
+        rng = rng or random
+        return cls(tsp=tsp, tour=tsp.random_tour())
 
-#Evaluates the fitness of the TSP solution
-def evaluate(self,tsp:Optional[TSP] = None) -> float:
-    return self.tsp.tour_length(self.tour)
+    def evaluate(self, tsp: Optional[TSP] = None) -> float:
+        return self.tsp.tour_length(self.tour)
 
-#Copies the TSP solution
-def copy(self) -> "Individual":
-    copy_tour = Individual(tsp=self.tsp,tour=self.tour)
-    return copy_tour
+    def copy(self) -> "Individual":
+        copy_tour = Individual(tsp=self.tsp, tour=self.tour)
+        return copy_tour
 
-#Returns a string representation of the TSP solution
-def __str__(self) -> str:
-    return f"Tour: {self.tour}, Fitness: {self.fitness:.2f}"
+    def __str__(self) -> str:
+        return f"Tour: {self.tour}, Fitness: {self.fitness:.2f}"
 
-#Returns a string representation of the fitness of the TSP solution
-def __repr__(self) -> str:
-    return f"fitness={self.fitness:.2f}"
+    def __repr__(self) -> str:
+        return f"fitness={self.fitness:.2f}"
 
 # The population class is a wrapper for a list of individuals.
 FitnessFn = Callable[[float], float]
@@ -78,22 +72,22 @@ class Population:
 
     def evaluate_all(self, fitness: Optional[FitnessFn] = None) -> None:
         for ind in self.individuals:
-            ind.evaluate(self.tsp)
-            if fitness is not None and ind.cost is not None:
-                ind.fitness = fitness(ind.cost)
+            ind.evaluate()
+            if fitness is not None and ind.fitness is not None:
+                ind.fitness = fitness(ind.fitness)
 
     def best(self) -> Tuple[int, Individual]:
         for ind in self.individuals:
-            if ind.cost is None:
-                ind.evaluate(self.tsp)
-        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].cost)
+            if ind.fitness is None:
+                ind.evaluate()
+        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].fitness)
         return idx, self.individuals[idx]
 
     def add(self, ind: Individual, evaluate: bool = True, fitness: Optional[FitnessFn] = None) -> None:
         if evaluate:
-            ind.evaluate(self.tsp)
-            if fitness is not None and ind.cost is not None:
-                ind.fitness = fitness(ind.cost)
+            ind.evaluate()
+            if fitness is not None and ind.fitness is not None:
+                ind.fitness = fitness(ind.fitness)
         self.individuals.append(ind)
 
     def extend(self, inds: Iterable[Individual], evaluate: bool = False) -> None:
