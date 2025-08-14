@@ -162,23 +162,15 @@ class TSP:
             Benchmark_results[config['name']] = config_results
             print(f"  Configuration {config['name']} completed!\n")
 
-        # 保存結果到文件
         # cls._save_benchmark_results(Benchmark_results)
 
-        # Run best algorithm 30 times (Exercise 6 最後部分)
         print("=== Running Best Algorithm 30 times ===")
         cls._run_best_algorithm_multiple_times(All_TSP_File_Path_List, Evolution_Strategies_config)
 
         return Benchmark_results
     @classmethod
     def _run_best_algorithm_multiple_times(cls, ALL_TSP_File_Path, configs):
-        """
-        Run best algorithm 30 times for each instance
-        根據 initial benchmark 結果選擇最佳配置
-        """
-        # 簡單起見，用第一個配置做示範
-        # 實際上你可以根據 benchmark 結果選擇最佳嘅
-        best_config = configs[0]  # 或者根據之前結果選擇
+        best_config = configs[0]
 
         results_for_report = {}
 
