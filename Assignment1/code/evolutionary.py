@@ -2,7 +2,7 @@ from tsp import TSP
 from localsearch import LocalSearch
 from mutations import Mutations
 from individual_population import Individual, Population
-from crossovers import order_crossover
+from crossovers import Crossovers
 from selection import Selection
 import random
 import numpy as np
@@ -41,7 +41,7 @@ class EvolutionaryAlgorithm:
 
     # Crossover
     def crossover(self, parent1, parent2):
-        child1_tour, child2_tour = order_crossover(parent1.tour, parent2.tour)
+        child1_tour, child2_tour = Crossovers.order_crossover(parent1.tour, parent2.tour)
 
         child1 = Individual(self.tsp, child1_tour)
         child2 = Individual(self.tsp, child2_tour)
