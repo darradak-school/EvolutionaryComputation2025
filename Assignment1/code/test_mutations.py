@@ -1,5 +1,5 @@
-from mutations import swap_mutation, insert_mutation
 import random
+from mutations import Mutations  # import the class instead of functions
 
 def test_swap():
     original_tour = list(range(1, 11))  # Example tour [1..10]
@@ -10,7 +10,7 @@ def test_swap():
     print("Testing swap mutation operator...\n")
 
     for test_num in range(1, iterations + 1):
-        mutated_tour = swap_mutation(original_tour.copy())
+        mutated_tour, _, _ = Mutations.swap(original_tour.copy())  # unpack i, j but ignore here
 
         # Check 1: Same elements, no duplicates or missing
         elements_ok = sorted(mutated_tour) == sorted(original_tour)
@@ -38,8 +38,6 @@ def test_swap():
 
     print(f"Swap mutation passed {success_count}/{iterations} tests.")
 
-import random
-from mutations import inversion_mutation  # adjust import as needed
 
 def test_inversion_mutation():
     original_tour = list(range(1, 11))  # Example tour [1..10]
@@ -49,17 +47,12 @@ def test_inversion_mutation():
     print("Testing inversion mutation operator...\n")
 
     for test_num in range(1, tests + 1):
-        # Seed random for reproducibility (optional)
-        # random.seed(test_num)
-
-        mutated_tour = inversion_mutation(original_tour)
+        mutated_tour, _, _ = Mutations.inversion(original_tour)  # unpack i, j but ignore here
         
-        # We can't control i,j here because random inside function, so extract them by comparing
-        # To find i and j, compare mutated and original:
+        # Compare mutated and original
         diffs = [idx for idx, (o, m) in enumerate(zip(original_tour, mutated_tour)) if o != m]
 
         if len(diffs) == 0:
-            # No change means i==j (should not happen because random.sample picks two distinct)
             status = "FAIL (no mutation)"
             print(f"Test {test_num}: {status}\n")
             continue
@@ -67,16 +60,16 @@ def test_inversion_mutation():
         i = diffs[0]
         j = diffs[-1]
 
-        # Check substring reversed:
+        # Check substring reversed
         original_sub = original_tour[i:j+1]
         mutated_sub = mutated_tour[i:j+1]
         reversed_correctly = (mutated_sub == original_sub[::-1])
 
-        # Check rest unchanged:
+        # Check rest unchanged
         unchanged_before = (original_tour[:i] == mutated_tour[:i])
         unchanged_after = (original_tour[j+1:] == mutated_tour[j+1:])
 
-        # Check elements same:
+        # Elements same
         elements_ok = sorted(original_tour) == sorted(mutated_tour)
 
         if reversed_correctly and unchanged_before and unchanged_after and elements_ok:
@@ -93,7 +86,7 @@ def test_inversion_mutation():
 
     print(f"Inversion mutation passed {success_count}/{tests} tests.")
 
-# Run the test
+
 if __name__ == "__main__":
     test_inversion_mutation()
     test_swap()
