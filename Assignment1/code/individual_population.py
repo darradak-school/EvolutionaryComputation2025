@@ -49,9 +49,8 @@ class Population:
     A population is a collection of Individuals tied to a specific TSP instance.
     Provides random construction, evaluation, and 'best' query.
     """
-    def __init__(self, tsp: TSP, individuals: Optional[List[Individual]] = None):
-        self.tsp = tsp
-        self.individuals: List[Individual] = individuals or []
+    tsp: TSP
+    individuals: List[Individual]
 
     @classmethod
     def empty(cls, tsp: TSP) -> "Population":
