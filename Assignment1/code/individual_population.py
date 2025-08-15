@@ -49,8 +49,9 @@ class Population:
     A population is a collection of Individuals tied to a specific TSP instance.
     Provides random construction, evaluation, and 'best' query.
     """
-    tsp: TSP
-    individuals: List[Individual]
+    def __init__(self, tsp: TSP, individuals: Optional[List[Individual]] = None):
+        self.tsp = tsp
+        self.individuals: List[Individual] = individuals or []
 
     @classmethod
     def empty(cls, tsp: TSP) -> "Population":
@@ -72,28 +73,32 @@ class Population:
 
     def evaluate_all(self, fitness: Optional[FitnessFn] = None) -> None:
         for ind in self.individuals:
-            ind.evaluate()
-            if fitness is not None and ind.fitness is not None:
-                ind.fitness = fitness(ind.fitness)
+            cost = ind.evaluate()
+            if fitness is not None:
+                ind.fitness = fitness(cost)
+            else:
+                ind.fitness = None
 
     def best(self) -> Tuple[int, Individual]:
         for ind in self.individuals:
-            if ind.fitness is None:
+            if ind.cost is None:
                 ind.evaluate()
-        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].fitness)
+        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].cost)
         return idx, self.individuals[idx]
 
     def add(self, ind: Individual, evaluate: bool = True, fitness: Optional[FitnessFn] = None) -> None:
         if evaluate:
-            ind.evaluate()
-            if fitness is not None and ind.fitness is not None:
-                ind.fitness = fitness(ind.fitness)
+            cost = ind.evaluate()
+            if fitness is not None:
+                ind.fitness = fitness(cost)
         self.individuals.append(ind)
 
-    def extend(self, inds: Iterable[Individual], evaluate: bool = False) -> None:
+    def extend(self, inds: Iterable[Individual], evaluate: bool = False, fitness: Optional[FitnessFn] = None) -> None:
         if evaluate:
             for ind in inds:
-                ind.evaluate(self.tsp)
+                cost = ind.evaluate()
+                if fitness is not None:
+                    ind.fitness = fitness(cost)
         self.individuals.extend(inds)
 
     def __len__(self) -> int:
