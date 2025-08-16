@@ -1,11 +1,4 @@
 Assignment1/.DS_Store
 .idea/vcs.xml
 /.idea
-Assignment1/code/__pycache__/crossovers.cpython-311.pyc
-Assignment1/code/__pycache__/evolutionary.cpython-311.pyc
-Assignment1/code/__pycache__/individual_population.cpython-311.pyc
-Assignment1/code/__pycache__/mutations.cpython-311.pyc
-Assignment1/code/__pycache__/selection.cpython-311.pyc
-Assignment1/code/__pycache__/tsp.cpython-311.pyc
-Assignment1/code/__pycache__/tsp.cpython-311.pyc
-Assignment1/code/__pycache__/tsp.cpython-311.pyc
+__pycache__/

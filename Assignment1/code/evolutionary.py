@@ -8,7 +8,16 @@ import numpy as np
 
 
 class EvolutionaryAlgorithm:
-    def __init__(self, tsp_file, population_size=50, max_generations=100, mutation_rate=0.1, crossover_rate=0.9, tournament_size=3, elitism=1):
+    def __init__(
+        self,
+        tsp_file,
+        population_size,
+        max_generations,
+        mutation_rate,
+        crossover_rate,
+        tournament_size,
+        replacement_rate,
+    ):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
         self.max_generations = max_generations
@@ -16,98 +25,66 @@ class EvolutionaryAlgorithm:
         self.mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
         self.tournament_size = tournament_size
-        self.elitism = elitism
+        self.replacement_rate = replacement_rate
 
-    # Select parents
-    def select_parents(self):
-        tours = np.array([ind.tour for ind in self.population.individuals])
-        n = len(self.tsp.location_ids)
-        distance_matrix = np.zeros((n, n))
-        for i in range(n):
-            for j in range(n):
-                if i != j:
-                    distance_matrix[i][j] = self.tsp.dist(
-                        self.tsp.location_ids[i], self.tsp.location_ids[j]
-                    )
+    # Get parents using tournament selection on fitness values.
+    def get_parents(self, num_parents=2):
+        # Get the number of parents to select.
+        num_to_select = min(num_parents, len(self.population.individuals))
+        # Get the fitness values of the population.
+        fitness_values = np.array([ind.fitness for ind in self.population.individuals])
+        # Select the parents using tournament selection on fitness values.
+        selected_indices = Selection.Tournament_Selection(
+            fitness_values, num_to_select, self.tournament_size
+        )
+        return [self.population.individuals[i] for i in selected_indices]
 
-        selected_indices = Selection.Tournament_Selection(distance_matrix, tours, self.tournament_size)
-
-        # Convert back to individuals
-        selected_parents = []
-        for tour in selected_indices:
-            for ind in self.population.individuals:
-                if ind.tour == tour.tolist():
-                    selected_parents.append(ind)
-                    break
-
-        return selected_parents
-
-    # Crossover
+    # Perform crossover between two parents.
     def crossover(self, parent1, parent2):
-        child1_tour, child2_tour = Crossovers.order_crossover(parent1.tour, parent2.tour)
+        if random.random() < self.crossover_rate:
+            # If crossover rate is hit, perform crossover.
+            child1_tour, child2_tour = Crossovers.order_crossover(
+                parent1.tour, parent2.tour
+            )
+            child1 = Individual(self.tsp, child1_tour)
+            child2 = Individual(self.tsp, child2_tour)
+            return [child1, child2]
+        else:
+            # No crossover, return copies of parents
+            return [
+                Individual(self.tsp, parent1.tour.copy()),
+                Individual(self.tsp, parent2.tour.copy()),
+            ]
 
-        child1 = Individual(self.tsp, child1_tour)
-        child2 = Individual(self.tsp, child2_tour)
-
-        return [child1, child2]
-
-    # Mutation
+    # Mutate individual with given probability.
     def mutate(self, individual):
-        if random.random() < self.mutation_rate:  # 10% mutation rate
+        # If mutation rate is hit, mutate individual.
+        if random.random() < self.mutation_rate:
             mutated_tour, _, _ = Mutations.swap(individual.tour)
             individual.tour = mutated_tour
             individual.fitness = individual.evaluate()
 
-    # Evolve generation
-    def evolve_generation(self):
-        parents = self.select_parents()
+    # Evolutionary algorithm.
+    def evolution(self):
+        num_replacements = max(1, int(self.population_size * self.replacement_rate))
+        parents = self.get_parents(num_replacements)
         offspring = []
 
-        # Process parents in pairs
+        # Generate offspring
         for i in range(0, len(parents), 2):
             if i + 1 < len(parents):
                 children = self.crossover(parents[i], parents[i + 1])
-
-                # Mutate children
                 for child in children:
                     self.mutate(child)
                     offspring.append(child)
+            else:
+                # Handle odd number of parents
+                child = Individual(self.tsp, parents[i].tour.copy())
+                self.mutate(child)
+                offspring.append(child)
 
-        # Simple replacement
-        new_population = Population.empty(self.tsp)
-
-        # Add offspring
-        for i in range(min(self.population_size, len(offspring))):
-            new_population.add(offspring[i])
-
-        # Fill with random if needed
-        while len(new_population) < self.population_size:
-            random_ind = Individual.random(self.tsp)
-            new_population.add(random_ind)
-
-        self.population = new_population
-
-    # Get best individual
-    def get_best_individual(self):
-        best_idx, best_ind = self.population.best()
-        return best_ind
-
-    # Run the algorithm
-    def run(self):
-        print(f"Starting EA for TSP with {len(self.tsp.location_ids)} cities")
-        print(
-            f"Population: {self.population_size}, Generations: {self.max_generations}"
-        )
-
-        for generation in range(self.max_generations):
-            self.evolve_generation()
-
-            if generation % 10 == 0:
-                best = self.get_best_individual()
-                print(f"Generation {generation}: Best = {best.fitness:.2f}")
-
-        # Final result
-        best_individual = self.get_best_individual()
-        print(f"Final best: {best_individual.fitness:.2f}")
-
-        return best_individual
+        # Sort population by fitness (best first) and replace worst individuals
+        self.population.individuals.sort(key=lambda x: x.fitness)
+        num_offspring = min(len(offspring), num_replacements)
+        for i in range(num_offspring):
+            self.population.individuals[-(i + 1)] = offspring[i]

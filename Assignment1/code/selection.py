@@ -1,41 +1,64 @@
 # Selection file worked on by Ian
-import os, random,itertools, sys, gc
 import numpy as np
+
+
+# Selection methods.
 class Selection:
-    @staticmethod
-    def _Premutation_Total_Distance(Premutation, Premutation_distance_matrix):
-        Premutation_idx = Premutation - 1
-        Distances = Premutation_distance_matrix[Premutation_idx, np.roll(Premutation_idx, -1)]
-        return np.sum(Distances)
-    @staticmethod
-    def _Population_Group_Fitness(Population_Group, Premutation_distance_matrix):
-        All_Fitness_Scores = np.array([Selection._Premutation_Total_Distance(i, Premutation_distance_matrix) for i in Population_Group])
-        return All_Fitness_Scores
     @classmethod
-    def Elitist_Selection(cls, Premutation_distance_matrix,  Parent_Group, Children_Group=None, Elitist_Children=None):
-        Elitist_Children = len(Parent_Group) if Elitist_Children is None else Elitist_Children
-        if Children_Group is None: return Parent_Group
-        Parent_Maxed_Children = np.concatenate((Parent_Group, Children_Group))
-        Fitness_Scores = Selection._Population_Group_Fitness(Parent_Maxed_Children, Premutation_distance_matrix)
-        Lower_Fitness_Order = np.argsort(Fitness_Scores)[:Elitist_Children]
-        Elitist_Group = Parent_Maxed_Children[Lower_Fitness_Order]
-        return Elitist_Group
+    def Elitist_Selection(
+        cls, tsp_instance, parent_group, children_group=None, elitist_children=None
+    ):
+        if children_group is None:
+            return parent_group
+
+        elitist_children = (
+            len(parent_group) if elitist_children is None else elitist_children
+        )
+        combined_group = np.concatenate((parent_group, children_group))
+
+        # Calculate fitness scores directly
+        n = len(combined_group)
+        fitness_scores = np.empty(n, dtype=np.float64)
+
+        for i in range(n):
+            fitness_scores[i] = tsp_instance.tour_length(combined_group[i])
+        best_indices = np.argsort(fitness_scores)[:elitist_children]
+
+        return best_indices
+
     @classmethod
-    def Tournament_Selection(cls, Premutation_distance_matrix, Parent_Group, k=3):
-        Parent_Select_Pool = []
-        for i in range(len(Parent_Group)):
-            Parent_k_idx = np.random.choice([i for i in range(len(Parent_Group))], size=k, replace=False, p=None)
-            Parent_k = [Parent_Group[i] for i in Parent_k_idx]
-            Fitness_Scores = Selection._Population_Group_Fitness(Parent_k, Premutation_distance_matrix)
-            Parent_Select_Pool.append(int(Parent_k_idx[np.argmin(Fitness_Scores)]))
-        Parent_Select_Pool = np.array([Parent_Group[i] for i in Parent_Select_Pool])
-        return Parent_Select_Pool
+    def Tournament_Selection(cls, fitness_values, num_parents, tournament_size):
+        n = len(fitness_values)
+        selected_idxs = np.empty(num_parents, dtype=np.int32)
+
+        for i in range(num_parents):
+            # Select tournament participants
+            t_indices = np.random.choice(n, tournament_size, replace=False)
+            t_fitness = fitness_values[t_indices]
+
+            # Find winner (best fitness - lowest distance)
+            winner_idx = t_indices[np.argmin(t_fitness)]
+            selected_idxs[i] = winner_idx
+
+        return selected_idxs
+
     @classmethod
-    def Fitness_Proportional_Selection(cls, Premutation_distance_matrix, Parent_Group):
-        Fitness_Scores = Selection._Population_Group_Fitness(Parent_Group, Premutation_distance_matrix)
-        Fitness_Scores = 1 / Fitness_Scores
-        Probabilities = Fitness_Scores / np.sum(Fitness_Scores)
-        # ----------------------------------------
-        parent_pool_idx = np.random.choice(np.array([i for i in range(len(Parent_Group))]), size=len(Parent_Group), replace=True, p=Probabilities)
-        parent_pool = np.array([Parent_Group[i] for i in parent_pool_idx])
-        return parent_pool
+    def Fitness_Proportional_Selection(cls, tsp_instance, parent_group):
+        # Calculate fitness scores directly
+        n = len(parent_group)
+        fitness_scores = np.empty(n, dtype=np.float64)
+
+        for i in range(n):
+            fitness_scores[i] = tsp_instance.tour_length(parent_group[i])
+
+        # Convert distances to probabilities (lower distance = higher probability).
+        inverse_fitness = 1.0 / fitness_scores
+        probabilities = inverse_fitness / np.sum(inverse_fitness)
+
+        # Select parents based on probabilities
+        n_parents = len(parent_group)
+        selected_indices = np.random.choice(
+            n_parents, size=n_parents, replace=True, p=probabilities
+        )
+
+        return selected_indices
