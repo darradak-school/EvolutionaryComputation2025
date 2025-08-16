@@ -19,16 +19,13 @@ class Individual:
         #The fitness is the total length of the tour
         self.fitness:Optional[float] = self.evaluate()
 
-    def evaluate(self):
+    def evaluate(self) -> float:
         return self.tsp.tour_length(self.tour)
 
     @classmethod
     def random(cls, tsp: TSP, rng: Optional[random.Random] = None) -> "Individual":
         rng = rng or random
         return cls(tsp=tsp, tour=tsp.random_tour())
-
-    def evaluate(self, tsp: Optional[TSP] = None) -> float:
-        return self.tsp.tour_length(self.tour)
 
     def copy(self) -> "Individual":
         copy_tour = Individual(tsp=self.tsp, tour=self.tour)
@@ -76,13 +73,13 @@ class Population:
             if fitness is not None:
                 ind.fitness = fitness(cost)
             else:
-                ind.fitness = None
+                ind.fitness = cost
 
     def best(self) -> Tuple[int, Individual]:
         for ind in self.individuals:
-            if ind.cost is None:
-                ind.evaluate()
-        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].cost)
+            if ind.fitness is None:
+                ind.fitness = ind.evaluate()
+        idx = min(range(len(self.individuals)), key=lambda k: self.individuals[k].fitness)
         return idx, self.individuals[idx]
 
     def add(self, ind: Individual, evaluate: bool = True, fitness: Optional[FitnessFn] = None) -> None:
@@ -90,6 +87,8 @@ class Population:
             cost = ind.evaluate()
             if fitness is not None:
                 ind.fitness = fitness(cost)
+            else:
+                ind.fitness = cost
         self.individuals.append(ind)
 
     def extend(self, inds: Iterable[Individual], evaluate: bool = False, fitness: Optional[FitnessFn] = None) -> None:
@@ -98,6 +97,8 @@ class Population:
                 cost = ind.evaluate()
                 if fitness is not None:
                     ind.fitness = fitness(cost)
+                else:
+                    ind.fitness = cost
         self.individuals.extend(inds)
 
     def __len__(self) -> int:
