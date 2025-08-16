@@ -1,5 +1,4 @@
 from tsp import TSP
-from localsearch import LocalSearch
 from mutations import Mutations
 from individual_population import Individual, Population
 from crossovers import Crossovers
@@ -9,11 +8,15 @@ import numpy as np
 
 
 class EvolutionaryAlgorithm:
-    def __init__(self, tsp_file, population_size=50, max_generations=100):
+    def __init__(self, tsp_file, population_size=50, max_generations=100, mutation_rate=0.1, crossover_rate=0.9, tournament_size=3, elitism=1):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
         self.max_generations = max_generations
         self.population = Population.random(self.tsp, self.population_size)
+        self.mutation_rate = mutation_rate
+        self.crossover_rate = crossover_rate
+        self.tournament_size = tournament_size
+        self.elitism = elitism
 
     # Select parents
     def select_parents(self):
@@ -27,7 +30,7 @@ class EvolutionaryAlgorithm:
                         self.tsp.location_ids[i], self.tsp.location_ids[j]
                     )
 
-        selected_indices = Selection.Tournament_Selection(distance_matrix, tours, 3)
+        selected_indices = Selection.Tournament_Selection(distance_matrix, tours, self.tournament_size)
 
         # Convert back to individuals
         selected_parents = []
@@ -50,7 +53,7 @@ class EvolutionaryAlgorithm:
 
     # Mutation
     def mutate(self, individual):
-        if random.random() < 0.1:  # 10% mutation rate
+        if random.random() < self.mutation_rate:  # 10% mutation rate
             mutated_tour, _, _ = Mutations.swap(individual.tour)
             individual.tour = mutated_tour
             individual.fitness = individual.evaluate()
@@ -99,7 +102,7 @@ class EvolutionaryAlgorithm:
         for generation in range(self.max_generations):
             self.evolve_generation()
 
-            if generation % 20 == 0:
+            if generation % 10 == 0:
                 best = self.get_best_individual()
                 print(f"Generation {generation}: Best = {best.fitness:.2f}")
 

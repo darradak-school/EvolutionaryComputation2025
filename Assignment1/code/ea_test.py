@@ -15,13 +15,17 @@ PROBLEMS = [
     "pr2392",
     "usa13509",
 ]
-POPULATION = 100
-GENERATIONS = 100
+POPULATION = 200
+GENERATIONS = 2000
+MUTATION = 0.1
+CROSSOVER = 0.9
+TOURNAMENT = 3
+ELITISM = 1
 
 # Create the ea
 for problem in PROBLEMS:
     ea = EvolutionaryAlgorithm(
-        f"tsplib/{problem}.tsp", POPULATION, GENERATIONS
+        f"tsplib/{problem}.tsp", POPULATION, GENERATIONS, MUTATION, CROSSOVER, TOURNAMENT, ELITISM
     )
     print("=" * 20)
     print(f"Running {problem} with population {POPULATION} and generations {GENERATIONS}")
