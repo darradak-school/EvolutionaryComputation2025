@@ -1,18 +1,19 @@
 import math
 import random
+import numpy as np
 
 
 class TSP:
-    def __init__(self, filepath):
+    def __init__(self, file):
         # Read the TSP file using read_tsp and store the information in a dictionary {key: location id, value: coordinates}.
-        self.locations = self.read_tsp(filepath)
+        self.locations = self.read_tsp(file)
         # Extract location IDs from the coordinates dictionary.
         self.location_ids = list(self.locations.keys())
 
     # Read TSP file and extract coordinates, puts results into a dictionary that it returns.
-    def read_tsp(self, file_path):
+    def read_tsp(self, file):
         locations = {}
-        with open(file_path, "r") as tsp:
+        with open(file, "r") as tsp:
             read = False
             for line in tsp:
                 line = line.strip()
@@ -49,3 +50,11 @@ class TSP:
     # Create a random tour.
     def random_tour(self):
         return random.sample(self.location_ids, len(self.location_ids))
+
+    # Get 0 based index of a location from its ID.
+    def get_idx(self, loc_id):
+        return self.location_ids.index(loc_id)
+
+    # Convert tour of location IDs to 0 based index for distance matrix.
+    def tour_idxs(self, tour):
+        return [self.get_idx(loc_id) for loc_id in tour]

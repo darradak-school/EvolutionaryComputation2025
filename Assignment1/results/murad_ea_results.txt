@@ -1,0 +1,1398 @@
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 547.00
+Average fitness: 548.14
+Time elapsed: 0.38s
+===== Generation 5000 =====
+Best fitness: 519.47
+Average fitness: 520.34
+Time elapsed: 0.94s
+===== Generation 10000 =====
+Best fitness: 519.47
+Average fitness: 520.17
+Time elapsed: 1.88s
+===== Generation 20000 =====
+Best fitness: 519.47
+Average fitness: 520.38
+Time elapsed: 3.76s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1039.22
+Average fitness: 1051.73
+Time elapsed: 0.45s
+===== Generation 5000 =====
+Best fitness: 885.40
+Average fitness: 886.06
+Time elapsed: 1.11s
+===== Generation 10000 =====
+Best fitness: 867.06
+Average fitness: 871.04
+Time elapsed: 2.20s
+===== Generation 20000 =====
+Best fitness: 855.37
+Average fitness: 856.33
+Time elapsed: 4.40s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 829.07
+Average fitness: 849.13
+Time elapsed: 0.46s
+===== Generation 5000 =====
+Best fitness: 751.14
+Average fitness: 752.23
+Time elapsed: 1.17s
+===== Generation 10000 =====
+Best fitness: 720.12
+Average fitness: 721.38
+Time elapsed: 2.32s
+===== Generation 20000 =====
+Best fitness: 717.70
+Average fitness: 719.29
+Time elapsed: 4.62s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 46427.69
+Average fitness: 46703.27
+Time elapsed: 0.54s
+===== Generation 5000 =====
+Best fitness: 39609.29
+Average fitness: 39769.25
+Time elapsed: 1.35s
+===== Generation 10000 =====
+Best fitness: 36264.07
+Average fitness: 36474.56
+Time elapsed: 2.70s
+===== Generation 20000 =====
+Best fitness: 35876.55
+Average fitness: 35962.58
+Time elapsed: 5.41s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 47263.26
+Average fitness: 47822.75
+Time elapsed: 0.54s
+===== Generation 5000 =====
+Best fitness: 38175.61
+Average fitness: 38175.61
+Time elapsed: 1.36s
+===== Generation 10000 =====
+Best fitness: 35007.26
+Average fitness: 35061.87
+Time elapsed: 2.74s
+===== Generation 20000 =====
+Best fitness: 32781.31
+Average fitness: 32836.86
+Time elapsed: 5.43s
+######### kroD100 #########
+===== Generation 2000 =====
+Best fitness: 42905.05
+Average fitness: 43245.78
+Time elapsed: 0.56s
+===== Generation 5000 =====
+Best fitness: 36617.41
+Average fitness: 36657.88
+Time elapsed: 1.38s
+===== Generation 10000 =====
+Best fitness: 33630.65
+Average fitness: 33630.65
+Time elapsed: 2.73s
+===== Generation 20000 =====
+Best fitness: 32477.81
+Average fitness: 32492.85
+Time elapsed: 5.45s
+######### eil101 #########
+===== Generation 2000 =====
+Best fitness: 1154.36
+Average fitness: 1164.16
+Time elapsed: 0.55s
+===== Generation 5000 =====
+Best fitness: 934.05
+Average fitness: 938.31
+Time elapsed: 1.37s
+===== Generation 10000 =====
+Best fitness: 887.07
+Average fitness: 887.54
+Time elapsed: 2.72s
+===== Generation 20000 =====
+Best fitness: 866.27
+Average fitness: 867.49
+Time elapsed: 5.47s
+######### lin105 #########
+===== Generation 2000 =====
+Best fitness: 35251.71
+Average fitness: 35539.70
+Time elapsed: 0.57s
+===== Generation 5000 =====
+Best fitness: 30262.56
+Average fitness: 30300.03
+Time elapsed: 1.41s
+===== Generation 10000 =====
+Best fitness: 27901.05
+Average fitness: 27901.05
+Time elapsed: 2.81s
+===== Generation 20000 =====
+Best fitness: 24568.83
+Average fitness: 24600.18
+Time elapsed: 5.61s
+######### pcb442 #########
+===== Generation 2000 =====
+Best fitness: 361743.06
+Average fitness: 367682.29
+Time elapsed: 1.78s
+===== Generation 5000 =====
+Best fitness: 265103.73
+Average fitness: 265884.49
+Time elapsed: 4.40s
+===== Generation 10000 =====
+Best fitness: 209482.10
+Average fitness: 209540.01
+Time elapsed: 8.83s
+===== Generation 20000 =====
+Best fitness: 169048.34
+Average fitness: 169092.11
+Time elapsed: 17.68s
+######### pr2392 #########
+===== Generation 2000 =====
+Best fitness: 10992772.45
+Average fitness: 11025801.31
+Time elapsed: 9.53s
+===== Generation 5000 =====
+Best fitness: 8807017.80
+Average fitness: 8843890.41
+Time elapsed: 23.16s
+===== Generation 10000 =====
+Best fitness: 7205284.93
+Average fitness: 7212957.27
+Time elapsed: 45.91s
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 571.61
+Average fitness: 572.79
+Time elapsed: 3.73s
+===== Generation 5000 =====
+Best fitness: 565.09
+Average fitness: 565.09
+Time elapsed: 3.73s
+===== Generation 10000 =====
+Best fitness: 565.09
+Average fitness: 566.51
+Time elapsed: 3.73s
+===== Generation 20000 =====
+Best fitness: 565.09
+Average fitness: 565.93
+Time elapsed: 3.73s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 944.33
+Average fitness: 948.44
+Time elapsed: 4.37s
+===== Generation 5000 =====
+Best fitness: 866.42
+Average fitness: 868.82
+Time elapsed: 4.37s
+===== Generation 10000 =====
+Best fitness: 843.81
+Average fitness: 847.25
+Time elapsed: 4.37s
+===== Generation 20000 =====
+Best fitness: 843.81
+Average fitness: 844.52
+Time elapsed: 4.37s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 846.52
+Average fitness: 852.46
+Time elapsed: 4.60s
+===== Generation 5000 =====
+Best fitness: 787.56
+Average fitness: 787.56
+Time elapsed: 4.60s
+===== Generation 10000 =====
+Best fitness: 772.69
+Average fitness: 774.25
+Time elapsed: 4.60s
+===== Generation 20000 =====
+Best fitness: 772.69
+Average fitness: 774.17
+Time elapsed: 4.60s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 45265.22
+Average fitness: 45373.86
+Time elapsed: 5.35s
+===== Generation 5000 =====
+Best fitness: 35347.93
+Average fitness: 35382.90
+Time elapsed: 5.35s
+===== Generation 10000 =====
+Best fitness: 31765.15
+Average fitness: 31842.03
+Time elapsed: 5.35s
+===== Generation 20000 =====
+Best fitness: 30199.89
+Average fitness: 30257.56
+Time elapsed: 5.35s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 44096.75
+Average fitness: 44284.45
+Time elapsed: 5.45s
+===== Generation 5000 =====
+Best fitness: 36659.41
+Average fitness: 36661.87
+Time elapsed: 5.45s
+===== Generation 10000 =====
+Best fitness: 32345.75
+Average fitness: 32352.30
+Time elapsed: 5.45s
+===== Generation 20000 =====
+Best fitness: 32220.36
+Average fitness: 32328.64
+Time elapsed: 5.45s
+######### kroD100 #########
+===== Generation 2000 =====
+Best fitness: 42000.12
+Average fitness: 42005.97
+Time elapsed: 5.38s
+===== Generation 5000 =====
+Best fitness: 35485.68
+Average fitness: 35505.67
+Time elapsed: 5.38s
+===== Generation 10000 =====
+Best fitness: 30426.74
+Average fitness: 30493.21
+Time elapsed: 5.38s
+===== Generation 20000 =====
+Best fitness: 30287.28
+Average fitness: 30336.00
+Time elapsed: 5.38s
+######### eil101 #########
+===== Generation 2000 =====
+Best fitness: 1132.16
+Average fitness: 1132.16
+Time elapsed: 5.49s
+===== Generation 5000 =====
+Best fitness: 970.77
+Average fitness: 971.39
+Time elapsed: 5.49s
+===== Generation 10000 =====
+Best fitness: 909.02
+Average fitness: 909.64
+Time elapsed: 5.49s
+===== Generation 20000 =====
+Best fitness: 891.21
+Average fitness: 892.31
+Time elapsed: 5.49s
+######### lin105 #########
+===== Generation 2000 =====
+Best fitness: 34910.24
+Average fitness: 35036.75
+Time elapsed: 5.53s
+===== Generation 5000 =====
+Best fitness: 30221.97
+Average fitness: 30252.25
+Time elapsed: 5.53s
+===== Generation 10000 =====
+Best fitness: 28355.98
+Average fitness: 28402.09
+Time elapsed: 5.53s
+===== Generation 20000 =====
+Best fitness: 27364.43
+Average fitness: 27432.68
+Time elapsed: 5.53s
+######### pcb442 #########
+===== Generation 2000 =====
+Best fitness: 361124.25
+Average fitness: 364392.91
+Time elapsed: 18.03s
+===== Generation 5000 =====
+Best fitness: 279331.93
+Average fitness: 280728.37
+Time elapsed: 18.03s
+===== Generation 10000 =====
+Best fitness: 222642.98
+Average fitness: 222781.32
+Time elapsed: 18.03s
+===== Generation 20000 =====
+Best fitness: 189770.36
+Average fitness: 189784.73
+Time elapsed: 18.03s
+######### pr2392 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 577.03
+Average fitness: 577.36
+Time elapsed: 3.66s
+===== Generation 5000 =====
+Best fitness: 546.68
+Average fitness: 549.08
+Time elapsed: 3.66s
+===== Generation 10000 =====
+Best fitness: 525.70
+Average fitness: 526.15
+Time elapsed: 3.66s
+===== Generation 20000 =====
+Best fitness: 525.70
+Average fitness: 527.35
+Time elapsed: 3.66s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 483.01
+Average fitness: 483.01
+Time elapsed: 3.72s
+===== Generation 5000 =====
+Best fitness: 477.91
+Average fitness: 479.31
+Time elapsed: 3.72s
+===== Generation 10000 =====
+Best fitness: 477.91
+Average fitness: 478.32
+Time elapsed: 3.72s
+===== Generation 20000 =====
+Best fitness: 477.91
+Average fitness: 479.39
+Time elapsed: 3.72s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1010.11
+Average fitness: 1024.73
+Time elapsed: 4.38s
+===== Generation 5000 =====
+Best fitness: 869.68
+Average fitness: 870.36
+Time elapsed: 4.38s
+===== Generation 10000 =====
+Best fitness: 851.42
+Average fitness: 852.35
+Time elapsed: 4.38s
+===== Generation 20000 =====
+Best fitness: 851.42
+Average fitness: 852.12
+Time elapsed: 4.38s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 789.22
+Average fitness: 789.60
+Time elapsed: 4.57s
+===== Generation 5000 =====
+Best fitness: 720.63
+Average fitness: 721.76
+Time elapsed: 4.57s
+===== Generation 10000 =====
+Best fitness: 698.45
+Average fitness: 700.90
+Time elapsed: 4.57s
+===== Generation 20000 =====
+Best fitness: 689.78
+Average fitness: 689.82
+Time elapsed: 4.57s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 44570.20
+Average fitness: 44870.22
+Time elapsed: 5.36s
+===== Generation 5000 =====
+Best fitness: 40305.69
+Average fitness: 40424.63
+Time elapsed: 5.36s
+===== Generation 10000 =====
+Best fitness: 36833.43
+Average fitness: 36947.93
+Time elapsed: 5.36s
+===== Generation 20000 =====
+Best fitness: 36032.86
+Average fitness: 36116.01
+Time elapsed: 5.36s
+######### kroC100 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 517.19
+Average fitness: 517.99
+Time elapsed: 3.69s
+===== Generation 5000 =====
+Best fitness: 516.33
+Average fitness: 517.42
+Time elapsed: 3.69s
+===== Generation 10000 =====
+Best fitness: 516.33
+Average fitness: 517.97
+Time elapsed: 3.69s
+===== Generation 20000 =====
+Best fitness: 516.33
+Average fitness: 516.84
+Time elapsed: 3.69s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 565.15
+Average fitness: 565.76
+Time elapsed: 3.69s
+===== Generation 5000 =====
+Best fitness: 550.54
+Average fitness: 551.71
+Time elapsed: 3.69s
+===== Generation 10000 =====
+Best fitness: 541.39
+Average fitness: 541.74
+Time elapsed: 3.69s
+===== Generation 20000 =====
+Best fitness: 541.39
+Average fitness: 542.66
+Time elapsed: 3.69s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1023.54
+Average fitness: 1024.40
+Time elapsed: 4.37s
+===== Generation 5000 =====
+Best fitness: 927.61
+Average fitness: 930.70
+Time elapsed: 4.37s
+===== Generation 10000 =====
+Best fitness: 910.06
+Average fitness: 910.06
+Time elapsed: 4.37s
+===== Generation 20000 =====
+Best fitness: 910.06
+Average fitness: 911.78
+Time elapsed: 4.37s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 709.71
+Average fitness: 710.69
+Time elapsed: 4.56s
+===== Generation 5000 =====
+Best fitness: 643.90
+Average fitness: 644.45
+Time elapsed: 4.56s
+===== Generation 10000 =====
+Best fitness: 635.06
+Average fitness: 635.63
+Time elapsed: 4.56s
+===== Generation 20000 =====
+Best fitness: 635.06
+Average fitness: 635.11
+Time elapsed: 4.56s
+######### kroA100 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 521.11
+Average fitness: 521.14
+Time elapsed: 3.67s
+===== Generation 5000 =====
+Best fitness: 493.04
+Average fitness: 493.62
+Time elapsed: 3.67s
+===== Generation 10000 =====
+Best fitness: 493.04
+Average fitness: 493.41
+Time elapsed: 3.67s
+===== Generation 20000 =====
+Best fitness: 493.04
+Average fitness: 494.63
+Time elapsed: 3.67s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 561.33
+Average fitness: 563.00
+Time elapsed: 3.71s
+===== Generation 5000 =====
+Best fitness: 541.28
+Average fitness: 542.94
+Time elapsed: 3.71s
+===== Generation 10000 =====
+Best fitness: 522.16
+Average fitness: 524.04
+Time elapsed: 3.71s
+===== Generation 20000 =====
+Best fitness: 522.16
+Average fitness: 523.70
+Time elapsed: 3.71s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 514.81
+Average fitness: 516.17
+Time elapsed: 3.69s
+===== Generation 5000 =====
+Best fitness: 495.81
+Average fitness: 497.72
+Time elapsed: 3.69s
+===== Generation 10000 =====
+Best fitness: 495.81
+Average fitness: 496.03
+Time elapsed: 3.69s
+===== Generation 20000 =====
+Best fitness: 495.81
+Average fitness: 496.35
+Time elapsed: 3.69s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 544.15
+Average fitness: 551.59
+Time elapsed: 3.71s
+===== Generation 5000 =====
+Best fitness: 485.55
+Average fitness: 486.17
+Time elapsed: 3.71s
+===== Generation 10000 =====
+Best fitness: 485.55
+Average fitness: 486.53
+Time elapsed: 3.71s
+===== Generation 20000 =====
+Best fitness: 485.55
+Average fitness: 488.10
+Time elapsed: 3.71s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1142.24
+Average fitness: 1145.66
+Time elapsed: 4.33s
+===== Generation 5000 =====
+Best fitness: 1020.13
+Average fitness: 1021.73
+Time elapsed: 4.33s
+===== Generation 10000 =====
+Best fitness: 982.59
+Average fitness: 983.64
+Time elapsed: 4.33s
+===== Generation 20000 =====
+Best fitness: 982.59
+Average fitness: 984.27
+Time elapsed: 4.33s
+######### eil76 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 556.97
+Average fitness: 558.99
+Time elapsed: 3.70s
+===== Generation 5000 =====
+Best fitness: 535.22
+Average fitness: 535.22
+Time elapsed: 3.70s
+===== Generation 10000 =====
+Best fitness: 535.22
+Average fitness: 536.18
+Time elapsed: 3.70s
+===== Generation 20000 =====
+Best fitness: 535.22
+Average fitness: 535.28
+Time elapsed: 3.70s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1077.37
+Average fitness: 1087.62
+Time elapsed: 4.33s
+===== Generation 5000 =====
+Best fitness: 924.39
+Average fitness: 926.13
+Time elapsed: 4.33s
+===== Generation 10000 =====
+Best fitness: 910.02
+Average fitness: 913.16
+Time elapsed: 4.33s
+===== Generation 20000 =====
+Best fitness: 910.02
+Average fitness: 913.46
+Time elapsed: 4.33s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 791.62
+Average fitness: 793.01
+Time elapsed: 4.53s
+===== Generation 5000 =====
+Best fitness: 724.40
+Average fitness: 724.40
+Time elapsed: 4.53s
+===== Generation 10000 =====
+Best fitness: 686.89
+Average fitness: 687.97
+Time elapsed: 4.53s
+===== Generation 20000 =====
+Best fitness: 685.01
+Average fitness: 687.59
+Time elapsed: 4.53s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 43277.98
+Average fitness: 44004.70
+Time elapsed: 5.34s
+===== Generation 5000 =====
+Best fitness: 35533.39
+Average fitness: 35694.77
+Time elapsed: 5.34s
+===== Generation 10000 =====
+Best fitness: 32904.84
+Average fitness: 33031.38
+Time elapsed: 5.34s
+===== Generation 20000 =====
+Best fitness: 30819.30
+Average fitness: 30894.09
+Time elapsed: 5.34s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 49434.26
+Average fitness: 49504.03
+Time elapsed: 5.37s
+===== Generation 5000 =====
+Best fitness: 39235.21
+Average fitness: 39368.79
+Time elapsed: 5.37s
+===== Generation 10000 =====
+Best fitness: 35482.06
+Average fitness: 35526.39
+Time elapsed: 5.37s
+===== Generation 20000 =====
+Best fitness: 33912.58
+Average fitness: 33975.67
+Time elapsed: 5.37s
+######### kroD100 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 547.99
+Average fitness: 549.13
+Time elapsed: 3.73s
+===== Generation 5000 =====
+Best fitness: 533.11
+Average fitness: 533.84
+Time elapsed: 3.73s
+===== Generation 10000 =====
+Best fitness: 533.11
+Average fitness: 535.69
+Time elapsed: 3.73s
+===== Generation 20000 =====
+Best fitness: 533.11
+Average fitness: 534.24
+Time elapsed: 3.73s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1129.12
+Average fitness: 1137.31
+Time elapsed: 4.37s
+===== Generation 5000 =====
+Best fitness: 997.04
+Average fitness: 998.78
+Time elapsed: 4.37s
+===== Generation 10000 =====
+Best fitness: 995.73
+Average fitness: 995.73
+Time elapsed: 4.37s
+===== Generation 20000 =====
+Best fitness: 995.73
+Average fitness: 997.25
+Time elapsed: 4.37s
+######### pcb442 #########
+===== Generation 2000 =====
+Best fitness: 363067.69
+Average fitness: 366126.59
+Time elapsed: 17.44s
+===== Generation 5000 =====
+Best fitness: 261413.64
+Average fitness: 261543.25
+Time elapsed: 17.44s
+===== Generation 10000 =====
+Best fitness: 213120.17
+Average fitness: 213638.67
+Time elapsed: 17.44s
+===== Generation 20000 =====
+Best fitness: 181490.38
+Average fitness: 181671.50
+Time elapsed: 17.44s
+######### pr2392 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 492.93
+Average fitness: 494.42
+Time elapsed: 3.69s
+===== Generation 5000 =====
+Best fitness: 480.35
+Average fitness: 481.01
+Time elapsed: 3.69s
+===== Generation 10000 =====
+Best fitness: 480.35
+Average fitness: 480.72
+Time elapsed: 3.69s
+===== Generation 20000 =====
+Best fitness: 480.35
+Average fitness: 480.35
+Time elapsed: 3.69s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1075.36
+Average fitness: 1083.69
+Time elapsed: 4.35s
+===== Generation 5000 =====
+Best fitness: 988.87
+Average fitness: 991.79
+Time elapsed: 4.35s
+===== Generation 10000 =====
+Best fitness: 932.53
+Average fitness: 933.35
+Time elapsed: 4.35s
+===== Generation 20000 =====
+Best fitness: 908.16
+Average fitness: 910.01
+Time elapsed: 4.35s
+######### pcb442 #########
+===== Generation 2000 =====
+Best fitness: 357269.93
+Average fitness: 360484.94
+Time elapsed: 17.50s
+===== Generation 5000 =====
+Best fitness: 258573.66
+Average fitness: 258848.81
+Time elapsed: 17.50s
+===== Generation 10000 =====
+Best fitness: 213916.01
+Average fitness: 214347.28
+Time elapsed: 17.50s
+===== Generation 20000 =====
+Best fitness: 176088.77
+Average fitness: 176126.26
+Time elapsed: 17.50s
+######### pr2392 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 543.64
+Average fitness: 546.79
+Time elapsed: 3.70s
+===== Generation 5000 =====
+Best fitness: 492.81
+Average fitness: 494.34
+Time elapsed: 3.70s
+===== Generation 10000 =====
+Best fitness: 492.81
+Average fitness: 493.78
+Time elapsed: 3.70s
+===== Generation 20000 =====
+Best fitness: 492.81
+Average fitness: 493.32
+Time elapsed: 3.70s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1122.76
+Average fitness: 1123.92
+Time elapsed: 4.32s
+===== Generation 5000 =====
+Best fitness: 1007.99
+Average fitness: 1011.63
+Time elapsed: 4.32s
+===== Generation 10000 =====
+Best fitness: 960.76
+Average fitness: 962.05
+Time elapsed: 4.32s
+===== Generation 20000 =====
+Best fitness: 960.76
+Average fitness: 961.55
+Time elapsed: 4.32s
+######### pcb442 #########
+===== Generation 2000 =====
+Best fitness: 342420.41
+Average fitness: 348385.00
+Time elapsed: 17.53s
+===== Generation 5000 =====
+Best fitness: 267742.78
+Average fitness: 267980.17
+Time elapsed: 17.53s
+===== Generation 10000 =====
+Best fitness: 224697.81
+Average fitness: 224905.02
+Time elapsed: 17.53s
+===== Generation 20000 =====
+Best fitness: 184870.82
+Average fitness: 185124.87
+Time elapsed: 17.53s
+######### pr2392 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 518.98
+Average fitness: 525.21
+Time elapsed: 3.73s
+===== Generation 5000 =====
+Best fitness: 493.95
+Average fitness: 494.63
+Time elapsed: 3.73s
+===== Generation 10000 =====
+Best fitness: 493.95
+Average fitness: 495.32
+Time elapsed: 3.73s
+===== Generation 20000 =====
+Best fitness: 493.95
+Average fitness: 494.56
+Time elapsed: 3.73s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 519.43
+Average fitness: 520.80
+Time elapsed: 3.72s
+===== Generation 5000 =====
+Best fitness: 518.05
+Average fitness: 520.34
+Time elapsed: 3.72s
+===== Generation 10000 =====
+Best fitness: 518.05
+Average fitness: 518.83
+Time elapsed: 3.72s
+===== Generation 20000 =====
+Best fitness: 518.05
+Average fitness: 519.21
+Time elapsed: 3.72s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1075.97
+Average fitness: 1082.48
+Time elapsed: 4.36s
+===== Generation 5000 =====
+Best fitness: 994.60
+Average fitness: 995.76
+Time elapsed: 4.36s
+===== Generation 10000 =====
+Best fitness: 981.25
+Average fitness: 982.78
+Time elapsed: 4.36s
+===== Generation 20000 =====
+Best fitness: 981.25
+Average fitness: 981.25
+Time elapsed: 4.36s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 891.33
+Average fitness: 891.99
+Time elapsed: 4.60s
+===== Generation 5000 =====
+Best fitness: 846.19
+Average fitness: 847.56
+Time elapsed: 4.60s
+===== Generation 10000 =====
+Best fitness: 825.31
+Average fitness: 827.29
+Time elapsed: 4.60s
+===== Generation 20000 =====
+Best fitness: 817.88
+Average fitness: 819.69
+Time elapsed: 4.60s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 42664.98
+Average fitness: 44089.62
+Time elapsed: 5.43s
+===== Generation 5000 =====
+Best fitness: 35026.89
+Average fitness: 35048.39
+Time elapsed: 5.43s
+===== Generation 10000 =====
+Best fitness: 33345.44
+Average fitness: 33402.35
+Time elapsed: 5.43s
+===== Generation 20000 =====
+Best fitness: 32451.39
+Average fitness: 32486.61
+Time elapsed: 5.43s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 48716.90
+Average fitness: 49493.49
+Time elapsed: 5.42s
+===== Generation 5000 =====
+Best fitness: 37374.03
+Average fitness: 38011.26
+Time elapsed: 5.42s
+===== Generation 10000 =====
+Best fitness: 34547.35
+Average fitness: 34655.61
+Time elapsed: 5.42s
+===== Generation 20000 =====
+Best fitness: 33124.65
+Average fitness: 33154.20
+Time elapsed: 5.42s
+######### kroD100 #########
+===== Generation 2000 =====
+Best fitness: 45451.41
+Average fitness: 45578.24
+Time elapsed: 5.42s
+===== Generation 5000 =====
+Best fitness: 38256.27
+Average fitness: 38358.46
+Time elapsed: 5.42s
+===== Generation 10000 =====
+Best fitness: 35753.13
+Average fitness: 35809.10
+Time elapsed: 5.42s
+===== Generation 20000 =====
+Best fitness: 34240.58
+Average fitness: 34306.66
+Time elapsed: 5.42s
+######### eil101 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 568.42
+Average fitness: 573.99
+Time elapsed: 3.77s
+===== Generation 5000 =====
+Best fitness: 534.07
+Average fitness: 534.11
+Time elapsed: 3.77s
+===== Generation 10000 =====
+Best fitness: 531.89
+Average fitness: 533.49
+Time elapsed: 3.77s
+===== Generation 20000 =====
+Best fitness: 531.89
+Average fitness: 533.09
+Time elapsed: 3.77s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 544.85
+Average fitness: 546.26
+Time elapsed: 6.86s
+===== Generation 5000 =====
+Best fitness: 506.46
+Average fitness: 508.04
+Time elapsed: 6.86s
+===== Generation 10000 =====
+Best fitness: 506.46
+Average fitness: 506.69
+Time elapsed: 6.86s
+===== Generation 20000 =====
+Best fitness: 506.46
+Average fitness: 508.55
+Time elapsed: 6.86s
+######### st70 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 543.33
+Average fitness: 552.58
+Time elapsed: 3.70s
+===== Generation 5000 =====
+Best fitness: 516.71
+Average fitness: 517.10
+Time elapsed: 3.70s
+===== Generation 10000 =====
+Best fitness: 516.71
+Average fitness: 517.18
+Time elapsed: 3.70s
+===== Generation 20000 =====
+Best fitness: 516.71
+Average fitness: 516.81
+Time elapsed: 3.70s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1022.82
+Average fitness: 1026.51
+Time elapsed: 4.31s
+===== Generation 5000 =====
+Best fitness: 920.07
+Average fitness: 922.09
+Time elapsed: 4.31s
+===== Generation 10000 =====
+Best fitness: 830.08
+Average fitness: 832.91
+Time elapsed: 4.31s
+===== Generation 20000 =====
+Best fitness: 830.08
+Average fitness: 830.08
+Time elapsed: 4.31s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 821.17
+Average fitness: 823.71
+Time elapsed: 4.50s
+===== Generation 5000 =====
+Best fitness: 755.52
+Average fitness: 756.27
+Time elapsed: 4.50s
+===== Generation 10000 =====
+Best fitness: 746.38
+Average fitness: 746.83
+Time elapsed: 4.50s
+===== Generation 20000 =====
+Best fitness: 746.38
+Average fitness: 746.38
+Time elapsed: 4.50s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 42726.74
+Average fitness: 43387.79
+Time elapsed: 5.33s
+===== Generation 5000 =====
+Best fitness: 34016.97
+Average fitness: 34212.37
+Time elapsed: 5.33s
+===== Generation 10000 =====
+Best fitness: 32901.44
+Average fitness: 32924.67
+Time elapsed: 5.33s
+===== Generation 20000 =====
+Best fitness: 32799.57
+Average fitness: 32799.57
+Time elapsed: 5.33s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 49143.16
+Average fitness: 49988.39
+Time elapsed: 5.32s
+===== Generation 5000 =====
+Best fitness: 35802.75
+Average fitness: 35955.05
+Time elapsed: 5.32s
+===== Generation 10000 =====
+Best fitness: 34369.99
+Average fitness: 34369.99
+Time elapsed: 5.32s
+===== Generation 20000 =====
+Best fitness: 32823.42
+Average fitness: 32907.93
+Time elapsed: 5.32s
+######### kroD100 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 555.44
+Average fitness: 555.44
+Time elapsed: 3.69s
+===== Generation 5000 =====
+Best fitness: 525.26
+Average fitness: 526.04
+Time elapsed: 3.69s
+===== Generation 10000 =====
+Best fitness: 525.26
+Average fitness: 526.18
+Time elapsed: 3.69s
+===== Generation 20000 =====
+Best fitness: 525.26
+Average fitness: 525.26
+Time elapsed: 3.69s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1080.47
+Average fitness: 1087.90
+Time elapsed: 4.37s
+===== Generation 5000 =====
+Best fitness: 957.39
+Average fitness: 958.33
+Time elapsed: 4.37s
+===== Generation 10000 =====
+Best fitness: 953.35
+Average fitness: 954.05
+Time elapsed: 4.37s
+===== Generation 20000 =====
+Best fitness: 953.35
+Average fitness: 954.75
+Time elapsed: 4.37s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 791.58
+Average fitness: 799.60
+Time elapsed: 4.57s
+===== Generation 5000 =====
+Best fitness: 715.90
+Average fitness: 717.45
+Time elapsed: 4.57s
+===== Generation 10000 =====
+Best fitness: 699.15
+Average fitness: 699.46
+Time elapsed: 4.57s
+===== Generation 20000 =====
+Best fitness: 699.15
+Average fitness: 699.21
+Time elapsed: 4.57s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 52939.44
+Average fitness: 52978.33
+Time elapsed: 5.39s
+===== Generation 5000 =====
+Best fitness: 45901.95
+Average fitness: 45915.28
+Time elapsed: 5.39s
+===== Generation 10000 =====
+Best fitness: 38913.93
+Average fitness: 39109.06
+Time elapsed: 5.39s
+===== Generation 20000 =====
+Best fitness: 32083.57
+Average fitness: 32240.39
+Time elapsed: 5.39s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 41015.39
+Average fitness: 41677.78
+Time elapsed: 5.40s
+===== Generation 5000 =====
+Best fitness: 32974.77
+Average fitness: 33047.34
+Time elapsed: 5.40s
+===== Generation 10000 =====
+Best fitness: 31890.00
+Average fitness: 31944.41
+Time elapsed: 5.40s
+===== Generation 20000 =====
+Best fitness: 31409.48
+Average fitness: 31498.77
+Time elapsed: 5.40s
+######### kroD100 #########
+===== Generation 2000 =====
+Best fitness: 44403.44
+Average fitness: 44792.11
+Time elapsed: 5.40s
+===== Generation 5000 =====
+Best fitness: 37249.71
+Average fitness: 37249.71
+Time elapsed: 5.40s
+===== Generation 10000 =====
+Best fitness: 34492.35
+Average fitness: 34531.82
+Time elapsed: 5.40s
+===== Generation 20000 =====
+Best fitness: 33889.27
+Average fitness: 33889.27
+Time elapsed: 5.40s
+######### eil101 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 535.10
+Average fitness: 541.73
+Time elapsed: 3.71s
+===== Generation 5000 =====
+Best fitness: 494.79
+Average fitness: 496.29
+Time elapsed: 3.71s
+===== Generation 10000 =====
+Best fitness: 494.79
+Average fitness: 496.80
+Time elapsed: 3.71s
+===== Generation 20000 =====
+Best fitness: 494.79
+Average fitness: 494.99
+Time elapsed: 3.71s
+######### st70 #########
+===== Generation 2000 =====
+Best fitness: 1113.04
+Average fitness: 1114.77
+Time elapsed: 4.34s
+===== Generation 5000 =====
+Best fitness: 930.66
+Average fitness: 939.61
+Time elapsed: 4.34s
+===== Generation 10000 =====
+Best fitness: 921.93
+Average fitness: 924.08
+Time elapsed: 4.34s
+===== Generation 20000 =====
+Best fitness: 921.93
+Average fitness: 926.87
+Time elapsed: 4.34s
+######### eil76 #########
+===== Generation 2000 =====
+Best fitness: 845.37
+Average fitness: 845.45
+Time elapsed: 4.57s
+===== Generation 5000 =====
+Best fitness: 742.09
+Average fitness: 743.41
+Time elapsed: 4.57s
+===== Generation 10000 =====
+Best fitness: 720.67
+Average fitness: 721.42
+Time elapsed: 4.57s
+===== Generation 20000 =====
+Best fitness: 720.67
+Average fitness: 722.35
+Time elapsed: 4.57s
+######### kroA100 #########
+===== Generation 2000 =====
+Best fitness: 43511.00
+Average fitness: 43716.82
+Time elapsed: 5.39s
+===== Generation 5000 =====
+Best fitness: 34163.72
+Average fitness: 34816.98
+Time elapsed: 5.39s
+===== Generation 10000 =====
+Best fitness: 32379.82
+Average fitness: 32426.92
+Time elapsed: 5.39s
+===== Generation 20000 =====
+Best fitness: 31879.11
+Average fitness: 31921.07
+Time elapsed: 5.39s
+######### kroC100 #########
+===== Generation 2000 =====
+Best fitness: 48034.83
+Average fitness: 48225.79
+Time elapsed: 5.39s
+===== Generation 5000 =====
+Best fitness: 39305.22
+Average fitness: 39345.98
+Time elapsed: 5.39s
+===== Generation 10000 =====
+Best fitness: 36446.32
+Average fitness: 36452.06
+Time elapsed: 5.39s
+===== Generation 20000 =====
+Best fitness: 36086.93
+Average fitness: 36109.19
+Time elapsed: 5.39s
+######### kroD100 #########
+===== Generation 2000 =====
+Best fitness: 45004.51
+Average fitness: 45252.86
+Time elapsed: 5.40s
+===== Generation 5000 =====
+Best fitness: 36463.16
+Average fitness: 36528.49
+Time elapsed: 5.40s
+===== Generation 10000 =====
+Best fitness: 34449.18
+Average fitness: 34554.39
+Time elapsed: 5.40s
+===== Generation 20000 =====
+Best fitness: 32998.62
+Average fitness: 33064.81
+Time elapsed: 5.40s
+######### eil101 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+######### EVOLUTIONARY ALGORITHM #########
+Results from running the EA on TSP problems
+Running with population 200.
+
+######### eil51 #########
+===== Generation 2000 =====
+Best fitness: 574.72
+Average fitness: 575.00
+Time elapsed: 3.70s
+===== Generation 5000 =====
+Best fitness: 572.86
+Average fitness: 573.56
+Time elapsed: 3.70s
+===== Generation 10000 =====
+Best fitness: 572.86
+Average fitness: 573.59
+Time elapsed: 3.70s
+===== Generation 20000 =====
+Best fitness: 572.86
+Average fitness: 573.94
+Time elapsed: 3.70s
+######### st70 #########

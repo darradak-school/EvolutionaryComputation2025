@@ -40,19 +40,19 @@ def calc(data_list):
 
 
 # Write results to file.
-def write_results(file, section_name, results, search_types):
-    file.write(f"===== {section_name} =====\n")
+def write_results(f, section_name, results, search_types):
+    f.write(f"===== {section_name} =====\n")
     for search_type in search_types:
         data = results[search_type]
         avg, min_v, avg_cycles, avg_time = calc(data)
         if section_name == "MEAN":
-            file.write(f"{search_type.title()}: {avg:.2f}\n")
+            f.write(f"{search_type.title()}: {avg:.2f}\n")
         elif section_name == "MINIMUM":
-            file.write(f"{search_type.title()}: {min_v:.2f}\n")
+            f.write(f"{search_type.title()}: {min_v:.2f}\n")
         elif section_name == "MEAN TIMES":
-            file.write(f"{search_type.title()} cycles: {avg_cycles:.2f}\n")
-            file.write(f"{search_type.title()} time: {avg_time:.2f}s\n")
-            file.write("---------------------\n")
+            f.write(f"{search_type.title()} cycles: {avg_cycles:.2f}\n")
+            f.write(f"{search_type.title()} time: {avg_time:.2f}s\n")
+            f.write("---------------------\n")
 
 
 # Run tests on all problems.
@@ -68,7 +68,7 @@ for problem in PROBLEMS:
     tours = []
     for i in range(10):
         t = tsp.random_tour()
-        tours.append(tsp.tour_length(t))
+        tours.append(tsp.total_dist(t))
 
     # Results dictionary for each search type.
     results = {search_type: [] for search_type in TYPES}
@@ -84,7 +84,7 @@ for problem in PROBLEMS:
                 r_tour, search_type, tsp, COOLING, TARGET, STAG_LIMIT
             )
             # Append the result to the results dictionary.
-            tour_length = tsp.tour_length(result[0])
+            tour_length = tsp.total_dist(result[0])
             results[search_type].append((tour_length, result[1], result[2]))
 
     print(f"Time taken: {time.time() - start:.2f} seconds")
@@ -93,9 +93,9 @@ for problem in PROBLEMS:
     baseline_avg = sum(tours) / len(tours)
 
     # Write results to file.
-    with open("../results/local_search.txt", "a") as file:
-        file.write(f"\n######### {problem} #########\n")
-        file.write(f"Average tour length before optimisation: {baseline_avg:.2f}\n")
-        write_results(file, "MEAN", results, TYPES)
-        write_results(file, "MINIMUM", results, TYPES)
-        write_results(file, "MEAN TIMES", results, TYPES)
+    with open("../results/local_search.txt", "a") as f:
+        f.write(f"\n######### {problem} #########\n")
+        f.write(f"Average tour length before optimisation: {baseline_avg:.2f}\n")
+        write_results(f, "MEAN", results, TYPES)
+        write_results(f, "MINIMUM", results, TYPES)
+        write_results(f, "MEAN TIMES", results, TYPES)
