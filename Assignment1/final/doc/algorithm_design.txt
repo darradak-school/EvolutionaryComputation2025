@@ -1,0 +1,9 @@
+ALGORITHM DESIGNS
+
+MURAD:
+This algorithm uses tournament selection for parent selection to maintain a balance between exploration and exploitation, 
+with a modular tournament size to allow for the user to adjust between the two extremes. 
+I used order crossover because it is faster and simpler than the other methods and does a good job at maintaining genetic diversity. 
+While passing on good segments, I used swap mutation for similar reasons, it is fast, simple, and balances exploration and exploitation. 
+The algorithm is very modular to the user’s preferences, but on default settings we use a very low replacement rate, making it a steady state algorithm. 
+This was done to make the algorithm faster, as we have to replace less individuals, and to not lose too many individuals through the generations.
