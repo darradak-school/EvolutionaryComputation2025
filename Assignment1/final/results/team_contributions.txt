@@ -1,0 +1,22 @@
+Murad 
+tsp.py                 # Exercise 1: TSP problem representation
+local_search.py        # Exercise 2: Local search algorithms
+
+Jerry 
+individual_population.py          # Exercise 3
+
+Carol
+individual_population.py          # Exercise 3
+
+Tyler
+mutations.py           # Exercise 4: Mutation operators
+
+Darcy
+crossovers.py          # Exercise 4: Crossover operators 
+Programmed crossovers.py file for team
+
+evolutionary.py        # Exercise 6: Evolutionary algorithm
+Worked on evolutionary.py file, collaborated on which algorithms to test
+
+Ian
+selection.py           # Exercise 5: Selection methods

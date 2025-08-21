@@ -135,7 +135,7 @@ class SimpleEvolutionaryAlgorithm:
 
 
 def test_different_operators():
-    """Test the EA with different operator combinations"""
+    """Test the EA with different operator combinations -- Using eil51.tsp currently"""
     print("Testing Different Operator Combinations")
     print("=" * 50)
     
@@ -143,7 +143,10 @@ def test_different_operators():
     configs = [
         ("Order + Swap", "order_crossover", "swap"),
         ("PMX + Insert", "pmx_crossover", "insert"),
-        ("Cycle + Inversion", "cycle_crossover", "inversion")
+        ("Cycle + Inversion", "cycle_crossover", "inversion"),
+        ("PMX + Inversion", "pmx_crossover", "inversion"),
+        ("Order + Insert", "order_crossover", "insert")
+       # ("Edge Recombo + Inversion", "edge_recombination", "inversion")
     ]
     
     results = []
