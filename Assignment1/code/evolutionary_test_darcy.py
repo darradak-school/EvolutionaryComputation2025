@@ -1,8 +1,3 @@
-"""
-Simple Evolutionary Algorithm for TSP Assignment
-Clean, student-level implementation that integrates team components
-"""
-
 from tsp import TSP
 from individual_population import Individual, Population
 from crossovers import Crossovers
@@ -13,10 +8,7 @@ import numpy as np
 
 
 class SimpleEvolutionaryAlgorithm:
-    """
-    Simple EA for TSP that can be easily configured and understood
-    """
-    
+    """EA Class"""
     def __init__(self, tsp_file, population_size=50, generations=1000):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
@@ -211,7 +203,7 @@ def test_different_operators():
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("Simple Evolutionary Algorithm Demo")
+    print("Simple Evolutionary Algorithm:")
     print("=" * 60)
     
     # Basic test
