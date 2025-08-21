@@ -1,3 +1,8 @@
+"""
+Simple Evolutionary Algorithm for TSP Assignment
+Clean, student-level implementation that integrates team components
+"""
+
 from tsp import TSP
 from individual_population import Individual, Population
 from crossovers import Crossovers
@@ -9,7 +14,7 @@ import numpy as np
 
 class SimpleEvolutionaryAlgorithm:
     """
-    Simple EA for TSP that can be easily configured
+    Simple EA for TSP that can be easily configured and understood
     """
     
     def __init__(self, tsp_file, population_size=50, generations=1000):
@@ -29,25 +34,17 @@ class SimpleEvolutionaryAlgorithm:
         
     def select_parents(self):
         """Select parents using tournament selection"""
-        # Convert to format needed by selection methods
-        tours = np.array([ind.tour for ind in self.population.individuals])
-        
-        # Create distance matrix
-        n = len(self.tsp.location_ids)
-        distance_matrix = np.zeros((n, n))
-        for i, loc1 in enumerate(self.tsp.location_ids):
-            for j, loc2 in enumerate(self.tsp.location_ids):
-                if i != j:
-                    distance_matrix[i][j] = self.tsp.dist(loc1, loc2)
-        
-        # Tournament selection
-        selected_tours = Selection.Tournament_Selection(distance_matrix, tours, k=3)
-        
-        # Convert back to individuals
+        # Simple tournament selection without using Selection class
         parents = []
-        for tour in selected_tours:
-            ind = Individual(self.tsp, tour.tolist())
-            parents.append(ind)
+        
+        for _ in range(self.population_size):
+            # Pick random individuals for tournament
+            tournament_size = 3
+            tournament = random.sample(self.population.individuals, tournament_size)
+            
+            # Find best in tournament (lowest fitness = best tour)
+            winner = min(tournament, key=lambda x: x.fitness)
+            parents.append(winner)
             
         return parents
     
@@ -212,37 +209,6 @@ def test_different_operators():
     print(f"\nBest configuration: {best_config[0]} with {best_config[1]:.2f}")
 
 
-def run_multiple_experiments():
-    """Run multiple experiments for statistics"""
-    print("\nRunning Multiple Experiments")
-    print("=" * 40)
-    
-    runs = 10
-    results = []
-    
-    print(f"Running {runs} experiments...")
-    
-    for i in range(runs):
-        ea = SimpleEvolutionaryAlgorithm(
-            "tsplib/eil51.tsp", 
-            population_size=50, 
-            generations=2000
-        )
-        best = ea.run(print_progress=False)
-        results.append(best.fitness)
-        print(f"Run {i+1}: {best.fitness:.2f}")
-    
-    # Statistics
-    avg = sum(results) / len(results)
-    best_result = min(results)
-    worst = max(results)
-    
-    print(f"\nStatistics over {runs} runs:")
-    print(f"Average: {avg:.2f}")
-    print(f"Best:    {best_result:.2f}")
-    print(f"Worst:   {worst:.2f}")
-
-
 # Example usage and testing
 if __name__ == "__main__":
     print("Simple Evolutionary Algorithm Demo")
@@ -262,7 +228,3 @@ if __name__ == "__main__":
     # Test different operators
     print(f"\n2. Operator Comparison")
     test_different_operators()
-    
-    # Multiple runs
-    print(f"\n3. Multiple Runs")
-    run_multiple_experiments()
