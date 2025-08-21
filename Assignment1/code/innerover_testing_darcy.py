@@ -369,47 +369,6 @@ def run_inverover_experiments():
     
     return results
 
-
-# Test function for development
-def test_inverover():
-    """Simple test of Inver-over algorithm."""
-    print("Testing Inver-over Algorithm")
-    print("-" * 40)
-    
-    # Test on a small instance
-    algo = InverOver("tsplib/eil51.tsp", population_size=50, p=0.02)
-    
-    # Get initial population stats
-    initial_stats = algo.get_population_stats()
-    print(f"Initial population - Best: {initial_stats['best']:.2f}, "
-          f"Average: {initial_stats['average']:.2f}")
-    
-    # Run for a few generations
-    for i in range(10):
-        algo.evolve_generation()
-        if (i + 1) % 5 == 0:
-            stats = algo.get_population_stats()
-            print(f"Generation {i+1} - Best: {stats['best']:.2f}, "
-                  f"Average: {stats['average']:.2f}")
-    
-    # Run complete algorithm
-    print("\nRunning complete algorithm...")
-    best_tour, best_fitness, generations, elapsed_time = algo.run(
-        max_generations=1000, verbose=True
-    )
-    
-    print(f"\nFinal Results:")
-    print(f"  Best fitness: {best_fitness:.2f}")
-    print(f"  Generations: {generations}")
-    print(f"  Time: {elapsed_time:.2f}s")
-    
-    # Verify tour validity
-    if len(set(best_tour)) == len(best_tour):
-        print("  Tour is valid (no duplicates)")
-    else:
-        print("  WARNING: Tour has duplicates!")
-
-
 if __name__ == "__main__":
 
     run_inverover_experiments()
