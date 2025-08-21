@@ -34,7 +34,7 @@ class Selection:
             Distances = Premutation_distance_matrix[Premutation_idx, np.roll(Premutation_idx, -1)]
             return np.sum(Distances) if CONFIG.Data_Type == np.ndarray else np.sum(Distances).tolist()
         else:
-            rolled_idx = Premutation_idx[1:] + [Premutation_idx[0]]  # 手動實現 roll
+            rolled_idx = Premutation_idx[1:] + [Premutation_idx[0]]
             total_distance = 0
             for i in range(len(Premutation_idx)):
                 total_distance += Premutation_distance_matrix[Premutation_idx[i]][rolled_idx[i]]
@@ -295,7 +295,7 @@ def Process_Benchmark_ALL_FILE(All_TSP_File_Path_List):
                     Generation_Iteration_Count += 1
                     if Generation_Iteration_Count % 100 == 0:
                         print(f"Generation {Generation_Iteration_Count}: Best Fitness = {Best_Fitness:.2f}")
-                print(f"\n=== 最終結果 ===")
-                print(f"最佳路徑長度: {Best_Fitness:.2f}")
+                print(f"\n======Final Results======")
+                print(f"Best Solution: {Best_Solution:.2f}")
         break
 Process_Benchmark_ALL_FILE(CONFIG.TSP_File_Path_List)
