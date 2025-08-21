@@ -216,7 +216,7 @@ File_Path="/Users/zebb/Library/Mobile Documents/com~apple~CloudDocs/Documents/Ia
 CONFIG = CONFIG(File_Path)
 TSP = TSP()
 # ====================
-# CONFIG.Data_Type = list
+CONFIG.Data_Type = list
 CONFIG.Data_Type = np.ndarray
 # ====================
 def Process_Benchmark_ALL_FILE(All_TSP_File_Path_List):
