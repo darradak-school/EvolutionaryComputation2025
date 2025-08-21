@@ -257,22 +257,6 @@ def Process_Benchmark_ALL_FILE(All_TSP_File_Path_List):
                 'crossover_rate': 0.8,
                 'mutation_rate' : 0.2
             },
-            {
-                'name'          : 'EA2_FitnessProportional_PMX_Swap',
-                'selection'     : Selection.Fitness_Proportional_Selection,
-                'crossover'     : Crossover.PMX_Crossover,
-                'mutation'      : Mutation.Swap_mutation,
-                'crossover_rate': 0.9,
-                'mutation_rate' : 0.1
-            },
-            {
-                'name'          : 'EA3_Elitist_Cycle_Inversion',
-                'selection'     : Selection.Elitist_Selection,
-                'crossover'     : Crossover.Cycle_Crossover,
-                'mutation'      : Mutation.Inversion_mutation,
-                'crossover_rate': 0.7,
-                'mutation_rate' : 0.3
-            }
         ], [20, 50, 100, 200], [2000, 5000, 10000, 20000]
     Evolution_Strategies_config, population_sizes, generation_checkpoints = TSP_config()
     for file_idx, file_path in enumerate(All_TSP_File_Path_List):
@@ -327,5 +311,6 @@ def Process_Benchmark_ALL_FILE(All_TSP_File_Path_List):
                     print(f"\n======Final Results======")
                     print(f"File: {file_name}, Config: {config['name']}, Population Size: {pop_size}, Generations: {generation_size}")
                     print(f"Best Solution: {Best_Fitness:.2f}")
+            break
         break
 Process_Benchmark_ALL_FILE(CONFIG.TSP_File_Path_List)
