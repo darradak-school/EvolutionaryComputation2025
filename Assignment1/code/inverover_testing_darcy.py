@@ -23,8 +23,8 @@ class InverOver:
         
         Args:
             tsp_file: Path to TSP problem file
-            population_size: Size of population (default: 100 as per paper)
-            p: Probability of random inversion (default: 0.02 as per paper)
+            population_size: Size of population (default: 100 for assignment)
+            p: Probability of random inversion (default: 0.02 for assignment)
             max_stagnation: Number of iterations without improvement before termination
         """
         self.tsp = TSP(tsp_file)
@@ -53,7 +53,7 @@ class InverOver:
         
         Args:
             tour: Current tour
-            start_idx: Start index of segment to invert (exclusive - starts after this)
+            start_idx: Start index of segment to invert (exclusive)
             end_idx: End index of segment to invert (inclusive)
             
         Returns:
@@ -169,7 +169,6 @@ class InverOver:
                 break  # Exit from repeat loop
             
             # Perform inversion from the position after c to position of c'
-            # This inverts the segment (c+1, c+2, ..., c')
             S_prime = self._inversion(S_prime, c_idx, c_prime_idx)
             
             # Update c to c'
@@ -220,7 +219,7 @@ class InverOver:
         
         Args:
             max_generations: Max number of generations
-            verbose: Whether to print information
+            verbose: Whether to print info
             
         Returns:
             Tuple of (best_tour, best_fitness, generations_run, time_elapsed)
