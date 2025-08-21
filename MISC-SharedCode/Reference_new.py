@@ -265,52 +265,52 @@ def Process_Benchmark_ALL_FILE(All_TSP_File_Path_List):
         TSP_City_distance_matrix = TSP.TSP_Distance_Cost(TSP_locations)
         for config_idx, config in enumerate(Evolution_Strategies_config):
             for pop_size in population_sizes:
-                for generation_size in generation_checkpoints:
-                    Parent_Population = TSP.Initial_different_Parent(TSP_city, population_sizes=pop_size)
-                    Generation_Iteration, Generation_Iteration_Count = generation_size, 0
-                    # ----------------------------------------
-                    Best_Solution, Best_Fitness, fitness_history = None, float('inf'), []
-                    crossover_rate, mutation_rate = config['crossover_rate'], config['mutation_rate']
-                    # ----------------------------------------
-                    while Generation_Iteration_Count < Generation_Iteration:
-                        parent_pool = config['selection'](TSP_City_distance_matrix, Parent_Population)
-                        # ====================
-                        offspring_population = []
-                        for i in range(0, len(parent_pool) - 1, 2):
-                            parent1 = parent_pool[i]
-                            parent2 = parent_pool[i + 1] if i + 1 < len(parent_pool) else parent_pool[0]
-                            if random.random() < crossover_rate:
-                                try:
-                                    child1, child2 = config['crossover'](parent1, parent2)
-                                    offspring_population.extend([child1, child2])
-                                except:
-                                    offspring_population.extend([parent1.copy(), parent2.copy()])
-                            else:
+                Parent_Population = TSP.Initial_different_Parent(TSP_city, population_sizes=pop_size)
+                Generation_Iteration, Generation_Iteration_Count = max(generation_checkpoints), 0
+                # ----------------------------------------
+                Best_Solution, Best_Fitness, fitness_history = None, float('inf'), []
+                crossover_rate, mutation_rate = config['crossover_rate'], config['mutation_rate']
+                # ----------------------------------------
+                while Generation_Iteration_Count < Generation_Iteration:
+                    parent_pool = config['selection'](TSP_City_distance_matrix, Parent_Population)
+                    # ====================
+                    offspring_population = []
+                    for i in range(0, len(parent_pool) - 1, 2):
+                        parent1 = parent_pool[i]
+                        parent2 = parent_pool[i + 1] if i + 1 < len(parent_pool) else parent_pool[0]
+                        if random.random() < crossover_rate:
+                            try:
+                                child1, child2 = config['crossover'](parent1, parent2)
+                                offspring_population.extend([child1, child2])
+                            except:
                                 offspring_population.extend([parent1.copy(), parent2.copy()])
-                        # ====================
-                        if CONFIG.Data_Type == np.ndarray:
-                            offspring_population = np.array(offspring_population)
-                        for i in range(len(offspring_population)):
-                            if random.random() < mutation_rate:
-                                offspring_population[i] = config['mutation'](offspring_population[i])
-                        if CONFIG.Data_Type == np.ndarray:
-                            offspring_population = np.array(offspring_population[:pop_size])
-                        if "Elitist" in config['selection'].__name__:
-                            Parent_Population = Selection.Elitist_Selection(TSP_City_distance_matrix, Parent_Population, offspring_population)
                         else:
-                            Parent_Population = offspring_population
-                        current_fitness = Selection._Population_Group_Fitness(Parent_Population, TSP_City_distance_matrix)
-                        min_fitness_idx = np.argmin(current_fitness) if CONFIG.Data_Type == np.ndarray else min(enumerate(current_fitness), key=lambda x: x[1])[0]
-                        if current_fitness[min_fitness_idx] < Best_Fitness:
-                            Best_Fitness = current_fitness[min_fitness_idx]
-                            Best_Solution = Parent_Population[min_fitness_idx].copy()
-                        fitness_history.append(Best_Fitness)
-                        Generation_Iteration_Count += 1
-                        if Generation_Iteration_Count % 100 == 0:
-                            print(f"Generation {Generation_Iteration_Count}: Best Fitness = {Best_Fitness:.2f}")
-                    print(f"\n======Final Results======")
-                    print(f"File: {file_name}, Config: {config['name']}, Population Size: {pop_size}, Generations: {generation_size}")
-                    print(f"Best Solution: {Best_Fitness:.2f}")
+                            offspring_population.extend([parent1.copy(), parent2.copy()])
+                    # ====================
+                    if CONFIG.Data_Type == np.ndarray:
+                        offspring_population = np.array(offspring_population)
+                    for i in range(len(offspring_population)):
+                        if random.random() < mutation_rate:
+                            offspring_population[i] = config['mutation'](offspring_population[i])
+                    if CONFIG.Data_Type == np.ndarray:
+                        offspring_population = np.array(offspring_population[:pop_size])
+                    if "Elitist" in config['selection'].__name__:
+                        Parent_Population = Selection.Elitist_Selection(TSP_City_distance_matrix, Parent_Population, offspring_population)
+                    else:
+                        Parent_Population = offspring_population
+                    current_fitness = Selection._Population_Group_Fitness(Parent_Population, TSP_City_distance_matrix)
+                    min_fitness_idx = np.argmin(current_fitness) if CONFIG.Data_Type == np.ndarray else min(enumerate(current_fitness), key=lambda x: x[1])[0]
+                    if current_fitness[min_fitness_idx] < Best_Fitness:
+                        Best_Fitness = current_fitness[min_fitness_idx]
+                        Best_Solution = Parent_Population[min_fitness_idx].copy()
+                    fitness_history.append(Best_Fitness)
+                    Generation_Iteration_Count += 1
+                    if Generation_Iteration_Count in generation_checkpoints:
+                        print(f"File: {file_name}, Config: {config['name']}, Population Size: {pop_size}")
+                        print(f"Generation {Generation_Iteration_Count}: Best Fitness = {Best_Fitness:.2f}")
+                print(f"\n======Final Results======")
+                print(f"File: {file_name}, Config: {config['name']}, Population Size: {pop_size}")
+                print(f"Best Solution: {Best_Fitness:.2f}")
             break
         break
 Process_Benchmark_ALL_FILE(CONFIG.TSP_File_Path_List)
