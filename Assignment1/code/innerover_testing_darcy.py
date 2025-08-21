@@ -411,9 +411,5 @@ def test_inverover():
 
 
 if __name__ == "__main__":
-    # Run test first
-    #test_inverover()
-    #print("\n" + "=" * 60 + "\n")
-    
-    # Run full experiments
+
     run_inverover_experiments()
