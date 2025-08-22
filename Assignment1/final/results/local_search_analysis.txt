@@ -6,5 +6,5 @@ However, as the datasets increase in size two-opt performs consistently better,
 with jump having a 50% larger minimum result compared to two-opt on the usa13509 dataset and almost double 
 the minimum of two-opt on the pr2392 dataset. 
 
-Overall, two-opt has the best results on average, and consistently finds the lower minima, especially on larger datasets, 
-and is faster in almost every case, with the exception of usa13509.
+Overall, two-opt produces the best results on average, and consistently finds the lower minima, especially on larger datasets, 
+and is faster in almost every case, with the exception of usa13509, which seems to be an outlier.

@@ -2,9 +2,9 @@ ALGORITHM DESIGNS
 
 STEADY STATE ALGORITHM (MURAD):
 This algorithm uses tournament selection for parent selection to maintain a balance between exploration and exploitation, 
-with a modular tournament size to allow for the user to adjust between the two extremes. 
-I used order crossover because it is faster and simpler than the other methods and does a good job at maintaining genetic diversity. 
-While passing on good segments, I used swap mutation for similar reasons, it is fast, simple, and balances exploration and exploitation. 
-The algorithm is very modular to the user’s preferences, but on default settings we use a very low replacement rate, making it a steady state algorithm. 
-This was done to make the algorithm faster, as we have to replace less individuals, and to not lose too many individuals through the generations.
-
+order crossover because it is faster and simpler than other methods and maintains genetic diversity while passing on good segments, 
+and swap mutation for similar reasons. 
+Its low replacement rate (5%) is to make the algorithm faster, as we must replace less individuals, and to preserve genetic diversity. 
+This algorithm produces results within 10-40% of the optimum but depends on landing in a good local environment, 
+as it gets stuck in local optima easily due to low replacement rate. 
+However, it produces results fast, only 3 seconds for 200 individuals and 20,000 generations on eil51.
