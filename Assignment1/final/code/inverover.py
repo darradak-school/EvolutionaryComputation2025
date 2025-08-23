@@ -140,7 +140,7 @@ class InverOverAlgorithm:
             improved = self.outer_pass()
 
             # Print progress every 1000 generations.
-            if gen % 1000 == 0:
+            if gen % 100 == 0:
                 # Calculate current average fitness.
                 fitness_vals = [
                     ind.fitness or self.tsp.tour_length(ind.tour)
@@ -175,9 +175,9 @@ def main():
         # "kroD100",
         # "eil101",
         # "lin105",
-        "pcb442",
-        "pr2392",
-        # "usa13509",
+        # "pcb442",
+        # "pr2392",
+        "usa13509",
     ]
 
     # Dictionary to store results for each problem.
@@ -195,13 +195,13 @@ def main():
         elif problem_size < 10000:
             steps = 50
         else:
-            steps = 1
+            steps = 5
 
         # Collect results over.
         best_fitnesses = []
         run_times = []
 
-        for run in range(5):
+        for run in range(3):
             print(f"Run {run + 1}")
             tsp = f"tsplib/{problem}.tsp"
 

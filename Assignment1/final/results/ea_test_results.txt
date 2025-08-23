@@ -1,0 +1,10 @@
+Algorithm,Problem,Best_Fitness,Time_Seconds
+
+SteadyState (Tourn + OX + Swap),eil51,455.10,24.10
+Generational+Elitism (FPS+PMX+INV),eil51,464.23,45.64
+SteadyState+Crowding (Tourn+ERX+INS),eil51,452.94,6.10
+
+SteadyState (Tourn + OX + Swap),eil101,796.37,36.41
+Generational+Elitism (FPS+PMX+INV),eil101,699.99,141.48
+SteadyState+Crowding (Tourn+ERX+INS),eil101,781.11,21.85
+

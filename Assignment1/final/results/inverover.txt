@@ -50,3 +50,8 @@ Average Best Fitness: 4311304.43 +/- 56264.46
 Average Time: 1249.98s +/- 43.43s
 ------------------------------
 
+Problem: usa13509
+Average Best Fitness: 1087041251.62 +/- 1129681.02
+Average Time: 4614.42s +/- 21.33s
+------------------------------
+
