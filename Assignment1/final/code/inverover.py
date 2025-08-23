@@ -45,7 +45,7 @@ class InverOverAlgorithm:
             arr[: b + 1] = seg[k:]
 
     def offspring(self, parent_tour, next_maps):
-        """Apply inver-over transformation using O(1) delta updates."""
+        """Apply inver-over transformation using delta updates."""
         n = len(parent_tour)
         if n <= 2:
             return parent_tour[:], self.tsp.tour_length(parent_tour)
@@ -126,7 +126,7 @@ class InverOverAlgorithm:
         return improved
 
     def run(self):
-        """Execute EA until no improvement for no_improve_limit passes."""
+        """Execute EA until no improvement for stag_limit passes."""
         start_time = time.time()
         stagnation = 0
         gen = 0
@@ -160,15 +160,27 @@ class InverOverAlgorithm:
         return self.best_individual.copy(), total_time
 
 
-def run_inverover_test():
+def main():
     """Main function to run and test the inverover algorithm."""
-    problems = ["eil51", "st70", "eil76", "kroA100", "kroC100", "kroD100", "eil101", "lin105", "pcb442", "pr2392", "usa13509"]
+    problems = [
+        "eil51",
+        "st70",
+        "eil76",
+        "kroA100",
+        "kroC100",
+        "kroD100",
+        "eil101",
+        "lin105",
+        "pcb442",
+        "pr2392",
+        "usa13509",
+    ]
     for problem in problems:
         tsp = f"tsplib/{problem}.tsp"
         print(f"\n### {problem} ###")
         algo = InverOverAlgorithm(
             tsp,  # TSP problem to run on
-            pop_size=200,  # Population size
+            pop_size=50,  # Population size
             generations=20000,  # Number of generations
             inversion_p=0.02,  # Inversion probability
             stag_limit=None,  # Stagnation limit (None for no limit)
@@ -177,4 +189,4 @@ def run_inverover_test():
 
 
 if __name__ == "__main__":
-    run_inverover_test()
+    main()
