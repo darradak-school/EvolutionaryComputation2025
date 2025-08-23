@@ -19,66 +19,66 @@ class InverOverAlgorithm:
     ):
         self.tsp = TSP(tsp)
         self.pop_size = pop_size
-        self.pass_limit = max(1, generations)
+        self.generations = generations
         self.p = inversion_p
-        self.stag_limit = max(1, stag_limit) if stag_limit else float("inf")
-        self.max_steps = max_steps  # Store max_steps
+        self.stag_limit = stag_limit if stag_limit else float("inf")
+        self.max_steps = max_steps
 
-        # Initialize population and track best
+        # Initialize population and track the best individual.
         self.population = Population.random(self.tsp, self.pop_size)
         _, best_ind = self.population.best()
         self.best_individual = best_ind.copy()
         self.best_fitness = float(best_ind.fitness)
 
-    def invert(self, arr, i_after, j):
-        """Reverse cyclic segment from i_after..j, wrapping if needed."""
+    def invert(self, arr, ia, j):
+        """Reverse cyclic segment from location after i -> j, wrapping if needed."""
         n = len(arr)
         if n <= 1:
             return
-        a = i_after % n
+        # Ensure that the indicies wrap correctly.
+        a = ia % n
         b = j % n
         if a <= b:
             arr[a : b + 1] = reversed(arr[a : b + 1])
         else:
-            # wrap-around: segment is arr[a:] + arr[:b+1]
+            # wrap-around: segment is arr[a:] + arr[:b+1].
             seg = list(reversed(arr[a:] + arr[: b + 1]))
             k = n - a
             arr[a:] = seg[:k]
             arr[: b + 1] = seg[k:]
 
-    def offspring(self, parent_tour, next_maps):
+    def offspring(self, p_tour, next_maps):
         """Apply inver-over transformation using delta updates."""
-        n = len(parent_tour)
+        n = len(p_tour)
         if n <= 2:
-            return parent_tour[:], self.tsp.tour_length(parent_tour)
-
-        S = parent_tour[:]
-        pos = {city: idx for idx, city in enumerate(S)}
-        total_len = self.tsp.tour_length(S)
-        c = random.choice(S)
+            return p_tour[:], self.tsp.tour_length(p_tour)
+        s = p_tour[:]  # Copy the parent tour into s.
+        pos = {city: idx for idx, city in enumerate(s)}
+        total_len = self.tsp.tour_length(s)
+        c = random.choice(s)  # Choose a random location to start with.
         max_steps = self.max_steps
 
         for _ in range(max_steps):
-            # Choose c' randomly or as mate's successor
+            # Choose c' randomly or as mate's successor.
             if random.random() <= self.p or not next_maps:
-                cprime = random.choice([x for x in S if x != c])
+                cprime = random.choice([x for x in s if x != c])
             else:
                 nm = random.choice(next_maps)
                 cprime = nm[c]
 
             i = pos[c]
-            left_neighbor = S[(i - 1) % n]
-            right_neighbor = S[(i + 1) % n]
+            left_neighbor = s[(i - 1) % n]
+            right_neighbor = s[(i + 1) % n]
 
-            # Stop if c' already neighbors c
+            # Stop if c' already neighbors c.
             if cprime == left_neighbor or cprime == right_neighbor:
                 break
 
             j = pos[cprime]
             a = (i + 1) % n
 
-            # Delta cost for inverting segment a..j
-            Sa, Sj, Sj1 = S[a], S[j], S[(j + 1) % n]
+            # Delta cost for inverting segment a..j.
+            Sa, Sj, Sj1 = s[a], s[j], s[(j + 1) % n]
             total_len += (
                 self.tsp.dist(c, Sj)
                 + self.tsp.dist(Sa, Sj1)
@@ -86,36 +86,37 @@ class InverOverAlgorithm:
                 - self.tsp.dist(Sj, Sj1)
             )
 
-            # Perform inversion and update position map
-            self.invert(S, a, j)
+            # Perform inversion and update position map.
+            self.invert(s, a, j)
             if a <= j:
                 affected = range(a, j + 1)
             else:
                 affected = list(range(a, n)) + list(range(0, j + 1))
             for idx in affected:
-                pos[S[idx]] = idx
+                pos[s[idx]] = idx
 
             c = cprime
 
-        return S, total_len
+        return s, total_len
 
     def outer_pass(self):
         """Apply inver-over operator once to each individual."""
         improved = False
         inds = self.population.individuals
 
-        # Build next city maps for all tours
+        # Build next city maps for all tours.
         next_maps = []
         for tour in inds:
             n = len(tour.tour)
             nm = {tour.tour[i]: tour.tour[(i + 1) % n] for i in range(n)}
             next_maps.append(nm)
 
+        # Apply inver-over operator to each individual.
         for i, ind in enumerate(inds):
             mates_next = next_maps[:i] + next_maps[i + 1 :]
             child_tour, child_len = self.offspring(ind.tour, mates_next)
 
-            # Replace if not worse
+            # Replace if not worse.
             parent_len = ind.fitness or self.tsp.tour_length(ind.tour)
             if child_len <= parent_len:
                 ind.tour = child_tour
@@ -133,19 +134,20 @@ class InverOverAlgorithm:
         stagnation = 0
         gen = 0
 
-        while stagnation < self.stag_limit and gen < self.pass_limit:
+        # Execute EA until no improvement for ammount of generations determined by stag_limit.
+        while stagnation < self.stag_limit and gen < self.generations:
             gen += 1
             improved = self.outer_pass()
 
-            # Periodic logging
+            # Print progress every 1000 generations.
             if gen % 1000 == 0:
-                # Calculate current average fitness
+                # Calculate current average fitness.
                 fitness_vals = [
                     ind.fitness or self.tsp.tour_length(ind.tour)
                     for ind in self.population.individuals
                 ]
                 avg_fitness = float(np.mean(fitness_vals))
-
+                # Calculate elapsed time.
                 elapsed = time.time() - start_time
                 print(
                     f"Generation: {gen} | Best: {self.best_fitness:.2f} | Avg: {avg_fitness:.2f} | Elapsed: {elapsed:.2f}s"
@@ -165,7 +167,7 @@ class InverOverAlgorithm:
 def main():
     """Main function to run and test the inverover algorithm."""
     problems = [
-        "eil51",
+        # "eil51",
         "st70",
         "eil76",
         "kroA100",
@@ -173,12 +175,12 @@ def main():
         "kroD100",
         "eil101",
         "lin105",
-        "pcb442",
-        "pr2392",
-        "usa13509",
+        # "pcb442",
+        # "pr2392",
+        # "usa13509",
     ]
 
-    # Dictionary to store results for each problem
+    # Dictionary to store results for each problem.
     results = {}
 
     for problem in problems:
@@ -187,14 +189,15 @@ def main():
             "".join(c for c in problem if c.isdigit())
         )  # Get the problem size
 
-        if problem_size < 1000:  # If problem size is less than 1000, use 20 steps
+        # Variable number of steps based on problem size.
+        if problem_size < 1000:
             steps = 20
-        elif problem_size < 10000:  # If problem size is greater than 1000, use 5 steps
+        elif problem_size < 10000:
             steps = 5
-        else:  # If problem size is greater than 10000, use 1 step
+        else:
             steps = 1
 
-        # Collect results over 30 runs
+        # Collect results over.
         best_fitnesses = []
         run_times = []
 
@@ -208,14 +211,14 @@ def main():
                 generations=20000,  # Number of generations
                 inversion_p=0.02,  # Inversion probability
                 stag_limit=2000,  # Stagnation limit (None for no limit)
-                max_steps=steps,  # Maximum inversion steps per offspring
+                max_steps=steps,  # Maximum inversion steps per offspring (determined by problem size)
             )
 
             best_individual, total_time = algo.run()
             best_fitnesses.append(best_individual.fitness)
             run_times.append(total_time)
 
-        # Calculate statistics
+        # Calculate statistics.
         avg_fitness = np.mean(best_fitnesses)
         std_fitness = np.std(best_fitnesses)
         avg_time = np.mean(run_times)
@@ -232,7 +235,7 @@ def main():
         print(f"Average Best Fitness: {avg_fitness:.2f} +/- {std_fitness:.2f}")
         print(f"Average Time: {avg_time:.2f}s +/- {std_time:.2f}s")
 
-    # Write results to file
+    # Write results to file.
     with open("../results/inverover.txt", "a") as f:
         f.write("InverOver Algorithm Results\n")
         f.write("=" * 50 + "\n")
@@ -246,6 +249,7 @@ def main():
                 f"Average Time: {result['avg_time']:.2f}s +/- {result['std_time']:.2f}s\n"
             )
             f.write("-" * 30 + "\n\n")
+
 
 if __name__ == "__main__":
     main()

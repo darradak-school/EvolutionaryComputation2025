@@ -1,8 +1,6 @@
 InverOver Algorithm Results
 ==================================================
 Problem: eil51
-Average Best Fitness: 428.93 +/- 0.05
-Average Time: 12.09s +/- 0.00s
-Max Steps Used: 20
+Average Best Fitness: 429.21 +/- 0.53
+Average Time: 3.67s +/- 0.85s
 ------------------------------
-
