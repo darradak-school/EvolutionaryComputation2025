@@ -40,3 +40,13 @@ Average Best Fitness: 14422.55 +/- 44.07
 Average Time: 9.44s +/- 1.94s
 ------------------------------
 
+Problem: pcb442
+Average Best Fitness: 53799.33 +/- 176.47
+Average Time: 129.19s +/- 1.48s
+------------------------------
+
+Problem: pr2392
+Average Best Fitness: 4311304.43 +/- 56264.46
+Average Time: 1249.98s +/- 43.43s
+------------------------------
+

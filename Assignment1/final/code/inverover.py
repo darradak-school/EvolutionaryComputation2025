@@ -168,15 +168,15 @@ def main():
     """Main function to run and test the inverover algorithm."""
     problems = [
         # "eil51",
-        "st70",
-        "eil76",
-        "kroA100",
-        "kroC100",
-        "kroD100",
-        "eil101",
-        "lin105",
-        # "pcb442",
-        # "pr2392",
+        # "st70",
+        # "eil76",
+        # "kroA100",
+        # "kroC100",
+        # "kroD100",
+        # "eil101",
+        # "lin105",
+        "pcb442",
+        "pr2392",
         # "usa13509",
     ]
 
@@ -191,9 +191,9 @@ def main():
 
         # Variable number of steps based on problem size.
         if problem_size < 1000:
-            steps = 20
+            steps = 100
         elif problem_size < 10000:
-            steps = 5
+            steps = 50
         else:
             steps = 1
 
@@ -201,7 +201,7 @@ def main():
         best_fitnesses = []
         run_times = []
 
-        for run in range(30):
+        for run in range(5):
             print(f"Run {run + 1}")
             tsp = f"tsplib/{problem}.tsp"
 
