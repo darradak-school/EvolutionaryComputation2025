@@ -15,12 +15,14 @@ class InverOverAlgorithm:
         generations,
         inversion_p,
         stag_limit,
+        max_steps,
     ):
         self.tsp = TSP(tsp)
         self.pop_size = int(pop_size)
         self.pass_limit = int(max(1, generations))
         self.p = float(inversion_p)
         self.stag_limit = int(max(1, stag_limit)) if stag_limit else float("inf")
+        self.max_steps = int(max_steps)  # Store max_steps
 
         # Initialize population and track best
         self.population = Population.random(self.tsp, self.pop_size)
@@ -54,7 +56,7 @@ class InverOverAlgorithm:
         pos = {city: idx for idx, city in enumerate(S)}
         total_len = self.tsp.tour_length(S)
         c = random.choice(S)
-        max_steps = 3 * n
+        max_steps = self.max_steps
 
         for _ in range(max_steps):
             # Choose c' randomly or as mate's successor
@@ -175,18 +177,75 @@ def main():
         "pr2392",
         "usa13509",
     ]
-    for problem in problems:
-        tsp = f"tsplib/{problem}.tsp"
-        print(f"\n### {problem} ###")
-        algo = InverOverAlgorithm(
-            tsp,  # TSP problem to run on
-            pop_size=50,  # Population size
-            generations=20000,  # Number of generations
-            inversion_p=0.02,  # Inversion probability
-            stag_limit=None,  # Stagnation limit (None for no limit)
-        )
-        algo.run()
 
+    # Dictionary to store results for each problem
+    results = {}
+
+    for problem in problems:
+        print(f"\n### {problem} ###")
+        problem_size = int(
+            "".join(c for c in problem if c.isdigit())
+        )  # Get the problem size
+
+        if problem_size < 1000:  # If problem size is less than 1000, use 20 steps
+            steps = 20
+        elif problem_size < 10000:  # If problem size is greater than 1000, use 5 steps
+            steps = 5
+        else:  # If problem size is greater than 10000, use 1 step
+            steps = 1
+
+        # Collect results over 30 runs
+        best_fitnesses = []
+        run_times = []
+
+        for run in range(30):
+            print(f"Run {run + 1}")
+            tsp = f"tsplib/{problem}.tsp"
+
+            algo = InverOverAlgorithm(
+                tsp,  # TSP problem to run on
+                pop_size=50,  # Population size
+                generations=20000,  # Number of generations
+                inversion_p=0.02,  # Inversion probability
+                stag_limit=None,  # Stagnation limit (None for no limit)
+                max_steps=steps,  # Maximum inversion steps per offspring
+            )
+
+            best_individual, total_time = algo.run()
+            best_fitnesses.append(best_individual.fitness)
+            run_times.append(total_time)
+
+        # Calculate statistics
+        avg_fitness = np.mean(best_fitnesses)
+        std_fitness = np.std(best_fitnesses)
+        avg_time = np.mean(run_times)
+        std_time = np.std(run_times)
+
+        results[problem] = {
+            "avg_fitness": avg_fitness,
+            "std_fitness": std_fitness,
+            "avg_time": avg_time,
+            "std_time": std_time,
+        }
+
+        print(f"Problem: {problem}")
+        print(f"Average Best Fitness: {avg_fitness:.2f} +/- {std_fitness:.2f}")
+        print(f"Average Time: {avg_time:.2f}s +/- {std_time:.2f}s")
+
+    # Write results to file
+    with open("../results/inverover.txt", "w") as f:
+        f.write("InverOver Algorithm Results\n")
+        f.write("=" * 50 + "\n")
+
+        for problem, result in results.items():
+            f.write(f"Problem: {problem}\n")
+            f.write(
+                f"Average Best Fitness: {result['avg_fitness']:.2f} +/- {result['std_fitness']:.2f}\n"
+            )
+            f.write(
+                f"Average Time: {result['avg_time']:.2f}s +/- {result['std_time']:.2f}s\n"
+            )
+            f.write("-" * 30 + "\n\n")
 
 if __name__ == "__main__":
     main()
