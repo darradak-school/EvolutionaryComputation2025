@@ -8,3 +8,6 @@ SteadyState (Tourn + OX + Swap),eil101,796.37,36.41
 Generational+Elitism (FPS+PMX+INV),eil101,699.99,141.48
 SteadyState+Crowding (Tourn+ERX+INS),eil101,781.11,21.85
 
+SteadyState (Tourn + OX + Swap),pcb442,363257.86,250.49
+Generational+Elitism (FPS+PMX+INV),pcb442,154988.52,1020.47
+SteadyState+Crowding (Tourn+ERX+INS),pcb442,293577.41,478.43

@@ -6,17 +6,17 @@ from ea_crowding import SteadyStateDeterministicCrowdingEA
 ### CONFIGURATION ###
 # Problems to run.
 PROBLEMS = [
-    # "eil51",
-    # "st70",
-    # "eil76",
-    # "kroA100",
-    # "kroC100",
-    # "kroD100",
-    # "eil101",
-    # "lin105",
+    "eil51",
+    "st70",
+    "eil76",
+    "kroA100",
+    "kroC100",
+    "kroD100",
+    "eil101",
+    "lin105",
     "pcb442",
-    # "pr2392",
-    # "usa13509",
+    "pr2392",
+    "usa13509",
 ]
 
 # Arguments for the algorithms.
