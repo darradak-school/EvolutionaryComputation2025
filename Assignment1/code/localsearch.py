@@ -157,7 +157,7 @@ class LocalSearch:
 
         # Copy tour and get its length.
         t = self.copy(tour)
-        t_len = tsp.total_dist(t)
+        t_len = tsp.tour_length(t)
 
         # Calibrate temperature from a sample of positive diffs.
         pos_diffs = []

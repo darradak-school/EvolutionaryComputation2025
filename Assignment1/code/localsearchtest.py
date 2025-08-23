@@ -62,13 +62,12 @@ for problem in PROBLEMS:
 
     # Create the problem instance.
     tsp = TSP(f"tsplib/{problem}.tsp")
-    location_count = len(tsp.location_ids)
 
     # Create random tours to get average unoptimised tour length.
     tours = []
     for i in range(10):
         t = tsp.random_tour()
-        tours.append(tsp.total_dist(t))
+        tours.append(tsp.tour_length(t))
 
     # Results dictionary for each search type.
     results = {search_type: [] for search_type in TYPES}
@@ -84,7 +83,7 @@ for problem in PROBLEMS:
                 r_tour, search_type, tsp, COOLING, TARGET, STAG_LIMIT
             )
             # Append the result to the results dictionary.
-            tour_length = tsp.total_dist(result[0])
+            tour_length = tsp.tour_length(result[0])
             results[search_type].append((tour_length, result[1], result[2]))
 
     print(f"Time taken: {time.time() - start:.2f} seconds")

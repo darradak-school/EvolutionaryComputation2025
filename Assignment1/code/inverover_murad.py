@@ -1,41 +1,34 @@
 import time
 import random
 import numpy as np
-from individual_population import Individual, Population
+from individual_population import Population
 from tsp import TSP
 
 
 class InverOverAlgorithm:
-    """
-    Inver-Over algorithm for TSP with single inver-over operator and mate-guided successor.
-    Uses O(1) delta-cost updates and stops after consecutive passes without improvement.
-    """
+    """Inver-Over algorithm for TSP with single inver-over operator."""
 
     def __init__(
         self,
-        tsp_file,
-        population_size=100,
-        generations=20000,
-        inversion_prob=0.02,
-        no_improve_limit=1000,
-        rng_seed=None,
-        log_every=1000,
+        tsp,
+        pop_size,
+        generations,
+        inversion_p,
+        stag_limit,
     ):
-        self.tsp = TSP(tsp_file)
-        self.pop_size = int(population_size)
-        self.max_passes = int(max(1, generations))
-        self.p = float(inversion_prob)
-        self.no_improve_limit = int(max(1, no_improve_limit))
-        self.rng = random.Random(rng_seed)
-        self.log_every = int(max(0, log_every))
+        self.tsp = TSP(tsp)
+        self.pop_size = int(pop_size)
+        self.pass_limit = int(max(1, generations))
+        self.p = float(inversion_p)
+        self.stag_limit = int(max(1, stag_limit)) if stag_limit else float("inf")
 
         # Initialize population and track best
-        self.population = Population.random(self.tsp, self.pop_size, rng=self.rng)
+        self.population = Population.random(self.tsp, self.pop_size)
         _, best_ind = self.population.best()
         self.best_individual = best_ind.copy()
-        self.best_fitness = float(self.best_individual.fitness)
+        self.best_fitness = float(best_ind.fitness)
 
-    def invert_cyclic(self, arr, i_after, j):
+    def invert(self, arr, i_after, j):
         """Reverse cyclic segment from i_after..j, wrapping if needed."""
         n = len(arr)
         if n <= 1:
@@ -51,28 +44,24 @@ class InverOverAlgorithm:
             arr[a:] = seg[:k]
             arr[: b + 1] = seg[k:]
 
-    def inver_over_offspring(self, parent_tour, next_maps):
+    def offspring(self, parent_tour, next_maps):
         """Apply inver-over transformation using O(1) delta updates."""
         n = len(parent_tour)
         if n <= 2:
-            L = self.tsp.tour_length(parent_tour)
-            return parent_tour[:], L
+            return parent_tour[:], self.tsp.tour_length(parent_tour)
 
         S = parent_tour[:]
         pos = {city: idx for idx, city in enumerate(S)}
         total_len = self.tsp.tour_length(S)
-        c = self.rng.choice(S)
+        c = random.choice(S)
         max_steps = 3 * n
-        steps = 0
 
-        while steps < max_steps:
-            steps += 1
-
+        for _ in range(max_steps):
             # Choose c' randomly or as mate's successor
-            if self.rng.random() <= self.p or not next_maps:
-                cprime = self.rng.choice([x for x in S if x != c])
+            if random.random() <= self.p or not next_maps:
+                cprime = random.choice([x for x in S if x != c])
             else:
-                nm = self.rng.choice(next_maps)
+                nm = random.choice(next_maps)
                 cprime = nm[c]
 
             i = pos[c]
@@ -87,16 +76,16 @@ class InverOverAlgorithm:
             a = (i + 1) % n
 
             # Delta cost for inverting segment a..j
-            Sa = S[a]
-            Sj = S[j]
-            Sj1 = S[(j + 1) % n]
-
-            old = self.tsp.dist(c, Sa) + self.tsp.dist(Sj, Sj1)
-            new = self.tsp.dist(c, Sj) + self.tsp.dist(Sa, Sj1)
-            total_len += new - old
+            Sa, Sj, Sj1 = S[a], S[j], S[(j + 1) % n]
+            total_len += (
+                self.tsp.dist(c, Sj)
+                + self.tsp.dist(Sa, Sj1)
+                - self.tsp.dist(c, Sa)
+                - self.tsp.dist(Sj, Sj1)
+            )
 
             # Perform inversion and update position map
-            self.invert_cyclic(S, a, j)
+            self.invert(S, a, j)
             if a <= j:
                 affected = range(a, j + 1)
             else:
@@ -114,25 +103,18 @@ class InverOverAlgorithm:
         inds = self.population.individuals
 
         # Build next city maps for all tours
-        all_tours = [ind.tour for ind in inds]
         next_maps = []
-        for tour in all_tours:
-            nm = {}
-            n = len(tour)
-            for i, c in enumerate(tour):
-                nm[c] = tour[(i + 1) % n]
+        for tour in inds:
+            n = len(tour.tour)
+            nm = {tour.tour[i]: tour.tour[(i + 1) % n] for i in range(n)}
             next_maps.append(nm)
 
         for i, ind in enumerate(inds):
             mates_next = next_maps[:i] + next_maps[i + 1 :]
-            child_tour, child_len = self.inver_over_offspring(ind.tour, mates_next)
+            child_tour, child_len = self.offspring(ind.tour, mates_next)
 
             # Replace if not worse
-            parent_len = (
-                ind.fitness
-                if ind.fitness is not None
-                else self.tsp.tour_length(ind.tour)
-            )
+            parent_len = ind.fitness or self.tsp.tour_length(ind.tour)
             if child_len <= parent_len:
                 ind.tour = child_tour
                 ind.fitness = child_len
@@ -146,65 +128,52 @@ class InverOverAlgorithm:
     def run(self):
         """Execute EA until no improvement for no_improve_limit passes."""
         start_time = time.time()
-        fitness_history = []
+        stagnation = 0
+        gen = 0
 
-        stale = 0
-        outer_pass = 0
-
-        while stale < self.no_improve_limit and outer_pass < self.max_passes:
-            outer_pass += 1
+        while stagnation < self.stag_limit and gen < self.pass_limit:
+            gen += 1
             improved = self.outer_pass()
 
-            # Compute avg fitness for logging
-            fitness_values = np.array(
-                [
-                    (
-                        ind.fitness
-                        if ind.fitness is not None
-                        else self.tsp.tour_length(ind.tour)
-                    )
-                    for ind in self.population.individuals
-                ],
-                dtype=float,
-            )
-            avg_fitness = float(np.mean(fitness_values))
-            fitness_history.append((outer_pass, float(self.best_fitness), avg_fitness))
-
             # Periodic logging
-            if self.log_every and (outer_pass % self.log_every == 0):
+            if gen % 1000 == 0:
+                # Calculate current average fitness
+                fitness_vals = [
+                    ind.fitness or self.tsp.tour_length(ind.tour)
+                    for ind in self.population.individuals
+                ]
+                avg_fitness = float(np.mean(fitness_vals))
+
                 elapsed = time.time() - start_time
                 print(
-                    f"[{outer_pass:7d}] best={self.best_fitness:.6f}  avg={avg_fitness:.6f}  elapsed={elapsed:.2f}s"
+                    f"Generation: {gen} | Best: {self.best_fitness:.2f} | Avg: {avg_fitness:.2f} | Elapsed: {elapsed:.2f}s"
                 )
 
-            stale = 0 if improved else stale + 1
+            stagnation = 0 if improved else stagnation + 1
 
         total_time = time.time() - start_time
 
-        if self.log_every:
-            print(
-                f"Finished after {outer_pass} passes, best={self.best_fitness:.6f}, elapsed={total_time:.2f}s"
-            )
+        print(
+            f"Finished after {gen} generations. Best: {self.best_fitness:.2f} Elapsed: {total_time:.2f}s"
+        )
 
-        return self.best_individual.copy(), fitness_history, total_time
+        return self.best_individual.copy(), total_time
 
 
 def run_inverover_test():
-    """Run Inver-Over on TSPLIB instances."""
-    problems = ["eil51", "st70", "eil76", "kroA100"]
+    """Main function to run and test the inverover algorithm."""
+    problems = ["eil51", "st70", "eil76", "kroA100", "kroC100", "kroD100", "eil101", "lin105", "pcb442", "pr2392", "usa13509"]
     for problem in problems:
-        tsp_path = f"tsplib/{problem}.tsp"
+        tsp = f"tsplib/{problem}.tsp"
         print(f"\n### {problem} ###")
         algo = InverOverAlgorithm(
-            tsp_path,
-            population_size=200,
-            generations=20000,
-            inversion_prob=0.02,
-            no_improve_limit=1000,
-            log_every=1000,
+            tsp,  # TSP problem to run on
+            pop_size=200,  # Population size
+            generations=20000,  # Number of generations
+            inversion_p=0.02,  # Inversion probability
+            stag_limit=None,  # Stagnation limit (None for no limit)
         )
-        best_individual, _, total_time = algo.run()
-        print(f"Best fitness: {best_individual.fitness:.6f}  time={total_time:.2f}s")
+        algo.run()
 
 
 if __name__ == "__main__":

@@ -232,3 +232,66 @@ Exchange time: 1.09s
 Two_Opt cycles: 389199.57
 Two_Opt time: 1.53s
 ---------------------
+
+######### eil51 #########
+Average tour length before optimisation: 1739.60
+===== MEAN =====
+Jump: 447.83
+Exchange: 499.00
+Two_Opt: 456.64
+===== MINIMUM =====
+Jump: 431.92
+Exchange: 458.04
+Two_Opt: 435.23
+===== MEAN TIMES =====
+Jump cycles: 49804.70
+Jump time: 0.08s
+---------------------
+Exchange cycles: 44464.80
+Exchange time: 0.07s
+---------------------
+Two_Opt cycles: 39025.77
+Two_Opt time: 0.04s
+---------------------
+
+######### st70 #########
+Average tour length before optimisation: 3573.06
+===== MEAN =====
+Jump: 764.96
+Exchange: 894.62
+Two_Opt: 733.17
+===== MINIMUM =====
+Jump: 700.23
+Exchange: 814.50
+Two_Opt: 697.65
+===== MEAN TIMES =====
+Jump cycles: 64648.57
+Jump time: 0.10s
+---------------------
+Exchange cycles: 59974.13
+Exchange time: 0.09s
+---------------------
+Two_Opt cycles: 46684.23
+Two_Opt time: 0.05s
+---------------------
+
+######### eil51 #########
+Average tour length before optimisation: 1688.01
+===== MEAN =====
+Jump: 455.81
+Exchange: 498.13
+Two_Opt: 457.68
+===== MINIMUM =====
+Jump: 437.04
+Exchange: 463.28
+Two_Opt: 435.81
+===== MEAN TIMES =====
+Jump cycles: 50584.63
+Jump time: 0.08s
+---------------------
+Exchange cycles: 44240.27
+Exchange time: 0.07s
+---------------------
+Two_Opt cycles: 39078.77
+Two_Opt time: 0.04s
+---------------------
