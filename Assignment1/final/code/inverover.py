@@ -18,11 +18,11 @@ class InverOverAlgorithm:
         max_steps,
     ):
         self.tsp = TSP(tsp)
-        self.pop_size = int(pop_size)
-        self.pass_limit = int(max(1, generations))
-        self.p = float(inversion_p)
-        self.stag_limit = int(max(1, stag_limit)) if stag_limit else float("inf")
-        self.max_steps = int(max_steps)  # Store max_steps
+        self.pop_size = pop_size
+        self.pass_limit = max(1, generations)
+        self.p = inversion_p
+        self.stag_limit = max(1, stag_limit) if stag_limit else float("inf")
+        self.max_steps = max_steps  # Store max_steps
 
         # Initialize population and track best
         self.population = Population.random(self.tsp, self.pop_size)
@@ -207,7 +207,7 @@ def main():
                 pop_size=50,  # Population size
                 generations=20000,  # Number of generations
                 inversion_p=0.02,  # Inversion probability
-                stag_limit=None,  # Stagnation limit (None for no limit)
+                stag_limit=2000,  # Stagnation limit (None for no limit)
                 max_steps=steps,  # Maximum inversion steps per offspring
             )
 
@@ -233,7 +233,7 @@ def main():
         print(f"Average Time: {avg_time:.2f}s +/- {std_time:.2f}s")
 
     # Write results to file
-    with open("../results/inverover.txt", "w") as f:
+    with open("../results/inverover.txt", "a") as f:
         f.write("InverOver Algorithm Results\n")
         f.write("=" * 50 + "\n")
 
