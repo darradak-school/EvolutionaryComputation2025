@@ -78,12 +78,12 @@ class InverOverAlgorithm:
             a = (i + 1) % n
 
             # Delta cost for inverting segment a..j.
-            Sa, Sj, Sj1 = s[a], s[j], s[(j + 1) % n]
+            sa, sj, sj1 = s[a], s[j], s[(j + 1) % n]
             total_len += (
-                self.tsp.dist(c, Sj)
-                + self.tsp.dist(Sa, Sj1)
-                - self.tsp.dist(c, Sa)
-                - self.tsp.dist(Sj, Sj1)
+                self.tsp.dist(c, sj)
+                + self.tsp.dist(sa, sj1)
+                - self.tsp.dist(c, sa)
+                - self.tsp.dist(sj, sj1)
             )
 
             # Perform inversion and update position map.

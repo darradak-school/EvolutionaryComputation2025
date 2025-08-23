@@ -4,3 +4,39 @@ Problem: eil51
 Average Best Fitness: 429.21 +/- 0.53
 Average Time: 3.67s +/- 0.85s
 ------------------------------
+
+Problem: st70
+Average Best Fitness: 677.73 +/- 1.87
+Average Time: 5.05s +/- 1.06s
+------------------------------
+
+Problem: eil76
+Average Best Fitness: 550.01 +/- 1.95
+Average Time: 6.29s +/- 1.37s
+------------------------------
+
+Problem: kroA100
+Average Best Fitness: 21299.65 +/- 42.62
+Average Time: 8.91s +/- 1.93s
+------------------------------
+
+Problem: kroC100
+Average Best Fitness: 20803.66 +/- 87.10
+Average Time: 9.62s +/- 2.10s
+------------------------------
+
+Problem: kroD100
+Average Best Fitness: 21437.38 +/- 63.22
+Average Time: 10.56s +/- 2.44s
+------------------------------
+
+Problem: eil101
+Average Best Fitness: 649.24 +/- 3.42
+Average Time: 10.63s +/- 2.74s
+------------------------------
+
+Problem: lin105
+Average Best Fitness: 14422.55 +/- 44.07
+Average Time: 9.44s +/- 1.94s
+------------------------------
+
