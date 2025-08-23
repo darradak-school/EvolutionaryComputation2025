@@ -5,41 +5,41 @@ import random
 
 class LocalSearch:
     ### TOUR HELPERS ###
-    # Copy the tour so we dont alter the original.
     def copy(self, t):
+        """ Copy the tour so we dont alter the original. """
         return t[:]
 
-    # Get the previous index in the tour.
     def prev(self, i, n):
+        """ Get the previous index in the tour. """
         return (i - 1) % n
 
-    # Get the next index in the tour.
     def next(self, i, n):
+        """ Get the next index in the tour. """
         return (i + 1) % n
 
-    ### NEIGHBOURHOOD APPLIERS ###
-    # Get the new tour after applying exchange move.
+    ### NEIGHBOURHOOD APPLIERS ### 
     def exchange(self, tour, i, j):
+        """ Get the new tour after applying exchange move. """
         new_tour = self.copy(tour)
         new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
         return new_tour
 
-    # Get the new tour after applying jump move.
     def jump(self, tour, i, j):
+        """ Get the new tour after applying jump move. """
         new_tour = self.copy(tour)
         a = new_tour.pop(i)
         new_tour.insert(j, a)
         return new_tour
 
-    # Get the new tour after applying two opt move.
     def two_opt(self, tour, i, j):
+        """ Get the new tour after applying two opt move. """
         new_tour = self.copy(tour)
         new_tour[i : j + 1] = reversed(new_tour[i : j + 1])
         return new_tour
 
     ### TOUR DIFFERENCE CALCULATORS ###
-    # Calculate the difference in tour length for two opt move.
     def diff_two_opt(self, tour, i, j, tsp):
+        """ Calculate the difference in tour length for two opt move. """
         n = len(tour)
         dist = tsp.dist
 
@@ -53,8 +53,8 @@ class LocalSearch:
         # AFTER:  ipre -> lj ... li -> jnext
         return (dist(ipre, lj) + dist(li, jnext)) - (dist(ipre, li) + dist(lj, jnext))
 
-    # Calculate the difference in tour length for exchange move.
     def diff_exchange(self, tour, i, j, tsp):
+        """ Calculate the difference in tour length for exchange move. """
         n = len(tour)
         dist = tsp.dist
 
@@ -85,8 +85,8 @@ class LocalSearch:
         after = dist(ipre, lj) + dist(lj, inext) + dist(jpre, li) + dist(li, jnext)
         return after - before
 
-    # Calculate the difference in tour length for a jump move (remove i, insert at j).
     def diff_jump(self, tour, i, j, tsp):
+        """ Calculate the difference in tour length for a jump move (remove i, insert at j). """
         n = len(tour)
         dist = tsp.dist
         li = tour[i]
@@ -112,11 +112,12 @@ class LocalSearch:
         return diff_r + diff_i  # New edges - old edges.
 
     ### SIMULATED ANNEALING ###
-    # Generate two random indices for the given search type.
     def random_ij(self, search_type, n):
+        """ Generate two random indices for the given search type. """
         # Random i and j for two opt.
         if search_type == "two_opt":
             while True:
+                # Random i and j for two opt.
                 i = random.randrange(0, n - 1)
                 j_low = i + 2
                 j_high = n if i > 0 else n - 1
@@ -138,7 +139,6 @@ class LocalSearch:
                 if i != j:
                     return i, j
 
-    # Run the searching algorithm.
     def search(
         self,
         tour,
@@ -148,6 +148,7 @@ class LocalSearch:
         target,
         stag_limit=1000,  # Max cycles without improvement before stopping
     ):
+        """ Run the searching algorithm with the provided parameters. """
         start = time.time()
         n = len(tour)
 
