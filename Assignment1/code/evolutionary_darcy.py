@@ -342,8 +342,8 @@ def test_population_sizes_and_generations():
     # Three different algorithms as designed
     algorithms = [
         ("Algorithm1_PMX_Inversion_Tournament", "pmx_crossover", "inversion", "tournament"),
-        ("Algorithm2_Order_Swap_FitnessProp", "order_crossover", "swap", "fitness_proportional"),
-        ("Algorithm3_Cycle_Insert_Tournament", "cycle_crossover", "insert", "tournament")
+        ("Algorithm2_Cycle_Insert_Tournament", "cycle_crossover", "insert", "tournament"),
+        ("Algorithm3_Order_Swap_FitnessProp", "order_crossover", "swap", "fitness_proportional")
     ]
     
     results = []
@@ -403,6 +403,60 @@ def test_population_sizes_and_generations():
     print(f"\nResults saved to results/population_generation_test.txt")
 
 
+
+def design_three_algorithms():
+    """Exercise 6 Part 1: Design and justify three different evolutionary algorithms"""
+    
+    algorithms = {
+        "Algorithm 1 - xxx": {
+            "crossover": "pmx_crossover",
+            "mutation": "inversion", 
+            "selection": "tournament",
+            "crossover_rate": 0.8,
+            "mutation_rate": 0.1,
+            "tournament_size": 3,
+            "justification": "PMX preserves position info well, inversion maintains adjacency, tournament provides good selection pressure"
+        },
+        "Algorithm 2 - xxx": {
+            "crossover": "cycle_crossover",
+            "mutation": "insert",       
+            "selection": "tournament",
+            "crossover_rate": 0.75,
+            "mutation_rate": 0.2,
+            "tournament_size": 4,
+            "justification": "Cycle crossover maintains absolute positions, insert mutation is less disruptive, tournament with size 4 increases selection pressure"
+        },
+        
+        "Algorithm 3 - Balanced": {
+            "crossover": "order_crossover",
+            "mutation": "swap",
+            "selection": "fitness_proportional", 
+            "crossover_rate": 0.7,
+            "mutation_rate": 0.15,
+            "tournament_size": 2,
+            "justification": "Order crossover preserves relative order, swap is gentle mutation, fitness proportional allows diversity"
+        }
+        
+    }
+    
+    return algorithms
+
+import concurrent.futures # Working with parallel processing - able to make use of multiple CPU cores
+
+# Best algorithm configuration 
+def single_run(instance_file):
+    ea = SimpleEvolutionaryAlgorithm(
+        tsp_file=instance_file,
+        crossover_method = "order_crossover",
+        mutation_method = "swap",
+        selection_method = "fitness_proportional", 
+        crossover_rate = 0.7,
+        mutation_rate= 0.15,
+        tournament_size= 2
+    )
+    best = ea.run(print_progress=False)
+    return best.fitness
+
 def run_best_algorithm_30_times():
     """Exercise 6 Part 3: Run best algorithm 30 times for statistics"""
     print("\nExercise 6 - Best Algorithm 30 Runs Test")
@@ -416,15 +470,7 @@ def run_best_algorithm_30_times():
         "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
     
-    # Best algorithm configuration 
-    best_algorithm = SimpleEvolutionaryAlgorithm(
-        tsp_file="",  # Will be set for each instance
-        population_size=50,
-        generations=20000,
-        crossover_method="pmx_crossover",  
-        mutation_method="inversion",       
-        selection_method="tournament"      
-    )
+    
     
     all_results = []
     
@@ -432,24 +478,15 @@ def run_best_algorithm_30_times():
         print(f"\nTesting {instance_file} - 30 runs")
         print("-" * 30)
         
-        instance_results = []
+        # Parallelize the 30 runs
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            futures = [executor.submit(single_run, instance_file) for _ in range(30)]
+            instance_results = [f.result() for f in concurrent.futures.as_completed(futures)]
+            instance_results.sort()  # Optional: sort for reporting
         
-        for run in range(30):
-            # Create new EA for this run
-            ea = SimpleEvolutionaryAlgorithm(
-                tsp_file=instance_file,
-                population_size=50,
-                generations=20000,
-                crossover_method="pmx_crossover",
-                mutation_method="inversion", 
-                selection_method="tournament"
-            )
-            
-            best = ea.run(print_progress=False)
-            instance_results.append(best.fitness)
-            print(f"Run {run+1}: {best.fitness:.2f}")
+        for i, fitness in enumerate(instance_results):
+            print(f"Run {i+1}: {fitness:.2f}")
         
-        # Calculate statistics
         avg_fitness = np.mean(instance_results)
         std_fitness = np.std(instance_results)
         min_fitness = min(instance_results)
@@ -477,63 +514,11 @@ def run_best_algorithm_30_times():
     return all_results
 
 
-def design_three_algorithms():
-    """Exercise 6 Part 1: Design and justify three different evolutionary algorithms"""
-    
-    algorithms = {
-        "Algorithm 1 - Explorative": {
-            "crossover": "pmx_crossover",
-            "mutation": "inversion", 
-            "selection": "tournament",
-            "crossover_rate": 0.8,
-            "mutation_rate": 0.1,
-            "tournament_size": 3,
-            "justification": "PMX preserves position info well, inversion maintains adjacency, tournament provides good selection pressure"
-        },
-        
-        "Algorithm 2 - Balanced": {
-            "crossover": "order_crossover",
-            "mutation": "swap",
-            "selection": "fitness_proportional", 
-            "crossover_rate": 0.7,
-            "mutation_rate": 0.15,
-            "tournament_size": 2,
-            "justification": "Order crossover preserves relative order, swap is gentle mutation, fitness proportional allows diversity"
-        },
-        
-        "Algorithm 3 - Intensive": {
-            "crossover": "cycle_crossover", 
-            "mutation": "insert",
-            "selection": "tournament",
-            "crossover_rate": 0.9,
-            "mutation_rate": 0.05,
-            "tournament_size": 5,
-            "justification": "Cycle crossover preserves absolute positions, insert mutation preserves order, high selection pressure"
-        }
-    }
-    
-    return algorithms
-
-
 # Example usage and testing
 if __name__ == "__main__":
     """
     print("Modular Evolutionary Algorithm - Final Version")
     print("=" * 70)
-    
-    # Basic usage example
-    print("1. Basic Usage Example")
-    ea = SimpleEvolutionaryAlgorithm(
-        tsp_file="tsplib/eil51.tsp",
-        population_size=50,
-        generations=500,
-        crossover_rate=0.8,
-        mutation_rate=0.1,
-        tournament_size=3,
-        selection_method="tournament",
-        crossover_method="pmx_crossover",
-        mutation_method="inversion"
-    )
     
     best = ea.run()
     print(f"Basic test result: {best.fitness:.2f}")
@@ -546,24 +531,6 @@ if __name__ == "__main__":
     print(f"\n3. Selection Method Test")
     test_selection_methods()
     
-    # Custom configuration example
-    print(f"\n4. Custom Configuration Example")
-    custom_ea = SimpleEvolutionaryAlgorithm(
-        tsp_file="tsplib/eil51.tsp",
-        population_size=100,
-        generations=1500,
-        crossover_rate=0.9,
-        mutation_rate=0.05,
-        tournament_size=5,
-        elitism_count=10,
-        selection_method="fitness_proportional",
-        crossover_method="cycle_crossover",
-        mutation_method="insert"
-    )
-    
-    custom_best = custom_ea.run()
-    print(f"Custom config result: {custom_best.fitness:.2f}")
-    
     # Multiple runs
     print(f"\n5. Multiple Runs")
     run_multiple_experiments()
@@ -575,13 +542,13 @@ if __name__ == "__main__":
     
     # Part 1: Design three algorithms
     print("\nPart 1: Designing Three Different Algorithms")
-    algorithms = design_three_algorithms()
+   # algorithms = design_three_algorithms()
     
     # Part 2: Test with different population sizes and generations
     print("\nPart 2: Testing Population Sizes and Generations")
     print("This will take a very long time to complete!")
     
-    test_population_sizes_and_generations()
+    #test_population_sizes_and_generations()
     
     # Part 3: Run best algorithm 30 times
     print("\nPart 3: Running Best Algorithm 30 Times")
