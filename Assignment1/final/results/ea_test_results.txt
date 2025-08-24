@@ -23,3 +23,16 @@ Average Time: 41.28s +/- 0.07s
 --- Algorithm: Crowding ---
 Average Best Fitness: 799.11 +/- 24.65
 Average Time: 19.97s +/- 0.15s
+
+##### Problem: pcb442 #####
+--- Algorithm: SteadyState ---
+Average Best Fitness: 64816.17 +/- 1338.05
+Average Time: 101.88s +/- 11.64s
+==========================
+--- Algorithm: Generational ---
+Average Best Fitness: 325611.32 +/- 2845.81
+Average Time: 286.90s +/- 27.20s
+==========================
+--- Algorithm: Crowding ---
+Average Best Fitness: 249159.92 +/- 5538.79
+Average Time: 457.79s +/- 10.55s
