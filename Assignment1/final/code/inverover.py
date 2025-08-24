@@ -166,6 +166,7 @@ class InverOverAlgorithm:
 ## MAIN TESTING FUNCTION FOR THE INVEROVER ALGORITHM ##
 def main():
     """Main function to run and test the inverover algorithm."""
+    ### CONFIGURATION VARIABLES ###
     problems = [
         "eil51",
         "st70",
@@ -179,6 +180,10 @@ def main():
         "pr2392",
         "usa13509",
     ]
+    POP_SIZE = 50  # Population size
+    GENERATIONS = 20000  # Number of generations
+    INVERSION = 0.02  # Inversion probability
+    STAG_LIMIT = 2000  # Stagnation limit (None for no limit)
 
     # Dictionary to store results for each problem.
     results = {}
@@ -196,10 +201,10 @@ def main():
 
             algo = InverOverAlgorithm(
                 tsp,  # TSP problem to run on
-                pop_size=50,  # Population size
-                generations=20000,  # Number of generations
-                inversion=0.02,  # Inversion probability
-                stag_limit=2000,  # Stagnation limit (None for no limit)
+                pop_size=POP_SIZE,  # Population size
+                generations=GENERATIONS,  # Number of generations
+                inversion=INVERSION,  # Inversion probability
+                stag_limit=STAG_LIMIT,  # Stagnation limit (None for no limit)
             )
 
             best_individual, total_time = algo.run()
