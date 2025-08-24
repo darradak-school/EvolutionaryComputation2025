@@ -18,9 +18,10 @@ mutations.py           # Exercise 4: Mutation operators
 Darcy:
 crossovers.py          # Exercise 4: Crossover operators 
 Programmed crossovers.py file for team
-evolutionary.py        # Exercise 6
-programmed modular evolutionary.py file 
-team worked on finding three algortihms to test
+
+evolutionary_modular.py        # Exercise 6
+Programmed modular / testing file for evolutionary testing 
+Found evolutionary algorithm to run against teams algs 
 
 
 Ian:
