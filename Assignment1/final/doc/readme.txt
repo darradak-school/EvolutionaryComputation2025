@@ -15,7 +15,7 @@ Code and documentation for Assignment 1 of the Evolutionary Computation 2025 cou
 
 ## Requirements
 
-- Python 3.x (or other specified language)
+- Python 3.x
 - numpy installed on system
 
 ## Usage
