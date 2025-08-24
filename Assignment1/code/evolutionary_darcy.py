@@ -17,7 +17,7 @@ class SimpleEvolutionaryAlgorithm:
     Simple EA for TSP that can be easily configured and understood
     """
     
-    def __init__(self, tsp_file, population_size=50, generations=1000, crossover_rate=0.8, mutation_rate=0.1, tournament_size=3, elitism_count=2, selection_method="tournament", crossover_method="order_crossover", mutation_method="swap"):
+    def __init__(self, tsp_file, population_size=50, generations=1000, crossover_rate=0.8, mutation_rate=0.1, tournament_size=3, elitism_count=2, selection_method="tournament", crossover_method="order_crossover", mutation_method="swap", algorithm_type="generational"):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
         self.generations = generations
@@ -31,6 +31,14 @@ class SimpleEvolutionaryAlgorithm:
         self.selection_method = selection_method
         self.crossover_method = crossover_method
         self.mutation_method = mutation_method
+
+        self.algorithm_type = algorithm_type  # "generational" or "steady_state"
+
+        # Steady-state specific parameters
+        self.replacement_rate = 0.05  # For steady-state
+        self.elite_size = max(1, int(self.population_size * 0.05))  # For steady-state
+
+
         
     def create_initial_population(self):
         """Create random starting population"""
@@ -115,7 +123,7 @@ class SimpleEvolutionaryAlgorithm:
         return offspring
     
     def create_next_generation(self, parents, offspring):
-        """Combine parents and offspring to create next generation"""
+        """Combine parents and offspring to create next generation (generational only)"""
         # Elitism - keep best individuals from current population
         all_individuals = parents + offspring
         all_individuals.sort(key=lambda x: x.fitness)
@@ -131,6 +139,81 @@ class SimpleEvolutionaryAlgorithm:
             
         return next_gen
     
+    def steady_state_step(self):
+        """Steady-state evolution step (replaces a few individuals per generation)"""
+        num_replacements = max(1, int(self.population_size * self.replacement_rate))
+        
+        # Get parents using configured selection method
+        parents = []
+        if self.selection_method == "tournament":
+            fitness_values = np.array([ind.fitness for ind in self.population.individuals])
+            selected_indices = Selection.Tournament_Selection(
+                fitness_values, num_replacements, self.tournament_size
+            )
+            parents = [self.population.individuals[i] for i in selected_indices]
+        else:
+            # Fallback to simple tournament
+            for _ in range(num_replacements):
+                tournament = random.sample(self.population.individuals, min(self.tournament_size, len(self.population.individuals)))
+                winner = min(tournament, key=lambda x: x.fitness)
+                parents.append(winner)
+        
+        # Create offspring
+        offspring = []
+        crossover_func = getattr(Crossovers, self.crossover_method)
+        mutation_func = getattr(Mutations, self.mutation_method)
+        
+        for i in range(0, len(parents), 2):
+            if i + 1 < len(parents):
+                parent1, parent2 = parents[i], parents[i + 1]
+                
+                # Crossover
+                if random.random() < self.crossover_rate:
+                    if self.crossover_method == "edge_recombination":
+                        child1_tour = crossover_func(parent1.tour, parent2.tour)
+                        child2_tour, _, _ = mutation_func(child1_tour)
+                    else:
+                        child1_tour, child2_tour = crossover_func(parent1.tour, parent2.tour)
+                else:
+                    child1_tour, child2_tour = parent1.tour[:], parent2.tour[:]
+                
+                child1 = Individual(self.tsp, child1_tour)
+                child2 = Individual(self.tsp, child2_tour)
+                
+                # Mutation
+                if random.random() < self.mutation_rate:
+                    child1.tour, _, _ = mutation_func(child1.tour)
+                    child1.fitness = child1.evaluate()
+                    
+                if random.random() < self.mutation_rate:
+                    child2.tour, _, _ = mutation_func(child2.tour)
+                    child2.fitness = child2.evaluate()
+                
+                offspring.extend([child1, child2])
+            else:
+                # Handle odd number of parents
+                child = Individual(self.tsp, parents[i].tour[:])
+                if random.random() < self.mutation_rate:
+                    child.tour, _, _ = mutation_func(child.tour)
+                    child.fitness = child.evaluate()
+                offspring.append(child)
+        
+        # Replacement with elite preservation
+        # Sort population by fitness (best first)
+        self.population.individuals.sort(key=lambda x: x.fitness)
+        offspring.sort(key=lambda x: x.fitness)
+        
+        # Replace worst individuals (excluding elite) with best offspring
+        num_offspring = min(len(offspring), num_replacements)
+        replaceable_start = self.elite_size
+        
+        for i in range(num_offspring):
+            if replaceable_start + i < len(self.population.individuals):
+                self.population.individuals[replaceable_start + i] = offspring[i]
+        
+        # Keep population sorted
+        self.population.individuals.sort(key=lambda x: x.fitness)
+    
     def get_best_individual(self):
         """Return best individual in current population"""
         _, best = self.population.best()
@@ -141,29 +224,41 @@ class SimpleEvolutionaryAlgorithm:
         if print_progress:
             print(f"Starting EA on {len(self.tsp.location_ids)} city TSP")
             print(f"Population: {self.population_size}, Generations: {self.generations}")
+            print(f"Algorithm Type: {self.algorithm_type}")
             print(f"Crossover: {self.crossover_method}, Mutation: {self.mutation_method}")
             print(f"Selection: {self.selection_method}")
         
         # Initialize
         self.create_initial_population()
         
-        # Evolution loop
-        for generation in range(self.generations):
-            # Selection
-            parents = self.select_parents()
-            
-            # Create offspring
-            offspring = self.create_offspring(parents)
-            
-            # Next generation
-            self.population = self.create_next_generation(
-                self.population.individuals, offspring
-            )
-            
-            # Print progress
-            if print_progress and generation % 200 == 0:
-                best = self.get_best_individual()
-                print(f"Generation {generation}: Best = {best.fitness:.2f}")
+        # Evolution loop - different based on algorithm type
+        if self.algorithm_type == "steady_state":
+            # Steady-state evolution
+            for generation in range(self.generations):
+                self.steady_state_step()
+                
+                # Print progress
+                if print_progress and generation % 200 == 0:
+                    best = self.get_best_individual()
+                    print(f"Generation {generation}: Best = {best.fitness:.2f}")
+        else:
+            # Generational evolution (original method)
+            for generation in range(self.generations):
+                # Selection
+                parents = self.select_parents()
+                
+                # Create offspring
+                offspring = self.create_offspring(parents)
+                
+                # Next generation
+                self.population = self.create_next_generation(
+                    self.population.individuals, offspring
+                )
+                
+                # Print progress
+                if print_progress and generation % 200 == 0:
+                    best = self.get_best_individual()
+                    print(f"Generation {generation}: Best = {best.fitness:.2f}")
         
         # Final result
         best_individual = self.get_best_individual()
@@ -341,10 +436,11 @@ def test_population_sizes_and_generations():
     
     # Three different algorithms as designed
     algorithms = [
-        ("Algorithm1_PMX_Inversion_Tournament", "pmx_crossover", "inversion", "tournament"),
-        ("Algorithm2_Cycle_Insert_Tournament", "cycle_crossover", "insert", "tournament"),
-        ("Algorithm3_Order_Swap_FitnessProp", "order_crossover", "swap", "fitness_proportional")
+        ("Algorithm1_Generational_PMX_Inversion_Tournament", "generational", "pmx_crossover", "inversion", "tournament", 0.8, 0.1, 3),
+        ("Algorithm2_SteadyState_Order_Inversion_Tournament", "steady_state", "order_crossover", "inversion", "tournament", 0.9, 0.05, 5),
+        ("Algorithm3_Generational_Order_Swap_FitnessProp", "generational", "order_crossover", "swap", "fitness_proportional", 0.7, 0.15, 2)
     ]
+
     
     results = []
     
@@ -408,7 +504,8 @@ def design_three_algorithms():
     """Exercise 6 Part 1: Design and justify three different evolutionary algorithms"""
     
     algorithms = {
-        "Algorithm 1 - xxx": {
+        "Algorithm 1 - Generational Explorative": {
+            "algorithm_type": "generational",
             "crossover": "pmx_crossover",
             "mutation": "inversion", 
             "selection": "tournament",
@@ -417,14 +514,16 @@ def design_three_algorithms():
             "tournament_size": 3,
             "justification": "PMX preserves position info well, inversion maintains adjacency, tournament provides good selection pressure"
         },
-        "Algorithm 2 - xxx": {
-            "crossover": "cycle_crossover",
-            "mutation": "insert",       
-            "selection": "tournament",
-            "crossover_rate": 0.75,
-            "mutation_rate": 0.2,
-            "tournament_size": 4,
-            "justification": "Cycle crossover maintains absolute positions, insert mutation is less disruptive, tournament with size 4 increases selection pressure"
+        
+        "Algorithm 2 - Steady-State Intensive": {
+            "algorithm_type": "steady_state",
+            "crossover": "order_crossover",
+            "mutation": "inversion",
+            "selection": "tournament", 
+            "crossover_rate": 0.9,
+            "mutation_rate": 0.05,
+            "tournament_size": 5,
+            "justification": "Steady-state preserves elites continuously, order crossover maintains relative sequence, low mutation with strong selection pressure for intensive search"
         },
         
         "Algorithm 3 - Balanced": {
@@ -445,16 +544,16 @@ import concurrent.futures # Working with parallel processing - able to make use 
 
 # Best algorithm configuration 
 def single_run(instance_file):
+    # Steady-state EA
     ea = SimpleEvolutionaryAlgorithm(
-        tsp_file=instance_file,
-        crossover_method = "order_crossover",
-        mutation_method = "swap",
-        selection_method = "fitness_proportional", 
-        crossover_rate = 0.7,
-        mutation_rate= 0.15,
-        tournament_size= 2,
-        population_size=50,
-        generations=20000
+    tsp_file="tsplib/eil51.tsp",
+    population_size=50,
+    generations=1000,
+    algorithm_type="steady_state",    # This enables steady-state
+    crossover_method="order_crossover",
+    mutation_method="inversion",
+    crossover_rate=0.9,
+    mutation_rate=0.05
     )
     best = ea.run(print_progress=False)
     return best.fitness
@@ -550,7 +649,7 @@ if __name__ == "__main__":
     print("\nPart 2: Testing Population Sizes and Generations")
     print("This will take a very long time to complete!")
     
-    #test_population_sizes_and_generations()
+    test_population_sizes_and_generations()
     
     # Part 3: Run best algorithm 30 times
     print("\nPart 3: Running Best Algorithm 30 Times")
