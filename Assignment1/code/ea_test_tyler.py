@@ -23,7 +23,7 @@ CROSSOVER = 0.9  # Probability of a crossover occuring.
 TOURNAMENT = 5  # Number of parents to select for tournament selection.
 REPLACEMENT = 0.05  # Percentage of the population to replace with offspring.
 
-with open("../results/murad_ea_results.txt", "a") as f:
+with open("../results/tyler_ea_results.txt", "a") as f:
     f.write("######### EVOLUTIONARY ALGORITHM #########\n")
     f.write("Results from running the EA on TSP problems\n")
     f.write(f"Running with population {POPULATION}.\n\n")
