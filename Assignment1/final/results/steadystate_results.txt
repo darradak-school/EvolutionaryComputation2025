@@ -1,4 +1,4 @@
-SteadyState (Tourn + OX + Swap + Elite5) Results
+SteadyState Results
 ==================================================
 
 Problem: eil51
@@ -51,3 +51,7 @@ Average Best Fitness: 2308946.77 +/- 25363.22
 Average Time: 496.40s +/- 3.99s
 ------------------------------
 
+Problem: usa13509
+Average Best Fitness: 706947739.40 +/- 4139147.11
+Average Time: 3127.36s +/- 114.55s
+------------------------------
