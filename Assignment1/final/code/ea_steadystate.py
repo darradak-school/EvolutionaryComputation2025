@@ -15,16 +15,17 @@ class SteadyStateEA:
       - Inversion mutation
       - Replacement: child vs most similar parent (edge overlap)
     """
+
     def __init__(
         self,
         tsp_file,
-        population_size,    
+        population_size,
         generations,
         mutation_rate,
         crossover_rate,
         tournament_size=3,
-        replacement_rate=0.05, # Replaces specified percentage of population.
-        elite_size=0.05, # Maintains specified percentage of elite population.
+        replacement_rate=0.05,  # Replaces specified percentage of population.
+        elite_size=0.05,  # Maintains specified percentage of elite population.
     ):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
@@ -37,7 +38,7 @@ class SteadyStateEA:
         self.elite_size = max(1, int(self.population_size * elite_size))
 
     def get_parents(self, num_parents=2):
-        """ Tournament selection. """
+        """Tournament selection."""
         num_to_select = min(num_parents, len(self.population.individuals))
         fitness_values = np.array([ind.fitness for ind in self.population.individuals])
         selected_indices = Selection.Tournament_Selection(
@@ -46,7 +47,7 @@ class SteadyStateEA:
         return [self.population.individuals[i] for i in selected_indices]
 
     def crossover(self, parent1, parent2):
-        """ Order Crossover (OX). """
+        """Order Crossover (OX)."""
         if random.random() < self.crossover_rate:
             child1_tour, child2_tour = Crossovers.order_crossover(
                 parent1.tour, parent2.tour
@@ -61,14 +62,14 @@ class SteadyStateEA:
             ]
 
     def mutate(self, individual):
-        """ Swap mutation. """
+        """Swap mutation."""
         if random.random() < self.mutation_rate:
             mutated_tour, _, _ = Mutations.inversion(individual.tour)
             individual.tour = mutated_tour
             individual.fitness = individual.evaluate()
 
     def step(self):
-        """ Steady-state GA with elite preservation. """
+        """Steady-state GA with elite preservation."""
         num_replacements = max(1, int(self.population_size * self.replacement_rate))
         parents = self.get_parents(num_replacements)
         offspring = []
@@ -86,21 +87,21 @@ class SteadyStateEA:
 
         # Sort population by fitness (best first)
         self.population.individuals.sort(key=lambda x: x.fitness)
-        
+
         # Sort offspring by fitness (best first)
         offspring.sort(key=lambda x: x.fitness)
-        
+
         # Replace worst individuals (excluding elite) with best offspring
         num_offspring = min(len(offspring), num_replacements)
         replaceable_start = self.elite_size
-        
+
         for i in range(num_offspring):
             if replaceable_start + i < len(self.population.individuals):
                 self.population.individuals[replaceable_start + i] = offspring[i]
-        
+
         # Ensure elite members are still at the top
         self.population.individuals.sort(key=lambda x: x.fitness)
 
     def best(self):
-        """ Return the best individual from the population. """
+        """Return the best individual from the population."""
         return self.population.best()
