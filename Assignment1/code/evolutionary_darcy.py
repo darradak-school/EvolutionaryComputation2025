@@ -452,7 +452,9 @@ def single_run(instance_file):
         selection_method = "fitness_proportional", 
         crossover_rate = 0.7,
         mutation_rate= 0.15,
-        tournament_size= 2
+        tournament_size= 2,
+        population_size=50,
+        generations=20000
     )
     best = ea.run(print_progress=False)
     return best.fitness
