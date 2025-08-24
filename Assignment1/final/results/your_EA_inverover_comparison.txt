@@ -1,1 +1,5 @@
-When comparing the inverover algorithm to
+When comparing our EA with the inverover algorithm across small to medium TSPs, inverover consistently achieves shorter tours in comparable times, 
+often within 5% of the optimum. On larger sets like pcb442 inverover is still achieving lower results, but is slower, 
+on very large problems (pr2392, usa13509), the EA produces much lower tours and runs faster (~2×), indicating better scalability. 
+Both curves were still improving at the generation limit, so more time would likely compress gaps, but the crossover point clearly favours the EA at scale. 
+Overall, inverover for quality early; EA for big instances/time-to-solution.

@@ -8,11 +8,11 @@ import numpy as np
 
 
 def overlap(t1, t2):
-    """ Calculates the edge overlap distance between two tours. """
+    """Calculates the edge overlap distance between two tours."""
     n = len(t1)
 
     def edges(t):
-        """ Returns the edges of a tour. """
+        """Returns the edges of a tour."""
         return {(t[i], t[(i + 1) % n]) for i in range(n)}
 
     return n - len(edges(t1) & edges(t2))
@@ -44,7 +44,7 @@ class CrowdingEA:
         self.population = Population.random(self.tsp, self.n)
 
     def get_parents(self):
-        """ Tournament selection. """
+        """Tournament selection."""
         fitness_values = np.array([ind.fitness for ind in self.population.individuals])
         idxs = Selection.Tournament_Selection(fitness_values, 2, self.tournament_k)
         return (
@@ -53,7 +53,7 @@ class CrowdingEA:
         )
 
     def crossover(self, p1, p2):
-        """ Edge Recombination crossover. """
+        """Edge Recombination crossover."""
         if random.random() < self.crossover_rate:
             c1_tour = Crossovers.edge_recombination(p1.tour, p2.tour)
             c2_tour = Crossovers.edge_recombination(p2.tour, p1.tour)
@@ -61,14 +61,14 @@ class CrowdingEA:
         return p1.copy(), p2.copy()
 
     def mutate(self, ind):
-        """ Insertion mutation. """
+        """Insertion mutation."""
         if random.random() < self.mutation_rate:
             mutated, _, _ = Mutations.insert(ind.tour)
             ind.tour = mutated
             ind.fitness = ind.evaluate()
 
     def step(self):
-        """ Steady-state GA with Deterministic Crowding. """
+        """Steady-state GA with Deterministic Crowding."""
         p1, p2 = self.get_parents()
         idx1 = self.population.individuals.index(p1)
         idx2 = self.population.individuals.index(p2)
@@ -92,5 +92,5 @@ class CrowdingEA:
                 self.population.individuals[parent_idx] = child
 
     def best(self):
-        """ Return the best individual from the population. """
+        """Return the best individual from the population."""
         return self.population.best()

@@ -1,4 +1,4 @@
-SteadyState Results
+Evolutionary Algorithm Results
 ==================================================
 
 Problem: eil51
