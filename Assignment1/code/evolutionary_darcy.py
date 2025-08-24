@@ -448,7 +448,7 @@ def test_population_sizes_and_generations():
         print(f"\nTesting on {instance_file}")
         print("-" * 40)
         
-        for alg_name, crossover, mutation, selection in algorithms:
+        for alg_name, algorithm_type, crossover, mutation, selection, crossover_rate, mutation_rate, tournament_size in algorithms:
             print(f"Algorithm: {alg_name}")
             
             for pop_size in population_sizes:
@@ -459,9 +459,13 @@ def test_population_sizes_and_generations():
                     tsp_file=instance_file,
                     population_size=pop_size,
                     generations=max(generation_checkpoints),  # Run for maximum generations
+                    algorithm_type=algorithm_type,
                     crossover_method=crossover,
                     mutation_method=mutation,
-                    selection_method=selection
+                    selection_method=selection,
+                    crossover_rate=crossover_rate,
+                    mutation_rate=mutation_rate,
+                    tournament_size=tournament_size
                 )
                 
                 # Modified run method to capture results at checkpoints
