@@ -6,23 +6,21 @@ from tsp import TSP
 
 
 class InverOverAlgorithm:
-    """Inver-Over algorithm for TSP with single inver-over operator."""
+    """Inverover algorithm for TSP with single inverover operator."""
 
     def __init__(
         self,
         tsp,
         pop_size,
         generations,
-        inversion_p,
+        inversion,
         stag_limit,
-        max_steps,
     ):
         self.tsp = TSP(tsp)
         self.pop_size = pop_size
         self.generations = generations
-        self.p = inversion_p
+        self.p = inversion
         self.stag_limit = stag_limit if stag_limit else float("inf")
-        self.max_steps = max_steps
 
         # Initialize population and track the best individual.
         self.population = Population.random(self.tsp, self.pop_size)
@@ -48,7 +46,7 @@ class InverOverAlgorithm:
             arr[: b + 1] = seg[k:]
 
     def offspring(self, p_tour, next_maps):
-        """Apply inver-over transformation using delta updates."""
+        """Apply inverover transformation using delta updates."""
         n = len(p_tour)
         if n <= 2:
             return p_tour[:], self.tsp.tour_length(p_tour)
@@ -56,9 +54,8 @@ class InverOverAlgorithm:
         pos = {city: idx for idx, city in enumerate(s)}
         total_len = self.tsp.tour_length(s)
         c = random.choice(s)  # Choose a random location to start with.
-        max_steps = self.max_steps
 
-        for _ in range(max_steps):
+        while True:
             # Choose c' randomly or as mate's successor.
             if random.random() <= self.p or not next_maps:
                 cprime = random.choice([x for x in s if x != c])
@@ -67,17 +64,19 @@ class InverOverAlgorithm:
                 cprime = nm[c]
 
             i = pos[c]
-            left_neighbor = s[(i - 1) % n]
-            right_neighbor = s[(i + 1) % n]
+            left = s[(i - 1) % n]
+            right = s[(i + 1) % n]
 
             # Stop if c' already neighbors c.
-            if cprime == left_neighbor or cprime == right_neighbor:
+            if cprime == left or cprime == right:
                 break
 
             j = pos[cprime]
             a = (i + 1) % n
 
-            # Delta cost for inverting segment a..j.
+            # Delta cost for inverting segment.
+            # BEFORE: c -> sa ... sj -> sj1
+            # AFTER:  c -> sj ... sa -> sj1
             sa, sj, sj1 = s[a], s[j], s[(j + 1) % n]
             total_len += (
                 self.tsp.dist(c, sj)
@@ -100,7 +99,7 @@ class InverOverAlgorithm:
         return s, total_len
 
     def outer_pass(self):
-        """Apply inver-over operator once to each individual."""
+        """Apply inverover operator once to each individual."""
         improved = False
         inds = self.population.individuals
 
@@ -111,7 +110,7 @@ class InverOverAlgorithm:
             nm = {tour.tour[i]: tour.tour[(i + 1) % n] for i in range(n)}
             next_maps.append(nm)
 
-        # Apply inver-over operator to each individual.
+        # Apply inverover operator to each individual.
         for i, ind in enumerate(inds):
             mates_next = next_maps[:i] + next_maps[i + 1 :]
             child_tour, child_len = self.offspring(ind.tour, mates_next)
@@ -134,13 +133,13 @@ class InverOverAlgorithm:
         stagnation = 0
         gen = 0
 
-        # Execute EA until no improvement for ammount of generations determined by stag_limit.
+        # Execute EA until no improvement for ammount of generations determined by stag_limit or hit generation limit.
         while stagnation < self.stag_limit and gen < self.generations:
             gen += 1
             improved = self.outer_pass()
 
             # Print progress every 1000 generations.
-            if gen % 100 == 0:
+            if gen % 1000 == 0:
                 # Calculate current average fitness.
                 fitness_vals = [
                     ind.fitness or self.tsp.tour_length(ind.tour)
@@ -164,19 +163,20 @@ class InverOverAlgorithm:
         return self.best_individual.copy(), total_time
 
 
+## MAIN TESTING FUNCTION FOR THE INVEROVER ALGORITHM ##
 def main():
     """Main function to run and test the inverover algorithm."""
     problems = [
-        # "eil51",
-        # "st70",
-        # "eil76",
-        # "kroA100",
-        # "kroC100",
-        # "kroD100",
-        # "eil101",
-        # "lin105",
-        # "pcb442",
-        # "pr2392",
+        "eil51",
+        "st70",
+        "eil76",
+        "kroA100",
+        "kroC100",
+        "kroD100",
+        "eil101",
+        "lin105",
+        "pcb442",
+        "pr2392",
         "usa13509",
     ]
 
@@ -185,23 +185,12 @@ def main():
 
     for problem in problems:
         print(f"\n### {problem} ###")
-        problem_size = int(
-            "".join(c for c in problem if c.isdigit())
-        )  # Get the problem size
 
-        # Variable number of steps based on problem size.
-        if problem_size < 1000:
-            steps = 100
-        elif problem_size < 10000:
-            steps = 50
-        else:
-            steps = 5
-
-        # Collect results over.
+        # Collect results.
         best_fitnesses = []
         run_times = []
 
-        for run in range(3):
+        for run in range(30):
             print(f"Run {run + 1}")
             tsp = f"tsplib/{problem}.tsp"
 
@@ -209,9 +198,8 @@ def main():
                 tsp,  # TSP problem to run on
                 pop_size=50,  # Population size
                 generations=20000,  # Number of generations
-                inversion_p=0.02,  # Inversion probability
+                inversion=0.02,  # Inversion probability
                 stag_limit=2000,  # Stagnation limit (None for no limit)
-                max_steps=steps,  # Maximum inversion steps per offspring (determined by problem size)
             )
 
             best_individual, total_time = algo.run()

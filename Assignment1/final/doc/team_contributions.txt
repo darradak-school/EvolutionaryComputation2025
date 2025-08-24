@@ -1,7 +1,19 @@
 Murad:
-tsp.py                 # Exercise 1: TSP problem representation
-local_search.py        # Exercise 2: Local search algorithms
+CODE
+tsp.py                    # Exercise 1: TSP problem representation
+local_search.py           # Exercise 2: Local search algorithms
+ea_steadystate.py         # Exercise 6: Evolutionary Algorithms
+inverover.py              # Exercise 7: Inver-over EA
+DOCUMENTATION
+local_search_analysis.txt
+your_EA_inverover_comparison.txt
+algorithm_design.txt (steady state)
 
+Created the tsp module file to retrieve data from the TSPlib files.
+Created, tested and optimised the localsearch algorithm, implementing tour
+delta calculations and other techniques to make the algorithm faster, found
+that two_opt was the best performing.
+Created the inverover algorithm, and the main steady state EA.
 
 Jerry:
 individual_population.py          # Exercise 3

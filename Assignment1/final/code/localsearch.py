@@ -7,40 +7,40 @@ from tsp import TSP
 class LocalSearch:
     ### TOUR HELPERS ###
     def copy(self, t):
-        """ Copy the tour so we dont alter the original. """
+        """Copy the tour so we dont alter the original."""
         return t[:]
 
     def prev(self, i, n):
-        """ Get the previous index in the tour. """
+        """Get the previous index in the tour."""
         return (i - 1) % n
 
     def next(self, i, n):
-        """ Get the next index in the tour. """
+        """Get the next index in the tour."""
         return (i + 1) % n
 
-    ### NEIGHBOURHOOD APPLIERS ### 
+    ### NEIGHBOURHOOD APPLIERS ###
     def exchange(self, tour, i, j):
-        """ Get the new tour after applying exchange move. """
+        """Get the new tour after applying exchange move."""
         new_tour = self.copy(tour)
         new_tour[i], new_tour[j] = new_tour[j], new_tour[i]
         return new_tour
 
     def jump(self, tour, i, j):
-        """ Get the new tour after applying jump move. """
+        """Get the new tour after applying jump move."""
         new_tour = self.copy(tour)
         a = new_tour.pop(i)
         new_tour.insert(j, a)
         return new_tour
 
     def two_opt(self, tour, i, j):
-        """ Get the new tour after applying two opt move. """
+        """Get the new tour after applying two opt move."""
         new_tour = self.copy(tour)
         new_tour[i : j + 1] = reversed(new_tour[i : j + 1])
         return new_tour
 
     ### TOUR DIFFERENCE CALCULATORS ###
     def diff_two_opt(self, tour, i, j, tsp):
-        """ Calculate the difference in tour length for two opt move. """
+        """Calculate the difference in tour length for two opt move."""
         n = len(tour)
         dist = tsp.dist
 
@@ -55,7 +55,7 @@ class LocalSearch:
         return (dist(ipre, lj) + dist(li, jnext)) - (dist(ipre, li) + dist(lj, jnext))
 
     def diff_exchange(self, tour, i, j, tsp):
-        """ Calculate the difference in tour length for exchange move. """
+        """Calculate the difference in tour length for exchange move."""
         n = len(tour)
         dist = tsp.dist
 
@@ -87,7 +87,7 @@ class LocalSearch:
         return after - before
 
     def diff_jump(self, tour, i, j, tsp):
-        """ Calculate the difference in tour length for a jump move (remove i, insert at j). """
+        """Calculate the difference in tour length for a jump move (remove i, insert at j)."""
         n = len(tour)
         dist = tsp.dist
         li = tour[i]
@@ -114,7 +114,7 @@ class LocalSearch:
 
     ### SIMULATED ANNEALING ###
     def random_ij(self, search_type, n):
-        """ Generate two random indices for the given search type. """
+        """Generate two random indices for the given search type."""
         # Random i and j for two opt.
         if search_type == "two_opt":
             while True:
@@ -149,7 +149,7 @@ class LocalSearch:
         target,
         stag_limit=1000,  # Max cycles without improvement before stopping
     ):
-        """ Run the searching algorithm with the provided parameters. """
+        """Run the searching algorithm with the provided parameters."""
         start = time.time()
         n = len(tour)
 
@@ -219,8 +219,10 @@ class LocalSearch:
             if temp == 0.0 or stag >= stag_limit:
                 return t, cycles, time.time() - start
 
+
+## MAIN TESTING FUNCTION FOR THE LOCAL SEARCH ALGORITHM ##
 def main():
-    """ Main function to run and test the local search algorithm, runs with the following configuration variables. """
+    """Main function to run and test the local search algorithm, runs with the following configuration variables."""
     ### CONFIGURATION VARIABLES ###
     PROBLEMS = [
         "eil51",
@@ -244,7 +246,6 @@ def main():
     COOLING = 0.9999  # How fast to cool the temp, 1.0 disables cooling.
     TARGET = 0.3  # Target chance to accept for an average tour with apositive diff.
 
-
     # Calculate statistics for results.
     def calc(data_list):
         values = [r[0] for r in data_list]
@@ -256,7 +257,6 @@ def main():
             sum(cycles) / len(cycles),  # Mean number of cycles.
             sum(times) / len(times),  # Mean time taken.
         )
-
 
     # Write results to file.
     def write_results(f, section_name, results, search_types):
@@ -272,7 +272,6 @@ def main():
                 f.write(f"{search_type.title()} cycles: {avg_cycles:.2f}\n")
                 f.write(f"{search_type.title()} time: {avg_time:.2f}s\n")
                 f.write("---------------------\n")
-
 
     # Run tests on all problems.
     for problem in PROBLEMS:
@@ -317,6 +316,7 @@ def main():
             write_results(f, "MEAN", results, TYPES)
             write_results(f, "MINIMUM", results, TYPES)
             write_results(f, "MEAN TIMES", results, TYPES)
+
 
 if __name__ == "__main__":
     main()

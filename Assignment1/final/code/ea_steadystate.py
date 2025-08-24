@@ -9,11 +9,12 @@ import numpy as np
 
 class SteadyStateEA:
     """
-    Steady-state EA with:
-      - Tournament selection (k)
-      - Order Crossover (OX)
+    Steady state EA with:
+      - Tournament selection
+      - Order Crossover
       - Inversion mutation
-      - Replacement: child vs most similar parent (edge overlap)
+      - Replacement: child vs most similar parent
+      - Elitism
     """
 
     def __init__(
@@ -24,8 +25,8 @@ class SteadyStateEA:
         mutation_rate,
         crossover_rate,
         tournament_size=3,
-        replacement_rate=0.05,  # Replaces specified percentage of population.
-        elite_size=0.05,  # Maintains specified percentage of elite population.
+        replacement_rate=0.05,
+        elite_size=0.05,
     ):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
@@ -47,7 +48,7 @@ class SteadyStateEA:
         return [self.population.individuals[i] for i in selected_indices]
 
     def crossover(self, parent1, parent2):
-        """Order Crossover (OX)."""
+        """Order Crossover."""
         if random.random() < self.crossover_rate:
             child1_tour, child2_tour = Crossovers.order_crossover(
                 parent1.tour, parent2.tour
@@ -69,11 +70,12 @@ class SteadyStateEA:
             individual.fitness = individual.evaluate()
 
     def step(self):
-        """Steady-state GA with elite preservation."""
+        """Advances the population by one generation."""
         num_replacements = max(1, int(self.population_size * self.replacement_rate))
         parents = self.get_parents(num_replacements)
         offspring = []
 
+        # Create offspring through crossover and mutation.
         for i in range(0, len(parents), 2):
             if i + 1 < len(parents):
                 children = self.crossover(parents[i], parents[i + 1])
@@ -85,13 +87,13 @@ class SteadyStateEA:
                 self.mutate(child)
                 offspring.append(child)
 
-        # Sort population by fitness (best first)
+        # Sort population by fitness (best first).
         self.population.individuals.sort(key=lambda x: x.fitness)
 
-        # Sort offspring by fitness (best first)
+        # Sort offspring by fitness (best first).
         offspring.sort(key=lambda x: x.fitness)
 
-        # Replace worst individuals (excluding elite) with best offspring
+        # Replace worst individuals (excluding elite) with best offspring.
         num_offspring = min(len(offspring), num_replacements)
         replaceable_start = self.elite_size
 
@@ -99,9 +101,9 @@ class SteadyStateEA:
             if replaceable_start + i < len(self.population.individuals):
                 self.population.individuals[replaceable_start + i] = offspring[i]
 
-        # Ensure elite members are still at the top
+        # Ensure elite members are still at the top.
         self.population.individuals.sort(key=lambda x: x.fitness)
 
     def best(self):
-        """Return the best individual from the population."""
+        """Returns the best individual from the population."""
         return self.population.best()
