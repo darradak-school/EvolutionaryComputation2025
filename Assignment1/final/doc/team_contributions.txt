@@ -25,6 +25,7 @@ individual_population.py          # Exercise 3
 
 Tyler:
 mutations.py           # Exercise 4: Mutation operators
+Implemented swap, insert and inversion mutations to be used for EA algs
 
 
 Darcy:
