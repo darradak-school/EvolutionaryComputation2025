@@ -311,41 +311,41 @@ def basic_test():
 
 # Exercise 6 stuff
 
-def population_generation_worker(instance_file, algorithms, population_sizes, generation_checkpoints):
+def population_generation_worker(instance_file, algorithm, population_sizes, generation_checkpoints):
     """Worker function for a single TSP instance."""
     results = []
-    for alg_name, algorithm_type, crossover, mutation, selection, crossover_rate, mutation_rate, tournament_size in algorithms:
-        for pop_size in population_sizes:
-            ea = SimpleEvolutionaryAlgorithm(
-                tsp_file=instance_file,
-                population_size=pop_size,
-                generations=max(generation_checkpoints),
-                algorithm_type=algorithm_type,
-                crossover_method=crossover,
-                mutation_method=mutation,
-                selection_method=selection,
-                crossover_rate=crossover_rate,
-                mutation_rate=mutation_rate,
-                tournament_size=tournament_size
-            )
-            ea.create_initial_population()
-            checkpoint_results = {}
-            for generation in range(max(generation_checkpoints)):
-                parents = ea.select_parents()
-                offspring = ea.create_offspring(parents)
-                ea.population = ea.create_next_gen(ea.population.individuals, offspring)
-                current_gen = generation + 1
-                if current_gen in generation_checkpoints:
-                    best = ea.get_best_individual()
-                    checkpoint_results[current_gen] = best.fitness
-            for gen, fitness in checkpoint_results.items():
-                results.append({
-                    'instance': instance_file,
-                    'algorithm': alg_name,
-                    'population_size': pop_size,
-                    'generation': gen,
-                    'fitness': fitness
-                })
+    alg_name, algorithm_type, crossover, mutation, selection, crossover_rate, mutation_rate, tournament_size = algorithm
+    for pop_size in population_sizes:
+        ea = SimpleEvolutionaryAlgorithm(
+            tsp_file=instance_file,
+            population_size=pop_size,
+            generations=max(generation_checkpoints),
+            algorithm_type=algorithm_type,
+            crossover_method=crossover,
+            mutation_method=mutation,
+            selection_method=selection,
+            crossover_rate=crossover_rate,
+            mutation_rate=mutation_rate,
+            tournament_size=tournament_size
+        )
+        ea.create_initial_population()
+        checkpoint_results = {}
+        for generation in range(max(generation_checkpoints)):
+            parents = ea.select_parents()
+            offspring = ea.create_offspring(parents)
+            ea.population = ea.create_next_gen(ea.population.individuals, offspring)
+            current_gen = generation + 1
+            if current_gen in generation_checkpoints:
+                best = ea.get_best_individual()
+                checkpoint_results[current_gen] = best.fitness
+        for gen, fitness in checkpoint_results.items():
+            results.append({
+                'instance': instance_file,
+                'algorithm': alg_name,
+                'population_size': pop_size,
+                'generation': gen,
+                'fitness': fitness
+            })
     return results
 
 def test_popsizes_generations():
@@ -355,8 +355,8 @@ def test_popsizes_generations():
     tsp_instances = [
         "tsplib/eil51.tsp", "tsplib/eil76.tsp", "tsplib/eil101.tsp", 
         "tsplib/st70.tsp", "tsplib/kroa100.tsp", "tsplib/kroc100.tsp", 
-        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp"#, 
-        #"tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
+        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp",
+        "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
     population_sizes = [20, 50, 100, 200]
     generation_checkpoints = [2000, 5000, 10000, 20000]
@@ -372,21 +372,22 @@ def test_popsizes_generations():
             executor.submit(
                 population_generation_worker,
                 instance_file,
-                algorithms,
+                algorithm,
                 population_sizes,
                 generation_checkpoints
             )
             for instance_file in tsp_instances
+            for algorithm in algorithms
         ]
         for future in concurrent.futures.as_completed(futures):
             results.extend(future.result())
 
     # Save results to file
-    with open('results/population_generation_test.txt', 'w') as f:
+    with open('../results/population_generation_test.txt', 'w') as f:
         f.write("Instance,Algorithm,PopSize,Generation,Fitness\n")
         for result in results:
             f.write(f"{result['instance']},{result['algorithm']},{result['population_size']},{result['generation']},{result['fitness']:.2f}\n")
-    print(f"\nResults saved to results/population_generation_test_missingUSA.txt")
+    print(f"\nResults saved to results/population_generation_test.txt")
 
 
 
@@ -406,6 +407,7 @@ def single_run(instance_file):
     best = ea.run(print_progress=False)
     return best.fitness
 
+# not used for final submission - kept for reference -- the ea_steady_state.py class was used for your_EA.txt's final run
 def best_alg_30_times():
     """Exercise 6 Part 3: Run best algorithm 30 times for statistics"""
     print("\nExercise 6 - Best Algorithm 30 Runs Test")
@@ -452,7 +454,7 @@ def best_alg_30_times():
         })
     
     # Save results to file
-    with open('results/your_EA.txt', 'w') as f:
+    with open('../results/your_EA.txt', 'w') as f:
         f.write("TSP Instance,Average Cost,Standard Deviation,Best Cost,Worst Cost\n")
         for result in all_results:
             f.write(f"{result['instance']},{result['average']:.2f},{result['std_dev']:.2f},{result['best']:.2f},{result['worst']:.2f}\n")
@@ -461,9 +463,8 @@ def best_alg_30_times():
     return all_results
 
 
-# Example usage and testing
+# main - if run normally, run Exercise 6 tests
 if __name__ == "__main__":
-    # Exercise 6 - Complete Assignment Requirements
     print(f"\n" + "="*70)
     print("EXERCISE 6 - EVOLUTIONARY ALGORITHMS AND BENCHMARKING")
     print("="*70)
@@ -471,14 +472,12 @@ if __name__ == "__main__":
     
     # Part 2: Test with different population sizes and generations
     print("\nPart 2: Testing Population Sizes and Generations")
-    print("This will take a very long time to complete!")
     
     test_popsizes_generations()
 
     
     # Part 3: Run best algorithm 30 times
     print("\nPart 3: Running Best Algorithm 30 Times")
-    print("This will also take a long time - comment out if needed")
     
-    #best_alg_30_times()
+    best_alg_30_times()
     

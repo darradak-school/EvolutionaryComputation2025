@@ -24,8 +24,11 @@ Run local search algorithm - Ex.2
 Can configure localsearch variables in the main function to change the algorithm parameters. 
 E.g. add new problems, alter cooling rate, change the stagnation limit, etc.
 
-Run evolutionary algorithm testing and benchmarking
-"python evolutionary.py"
+Run evolutionary algorithm testing and benchmarking Ex.6
+"python evolutionary_modular.py"
+
+(Would take >24hrs to complete USA and pr2392 on larger test cases - ran on smaller test examples even after multithreading/parellelizing due to submission deadlines)
+(Added parellelizisation may cause issues on some systems but should work naturally using up to as many processes as possible)
 
 Run inverover algorithm - Ex.7
 "python inverover.py"
