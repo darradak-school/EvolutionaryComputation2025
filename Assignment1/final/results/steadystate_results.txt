@@ -46,3 +46,8 @@ Average Best Fitness: 64468.07 +/- 1012.96
 Average Time: 88.51s +/- 1.55s
 ------------------------------
 
+Problem: pr2392
+Average Best Fitness: 2308946.77 +/- 25363.22
+Average Time: 496.40s +/- 3.99s
+------------------------------
+
