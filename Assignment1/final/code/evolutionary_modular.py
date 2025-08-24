@@ -11,6 +11,8 @@ from mutations import Mutations
 from selection import Selection
 import random
 import numpy as np
+import concurrent.futures # Working with parallel processing - able to make use of multiple CPU cores
+
 
 
 class SimpleEvolutionaryAlgorithm:
@@ -419,88 +421,82 @@ def run_multiple_experiments():
     print(f"Worst:   {worst:.2f}")
 
 
+
+def population_generation_worker(instance_file, algorithms, population_sizes, generation_checkpoints):
+    """Worker function for a single TSP instance."""
+    results = []
+    for alg_name, algorithm_type, crossover, mutation, selection, crossover_rate, mutation_rate, tournament_size in algorithms:
+        for pop_size in population_sizes:
+            ea = SimpleEvolutionaryAlgorithm(
+                tsp_file=instance_file,
+                population_size=pop_size,
+                generations=max(generation_checkpoints),
+                algorithm_type=algorithm_type,
+                crossover_method=crossover,
+                mutation_method=mutation,
+                selection_method=selection,
+                crossover_rate=crossover_rate,
+                mutation_rate=mutation_rate,
+                tournament_size=tournament_size
+            )
+            ea.create_initial_population()
+            checkpoint_results = {}
+            for generation in range(max(generation_checkpoints)):
+                parents = ea.select_parents()
+                offspring = ea.create_offspring(parents)
+                ea.population = ea.create_next_generation(ea.population.individuals, offspring)
+                current_gen = generation + 1
+                if current_gen in generation_checkpoints:
+                    best = ea.get_best_individual()
+                    checkpoint_results[current_gen] = best.fitness
+            for gen, fitness in checkpoint_results.items():
+                results.append({
+                    'instance': instance_file,
+                    'algorithm': alg_name,
+                    'population_size': pop_size,
+                    'generation': gen,
+                    'fitness': fitness
+                })
+    return results
+
 def test_population_sizes_and_generations():
-    """Exercise 6 Part 2: Test different population sizes and generations"""
+    """Exercise 6 Part 2: Test different population sizes and generations (parallelized by TSP instance)"""
     print("\nExercise 6 - Population Sizes and Generations Test")
     print("=" * 60)
-    
-    # TSP instances as specified in assignment
     tsp_instances = [
         "tsplib/eil51.tsp", "tsplib/eil76.tsp", "tsplib/eil101.tsp", 
         "tsplib/st70.tsp", "tsplib/kroa100.tsp", "tsplib/kroc100.tsp", 
         "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp", 
         "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
-    
     population_sizes = [20, 50, 100, 200]
     generation_checkpoints = [2000, 5000, 10000, 20000]
-    
-    # Three different algorithms as designed
     algorithms = [
         ("Algorithm1_Generational_PMX_Inversion_Tournament", "generational", "pmx_crossover", "inversion", "tournament", 0.8, 0.1, 3),
         ("Algorithm2_SteadyState_Order_Inversion_Tournament", "steady_state", "order_crossover", "inversion", "tournament", 0.9, 0.05, 5),
         ("Algorithm3_Generational_Order_Swap_FitnessProp", "generational", "order_crossover", "swap", "fitness_proportional", 0.7, 0.15, 2)
     ]
-
-    
     results = []
-    
-    for instance_file in tsp_instances:
-        print(f"\nTesting on {instance_file}")
-        print("-" * 40)
-        
-        for alg_name, algorithm_type, crossover, mutation, selection, crossover_rate, mutation_rate, tournament_size in algorithms:
-            print(f"Algorithm: {alg_name}")
-            
-            for pop_size in population_sizes:
-                print(f"  Population size: {pop_size}")
-                
-                # Create EA with current configuration
-                ea = SimpleEvolutionaryAlgorithm(
-                    tsp_file=instance_file,
-                    population_size=pop_size,
-                    generations=max(generation_checkpoints),  # Run for maximum generations
-                    algorithm_type=algorithm_type,
-                    crossover_method=crossover,
-                    mutation_method=mutation,
-                    selection_method=selection,
-                    crossover_rate=crossover_rate,
-                    mutation_rate=mutation_rate,
-                    tournament_size=tournament_size
-                )
-                
-                # Modified run method to capture results at checkpoints
-                ea.create_initial_population()
-                
-                checkpoint_results = {}
-                for generation in range(max(generation_checkpoints)):
-                    parents = ea.select_parents()
-                    offspring = ea.create_offspring(parents)
-                    ea.population = ea.create_next_generation(ea.population.individuals, offspring)
-                    
-                    # Check if this generation is a checkpoint
-                    current_gen = generation + 1
-                    if current_gen in generation_checkpoints:
-                        best = ea.get_best_individual()
-                        checkpoint_results[current_gen] = best.fitness
-                        print(f"    Gen {current_gen}: {best.fitness:.2f}")
-                
-                # Store results
-                for gen, fitness in checkpoint_results.items():
-                    results.append({
-                        'instance': instance_file,
-                        'algorithm': alg_name,
-                        'population_size': pop_size,
-                        'generation': gen,
-                        'fitness': fitness
-                    })
-    
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        futures = [
+            executor.submit(
+                population_generation_worker,
+                instance_file,
+                algorithms,
+                population_sizes,
+                generation_checkpoints
+            )
+            for instance_file in tsp_instances
+        ]
+        for future in concurrent.futures.as_completed(futures):
+            results.extend(future.result())
+
     # Save results to file
     with open('results/population_generation_test.txt', 'w') as f:
         f.write("Instance,Algorithm,PopSize,Generation,Fitness\n")
         for result in results:
             f.write(f"{result['instance']},{result['algorithm']},{result['population_size']},{result['generation']},{result['fitness']:.2f}\n")
-    
     print(f"\nResults saved to results/population_generation_test.txt")
 
 
@@ -545,7 +541,6 @@ def design_three_algorithms():
     
     return algorithms
 
-import concurrent.futures # Working with parallel processing - able to make use of multiple CPU cores
 
 # Best algorithm configuration 
 def single_run(instance_file):
@@ -654,7 +649,7 @@ if __name__ == "__main__":
     #print("\nPart 2: Testing Population Sizes and Generations")
     #print("This will take a very long time to complete!")
     
-    #test_population_sizes_and_generations()
+    test_population_sizes_and_generations()
 
 # above commeneted out to avoid long runtimes during final run
     
