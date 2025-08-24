@@ -66,6 +66,7 @@ ALGORITHMS = [
 
 
 def run():
+    """ Run the algorithms and store the results. """
     # Store results for all problems to write summary later
     all_results = {}
     
@@ -138,16 +139,16 @@ def run():
     for key, problem_results in all_results.items():
         algorithm_name = next(name for name, k, _ in ALGORITHMS if k == key)
         with open(f"../results/{key}_results.txt", "a") as summary_file:
-            # summary_file.write(f"{algorithm_name} Results\n")
-            # summary_file.write("=" * 50 + "\n")
+            summary_file.write(f"{algorithm_name} Results\n")
+            summary_file.write("=" * 50 + "\n")
             
             for problem in PROBLEMS:
                 if problem in problem_results:
                     results = problem_results[problem]
-                    # summary_file.write(f"Problem: {problem}\n")
-                    # summary_file.write(f"Average Best Fitness: {results['avg_fitness']:.2f} +/- {results['std_fitness']:.2f}\n")
-                    # summary_file.write(f"Average Time: {results['avg_time']:.2f}s +/- {results['std_time']:.2f}s\n")
-                    # summary_file.write("-" * 30 + "\n\n")
+                    summary_file.write(f"Problem: {problem}\n")
+                    summary_file.write(f"Average Best Fitness: {results['avg_fitness']:.2f} +/- {results['std_fitness']:.2f}\n")
+                    summary_file.write(f"Average Time: {results['avg_time']:.2f}s +/- {results['std_time']:.2f}s\n")
+                    summary_file.write("-" * 30 + "\n\n")
 
 
 if __name__ == "__main__":
