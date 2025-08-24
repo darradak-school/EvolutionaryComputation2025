@@ -431,3 +431,6 @@ tsplib/pcb442.tsp,Algorithm3_Generational_Order_Swap_FitnessProp,200,2000,170698
 tsplib/pcb442.tsp,Algorithm3_Generational_Order_Swap_FitnessProp,200,5000,130899.74
 tsplib/pcb442.tsp,Algorithm3_Generational_Order_Swap_FitnessProp,200,10000,118084.35
 tsplib/pcb442.tsp,Algorithm3_Generational_Order_Swap_FitnessProp,200,20000,108539.62
+
+
+## Below only run on population sizes 20, 50 and 2000, 5000 generations - due to time constraints likely taking >24hr to finish final run on usa13509 and pr2392

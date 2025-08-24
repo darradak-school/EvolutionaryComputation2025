@@ -11,7 +11,7 @@ Code and documentation for Assignment 1 of the Evolutionary Computation 2025 cou
 ## Getting Started
 
 1. Clone the repository / Download the files.
-2. Follow instructions in the documentation to run the code.
+2. Follow instructions in 'Usage' to run the code.
 
 ## Requirements
 
@@ -28,7 +28,7 @@ Run evolutionary algorithm testing and benchmarking Ex.6
 "python evolutionary_modular.py"
 
 (Would take >24hrs to complete USA and pr2392 on larger test cases - ran on smaller test examples even after multithreading/parellelizing due to submission deadlines)
-(Added parellelizisation may cause issues on some systems but should work naturally using up to as many processes as possible)
+(Added parellelizisation may cause issues on some systems but should work naturally using up to as many processes as available)
 
 Run inverover algorithm - Ex.7
 "python inverover.py"
