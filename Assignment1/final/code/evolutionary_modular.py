@@ -26,7 +26,7 @@ class SimpleEvolutionaryAlgorithm:
         self.generations = generations
         self.population = None
         
-        # Parameters (easy to modify)
+        # Parameters 
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.elitism = elitism_count
@@ -38,8 +38,8 @@ class SimpleEvolutionaryAlgorithm:
         self.algorithm_type = algorithm_type  # "generational" or "steady_state"
 
         # Steady-state specific parameters
-        self.replacement_rate = 0.05  # For steady-state
-        self.elite_size = max(1, int(self.population_size * 0.05))  # For steady-state
+        self.replacement_rate = 0.05  #  steady-state
+        self.elite_size = max(1, int(self.population_size * 0.05))  #  steady-state
 
 
         
@@ -60,8 +60,6 @@ class SimpleEvolutionaryAlgorithm:
             parents = [self.population.individuals[i] for i in selected_indices]
             
         elif self.selection_method == "fitness_proportional":
-            # Use Selection class for fitness proportional selection
-            # Convert Individual objects to tour arrays for the Selection class
             parent_tours = np.array([ind.tour for ind in self.population.individuals])
             selected_indices = Selection.Fitness_Proportional_Selection(
                 self.tsp, parent_tours
@@ -69,7 +67,7 @@ class SimpleEvolutionaryAlgorithm:
             parents = [self.population.individuals[i] for i in selected_indices]
             
         else:
-            # Default to simple tournament selection
+            # Default tournament selection
             for _ in range(self.population_size):
                 tournament = random.sample(self.population.individuals, min(self.tournament_size, len(self.population.individuals)))
                 winner = min(tournament, key=lambda x: x.fitness)
@@ -125,7 +123,7 @@ class SimpleEvolutionaryAlgorithm:
         
         return offspring
     
-    def create_next_generation(self, parents, offspring):
+    def create_next_gen(self, parents, offspring):
         """Combine parents and offspring to create next generation (generational only)"""
         # Elitism - keep best individuals from current population
         all_individuals = parents + offspring
@@ -202,11 +200,11 @@ class SimpleEvolutionaryAlgorithm:
                 offspring.append(child)
         
         # Replacement with elite preservation
-        # Sort population by fitness (best first)
+        # Sort population by fitness
         self.population.individuals.sort(key=lambda x: x.fitness)
         offspring.sort(key=lambda x: x.fitness)
         
-        # Replace worst individuals (excluding elite) with best offspring
+        # Replace worst individuals with best offspring
         num_offspring = min(len(offspring), num_replacements)
         replaceable_start = self.elite_size
         
@@ -231,7 +229,7 @@ class SimpleEvolutionaryAlgorithm:
             print(f"Crossover: {self.crossover_method}, Mutation: {self.mutation_method}")
             print(f"Selection: {self.selection_method}")
         
-        # Initialize
+        # Init
         self.create_initial_population()
         
         # Evolution loop - different based on algorithm type
@@ -245,7 +243,7 @@ class SimpleEvolutionaryAlgorithm:
                     best = self.get_best_individual()
                     print(f"Generation {generation}: Best = {best.fitness:.2f}")
         else:
-            # Generational evolution (original method)
+            # Generational evolution 
             for generation in range(self.generations):
                 # Selection
                 parents = self.select_parents()
@@ -254,7 +252,7 @@ class SimpleEvolutionaryAlgorithm:
                 offspring = self.create_offspring(parents)
                 
                 # Next generation
-                self.population = self.create_next_generation(
+                self.population = self.create_next_gen(
                     self.population.individuals, offspring
                 )
                 
@@ -263,7 +261,7 @@ class SimpleEvolutionaryAlgorithm:
                     best = self.get_best_individual()
                     print(f"Generation {generation}: Best = {best.fitness:.2f}")
         
-        # Final result
+        # Result
         best_individual = self.get_best_individual()
         if print_progress:
             print(f"Final best: {best_individual.fitness:.2f}")
@@ -271,7 +269,7 @@ class SimpleEvolutionaryAlgorithm:
         return best_individual
 
 
-def test_different_operators():
+def basic_test():
     """Test the EA with different operator combinations"""
     print("Testing Different Operator Combinations")
     print("=" * 50)
@@ -301,7 +299,7 @@ def test_different_operators():
         results.append((name, best.fitness))
         print(f"Result: {best.fitness:.2f}")
     
-    # Summary
+    # Print Summary
     print(f"\nSummary:")
     for name, fitness in results:
         print(f"{name:20s}: {fitness:.2f}")
@@ -310,117 +308,8 @@ def test_different_operators():
     print(f"\nBest configuration: {best_config[0]} with {best_config[1]:.2f}")
 
 
-def test_selection_methods():
-    """Test different selection methods using team member's Selection class"""
-    print("Testing Different Selection Methods")
-    print("=" * 50)
-    
-    selection_methods = ["tournament", "fitness_proportional"]
-    results = []
-    
-    for method in selection_methods:
-        print(f"Testing {method} selection...")
-        
-        ea = SimpleEvolutionaryAlgorithm(
-            tsp_file="tsplib/eil51.tsp",
-            population_size=50,
-            generations=1000,
-            selection_method=method,
-            crossover_method="pmx_crossover",
-            mutation_method="inversion"
-        )
-        
-        best = ea.run(print_progress=False)
-        results.append((method, best.fitness))
-        print(f"  Result: {best.fitness:.2f}")
-    
-    print(f"\nSelection Method Summary:")
-    for method, fitness in results:
-        print(f"{method:20s}: {fitness:.2f}")
 
-
-def comprehensive_algorithm_test():
-    """Comprehensive test using all team member's components"""
-    print("Comprehensive Algorithm Test")
-    print("=" * 50)
-    print("Testing all combinations of crossover, mutation, and selection")
-    
-    crossovers = ["order_crossover", "pmx_crossover", "cycle_crossover"]
-    mutations = ["swap", "insert", "inversion"]
-    selections = ["tournament", "fitness_proportional"]
-    
-    results = []
-    test_count = 0
-    
-    for crossover in crossovers:
-        for mutation in mutations:
-            for selection in selections:
-                test_count += 1
-                config_name = f"{crossover.split('_')[0].title()}+{mutation.title()}+{selection.split('_')[0].title()}"
-                
-                print(f"Test {test_count}: {config_name}")
-                
-                ea = SimpleEvolutionaryAlgorithm(
-                    tsp_file="tsplib/eil51.tsp",
-                    population_size=30,
-                    generations=500,
-                    crossover_rate=0.8,
-                    mutation_rate=0.1,
-                    tournament_size=3,
-                    selection_method=selection,
-                    crossover_method=crossover,
-                    mutation_method=mutation
-                )
-                
-                best = ea.run(print_progress=False)
-                results.append((config_name, best.fitness, crossover, mutation, selection))
-                print(f"  Result: {best.fitness:.2f}")
-    
-    print(f"\nComprehensive Test Results (sorted by performance):")
-    print("-" * 60)
-    results.sort(key=lambda x: x[1])  # Sort by fitness
-    
-    for i, (name, fitness, cx, mut, sel) in enumerate(results[:10]):  # Top 10
-        print(f"{i+1:2d}. {name:25s}: {fitness:8.2f}")
-    
-    best = results[0]
-    print(f"\nBest combination: {best[0]} with {best[1]:.2f}")
-    print(f"   Crossover: {best[2]}")
-    print(f"   Mutation:  {best[3]}")
-    print(f"   Selection: {best[4]}")
-
-
-def run_multiple_experiments():
-    """Run multiple experiments for statistics (quick demo)"""
-    print("\nRunning Multiple Experiments (Demo)")
-    print("=" * 40)
-    
-    runs = 5  # Reduced for demo
-    results = []
-    
-    print(f"Running {runs} experiments...")
-    
-    for i in range(runs):
-        ea = SimpleEvolutionaryAlgorithm(
-            "tsplib/eil51.tsp", 
-            population_size=50, 
-            generations=500  # Reduced for demo
-        )
-        best = ea.run(print_progress=False)
-        results.append(best.fitness)
-        print(f"Run {i+1}: {best.fitness:.2f}")
-    
-    # Statistics
-    avg = sum(results) / len(results)
-    best_result = min(results)
-    worst = max(results)
-    
-    print(f"\nStatistics over {runs} runs:")
-    print(f"Average: {avg:.2f}")
-    print(f"Best:    {best_result:.2f}")
-    print(f"Worst:   {worst:.2f}")
-
-
+# Exercise 6 stuff
 
 def population_generation_worker(instance_file, algorithms, population_sizes, generation_checkpoints):
     """Worker function for a single TSP instance."""
@@ -444,7 +333,7 @@ def population_generation_worker(instance_file, algorithms, population_sizes, ge
             for generation in range(max(generation_checkpoints)):
                 parents = ea.select_parents()
                 offspring = ea.create_offspring(parents)
-                ea.population = ea.create_next_generation(ea.population.individuals, offspring)
+                ea.population = ea.create_next_gen(ea.population.individuals, offspring)
                 current_gen = generation + 1
                 if current_gen in generation_checkpoints:
                     best = ea.get_best_individual()
@@ -459,15 +348,15 @@ def population_generation_worker(instance_file, algorithms, population_sizes, ge
                 })
     return results
 
-def test_population_sizes_and_generations():
-    """Exercise 6 Part 2: Test different population sizes and generations (parallelized by TSP instance)"""
+def test_popsizes_generations():
+    """Exercise 6 Step 2: Test different population sizes and generations (parallelized by TSP instance)"""
     print("\nExercise 6 - Population Sizes and Generations Test")
     print("=" * 60)
     tsp_instances = [
         "tsplib/eil51.tsp", "tsplib/eil76.tsp", "tsplib/eil101.tsp", 
         "tsplib/st70.tsp", "tsplib/kroa100.tsp", "tsplib/kroc100.tsp", 
-        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp", 
-        "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
+        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp"#, 
+        #"tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
     population_sizes = [20, 50, 100, 200]
     generation_checkpoints = [2000, 5000, 10000, 20000]
@@ -497,49 +386,8 @@ def test_population_sizes_and_generations():
         f.write("Instance,Algorithm,PopSize,Generation,Fitness\n")
         for result in results:
             f.write(f"{result['instance']},{result['algorithm']},{result['population_size']},{result['generation']},{result['fitness']:.2f}\n")
-    print(f"\nResults saved to results/population_generation_test.txt")
+    print(f"\nResults saved to results/population_generation_test_missingUSA.txt")
 
-
-
-def design_three_algorithms():
-    """Exercise 6 Part 1: Design and justify three different evolutionary algorithms"""
-    
-    algorithms = {
-        "Algorithm 1 - Generational Explorative": {
-            "algorithm_type": "generational",
-            "crossover": "pmx_crossover",
-            "mutation": "inversion", 
-            "selection": "tournament",
-            "crossover_rate": 0.8,
-            "mutation_rate": 0.1,
-            "tournament_size": 3,
-            "justification": "PMX preserves position info well, inversion maintains adjacency, tournament provides good selection pressure"
-        },
-        
-        "Algorithm 2 - Steady-State Intensive": {
-            "algorithm_type": "steady_state",
-            "crossover": "order_crossover",
-            "mutation": "inversion",
-            "selection": "tournament", 
-            "crossover_rate": 0.9,
-            "mutation_rate": 0.05,
-            "tournament_size": 5,
-            "justification": "Steady-state preserves elites continuously, order crossover maintains relative sequence, low mutation with strong selection pressure for intensive search"
-        },
-        
-        "Algorithm 3 - Balanced": {
-            "crossover": "order_crossover",
-            "mutation": "swap",
-            "selection": "fitness_proportional", 
-            "crossover_rate": 0.7,
-            "mutation_rate": 0.15,
-            "tournament_size": 2,
-            "justification": "Order crossover preserves relative order, swap is gentle mutation, fitness proportional allows diversity"
-        }
-        
-    }
-    
-    return algorithms
 
 
 # Best algorithm configuration 
@@ -549,7 +397,7 @@ def single_run(instance_file):
     tsp_file="tsplib/eil51.tsp",
     population_size=50,
     generations=1000,
-    algorithm_type="steady_state",    # This enables steady-state
+    algorithm_type="steady_state",    
     crossover_method="order_crossover",
     mutation_method="inversion",
     crossover_rate=0.9,
@@ -558,7 +406,7 @@ def single_run(instance_file):
     best = ea.run(print_progress=False)
     return best.fitness
 
-def run_best_algorithm_30_times():
+def best_alg_30_times():
     """Exercise 6 Part 3: Run best algorithm 30 times for statistics"""
     print("\nExercise 6 - Best Algorithm 30 Runs Test")
     print("=" * 50)
@@ -571,19 +419,17 @@ def run_best_algorithm_30_times():
         "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
     
-    
-    
     all_results = []
     
     for instance_file in tsp_instances:
         print(f"\nTesting {instance_file} - 30 runs")
         print("-" * 30)
         
-        # Parallelize the 30 runs
+        # Parallelize 30 runs
         with concurrent.futures.ProcessPoolExecutor() as executor:
             futures = [executor.submit(single_run, instance_file) for _ in range(30)]
             instance_results = [f.result() for f in concurrent.futures.as_completed(futures)]
-            instance_results.sort()  # Optional: sort for reporting
+            instance_results.sort()  
         
         for i, fitness in enumerate(instance_results):
             print(f"Run {i+1}: {fitness:.2f}")
@@ -605,7 +451,7 @@ def run_best_algorithm_30_times():
             'all_runs': instance_results
         })
     
-    # Save results to file as required
+    # Save results to file
     with open('results/your_EA.txt', 'w') as f:
         f.write("TSP Instance,Average Cost,Standard Deviation,Best Cost,Worst Cost\n")
         for result in all_results:
@@ -617,45 +463,22 @@ def run_best_algorithm_30_times():
 
 # Example usage and testing
 if __name__ == "__main__":
-    """
-    print("Modular Evolutionary Algorithm - Final Version")
-    print("=" * 70)
-    
-    best = ea.run()
-    print(f"Basic test result: {best.fitness:.2f}")
-    
-    # Test different operators
-    print(f"\n2. Operator Comparison Test")
-    test_different_operators()
-    
-    # Test selection methods
-    print(f"\n3. Selection Method Test")
-    test_selection_methods()
-    
-    # Multiple runs
-    print(f"\n5. Multiple Runs")
-    run_multiple_experiments()
-    """
     # Exercise 6 - Complete Assignment Requirements
     print(f"\n" + "="*70)
     print("EXERCISE 6 - EVOLUTIONARY ALGORITHMS AND BENCHMARKING")
     print("="*70)
     
-    # Part 1: Design three algorithms
-    #print("\nPart 1: Designing Three Different Algorithms")
-   # algorithms = design_three_algorithms()
     
     # Part 2: Test with different population sizes and generations
-    #print("\nPart 2: Testing Population Sizes and Generations")
-    #print("This will take a very long time to complete!")
+    print("\nPart 2: Testing Population Sizes and Generations")
+    print("This will take a very long time to complete!")
     
-    test_population_sizes_and_generations()
+    test_popsizes_generations()
 
-# above commeneted out to avoid long runtimes during final run
     
     # Part 3: Run best algorithm 30 times
     print("\nPart 3: Running Best Algorithm 30 Times")
     print("This will also take a long time - comment out if needed")
     
-    run_best_algorithm_30_times()
+    #best_alg_30_times()
     

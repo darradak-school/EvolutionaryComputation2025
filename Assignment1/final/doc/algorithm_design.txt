@@ -1,6 +1,6 @@
 ALGORITHM DESIGNS
 
-STEADY STATE ALGORITHM (ea_steadystate.py):
+STEADY STATE ALGORITHM (ea_steadystate.py - also run as alg 2 in evolutionary_modular.py testing):
 This algorithm uses tournament selection for parent selection to maintain a balance between exploration and exploitation, 
 order crossover preserves good sequences, and inversion mutation removes crossings. 
 A small amount of elite preservation is present to make sure we don’t lose improvements. Its low replacement rate at 5% is to make the algorithm faster, 
@@ -8,15 +8,13 @@ as we must replace less individuals, and it preserves a wider variety of individ
 usually performing better on smaller datasets, as it converges too slowly for it to reach the optimum on large datasets. However, 
 it produces results fast, only 4 seconds for 50 individuals and 20,000 generations on eil51.
 
-GENERATIONAL ALGORITHM (ea_generational.py)
-This algorithm replaces the entire population with each generation. It uses fitness proportional to sample from the population based on performance, 
-providing strong selection pressure, PMX crossover to keep relative order from parents, and inversion mutation to remove crossings. 
-This algorithm also uses elitism to preserve a portion of the best results. This algorithm typically finds good results, 
-however the time to compute these results becomes intractable on larger problems due to having to repopulate the entire population every generation.
+Generational Explorative ALGORITHM (Algorithm1_Generational_PMX_Inversion_Tournament - evolutionary_modular.py)
+PMX Crossover: Preserves positional information and city relationships by maintaining the mapping between positions from both parents
+Inversion Mutation: Maintains adjacency relationships while exploring tour variations through segment reversal
+Tournament Selection (size 3): Moderate selection pressure that balances exploration and exploitation
 
-CROWDING ALGORITHM (ea_crowding.py)
-This algorithm is a variation on the steady state algorithm in which each offspring only competes with the most similar parent, 
-this allows distinct algorithms to evolve in parallel, preserving more diversity (in theory). It uses tournament selection, edge recombination, 
-and insertion mutation. The parent is only replaced if the offspring has a better fitness value. This method finds decent results, 
-although it is the worst of the three algorithms by a small margin. It produces results far faster than the generational algorithm, 
-but still slightly slower than the original steady state algorithm.
+Generational Balanced (Algorithm3_Generational_Order_Swap_FitnessProp - evolutionary_modular.py)
+Order Crossover: Maintains relative city sequences from parents, preserving important ordering information
+Swap Mutation: Gentle local search moves with rate (0.15) for thorough exploration
+Fitness Proportional Selection: Maintains population diversity and prevents premature convergence by giving all individuals a chance based on relative fitness
+Chosen as closest performance to steady_state and inverover when bruteforce testing diferent algorithms.
