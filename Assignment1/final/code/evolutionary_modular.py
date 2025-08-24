@@ -1,4 +1,5 @@
 """
+evolutionary.py attempt by Darcy - Final Version 
 Simple Evolutionary Algorithm for TSP Assignment
 Modular design allowing easy configuration of operators and parameters
 """
@@ -437,7 +438,7 @@ def test_population_sizes_and_generations():
     # Three different algorithms as designed
     algorithms = [
         ("Algorithm1_Generational_PMX_Inversion_Tournament", "generational", "pmx_crossover", "inversion", "tournament", 0.8, 0.1, 3),
-        #("Algorithm2_SteadyState_Order_Inversion_Tournament", "steady_state", "order_crossover", "inversion", "tournament", 0.9, 0.05, 5),
+        ("Algorithm2_SteadyState_Order_Inversion_Tournament", "steady_state", "order_crossover", "inversion", "tournament", 0.9, 0.05, 5),
         ("Algorithm3_Generational_Order_Swap_FitnessProp", "generational", "order_crossover", "swap", "fitness_proportional", 0.7, 0.15, 2)
     ]
 
@@ -646,14 +647,16 @@ if __name__ == "__main__":
     print("="*70)
     
     # Part 1: Design three algorithms
-    print("\nPart 1: Designing Three Different Algorithms")
+    #print("\nPart 1: Designing Three Different Algorithms")
    # algorithms = design_three_algorithms()
     
     # Part 2: Test with different population sizes and generations
-    print("\nPart 2: Testing Population Sizes and Generations")
-    print("This will take a very long time to complete!")
+    #print("\nPart 2: Testing Population Sizes and Generations")
+    #print("This will take a very long time to complete!")
     
-    test_population_sizes_and_generations()
+    #test_population_sizes_and_generations()
+
+# above commeneted out to avoid long runtimes during final run
     
     # Part 3: Run best algorithm 30 times
     print("\nPart 3: Running Best Algorithm 30 Times")
