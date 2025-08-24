@@ -7,23 +7,24 @@ import random
 import numpy as np
 
 
-class EvolutionaryAlgorithm:
+class SteadyStateEA:
     """
-    Steady-state GA with:
+    Steady-state EA with:
       - Tournament selection (k)
       - Order Crossover (OX)
-      - Swap mutation
+      - Inversion mutation
       - Replacement: child vs most similar parent (edge overlap)
     """
     def __init__(
         self,
         tsp_file,
-        population_size,
+        population_size,    
         generations,
         mutation_rate,
         crossover_rate,
         tournament_size=3,
-        replacement_rate=0.05,
+        replacement_rate=0.05, # Replaces specified percentage of population.
+        elite_size=0.05, # Maintains specified percentage of elite population.
     ):
         self.tsp = TSP(tsp_file)
         self.population_size = population_size
@@ -33,6 +34,7 @@ class EvolutionaryAlgorithm:
         self.crossover_rate = crossover_rate
         self.tournament_size = tournament_size
         self.replacement_rate = max(1, int(self.population_size * replacement_rate))
+        self.elite_size = max(1, int(self.population_size * elite_size))
 
     def get_parents(self, num_parents=2):
         """ Tournament selection. """
@@ -61,12 +63,12 @@ class EvolutionaryAlgorithm:
     def mutate(self, individual):
         """ Swap mutation. """
         if random.random() < self.mutation_rate:
-            mutated_tour, _, _ = Mutations.swap(individual.tour)
+            mutated_tour, _, _ = Mutations.inversion(individual.tour)
             individual.tour = mutated_tour
             individual.fitness = individual.evaluate()
 
     def step(self):
-        """ Steady-state GA with replacement. """
+        """ Steady-state GA with elite preservation. """
         num_replacements = max(1, int(self.population_size * self.replacement_rate))
         parents = self.get_parents(num_replacements)
         offspring = []
@@ -82,10 +84,22 @@ class EvolutionaryAlgorithm:
                 self.mutate(child)
                 offspring.append(child)
 
+        # Sort population by fitness (best first)
         self.population.individuals.sort(key=lambda x: x.fitness)
+        
+        # Sort offspring by fitness (best first)
+        offspring.sort(key=lambda x: x.fitness)
+        
+        # Replace worst individuals (excluding elite) with best offspring
         num_offspring = min(len(offspring), num_replacements)
+        replaceable_start = self.elite_size
+        
         for i in range(num_offspring):
-            self.population.individuals[-(i + 1)] = offspring[i]
+            if replaceable_start + i < len(self.population.individuals):
+                self.population.individuals[replaceable_start + i] = offspring[i]
+        
+        # Ensure elite members are still at the top
+        self.population.individuals.sort(key=lambda x: x.fitness)
 
     def best(self):
         """ Return the best individual from the population. """

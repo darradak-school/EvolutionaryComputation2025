@@ -1,0 +1,48 @@
+SteadyState (Tourn + OX + Swap + Elite5) Results
+==================================================
+
+Problem: eil51
+Average Best Fitness: 454.78 +/- 8.86
+Average Time: 4.49s +/- 1.13s
+------------------------------
+
+Problem: st70
+Average Best Fitness: 719.96 +/- 15.42
+Average Time: 6.02s +/- 1.57s
+------------------------------
+
+Problem: eil76
+Average Best Fitness: 590.49 +/- 12.85
+Average Time: 6.34s +/- 0.99s
+------------------------------
+
+Problem: kroA100
+Average Best Fitness: 23058.38 +/- 663.26
+Average Time: 10.81s +/- 2.62s
+------------------------------
+
+Problem: kroC100
+Average Best Fitness: 22937.76 +/- 773.93
+Average Time: 9.27s +/- 1.20s
+------------------------------
+
+Problem: kroD100
+Average Best Fitness: 23143.75 +/- 529.70
+Average Time: 9.82s +/- 2.08s
+------------------------------
+
+Problem: eil101
+Average Best Fitness: 701.10 +/- 10.60
+Average Time: 9.29s +/- 1.35s
+------------------------------
+
+Problem: lin105
+Average Best Fitness: 15672.87 +/- 445.72
+Average Time: 11.01s +/- 2.38s
+------------------------------
+
+Problem: pcb442
+Average Best Fitness: 64468.07 +/- 1012.96
+Average Time: 88.51s +/- 1.55s
+------------------------------
+

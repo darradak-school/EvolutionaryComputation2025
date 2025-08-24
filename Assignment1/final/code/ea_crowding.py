@@ -7,18 +7,20 @@ import random
 import numpy as np
 
 
-def edge_overlap_distance(t1, t2):
+def overlap(t1, t2):
+    """ Calculates the edge overlap distance between two tours. """
     n = len(t1)
 
     def edges(t):
+        """ Returns the edges of a tour. """
         return {(t[i], t[(i + 1) % n]) for i in range(n)}
 
     return n - len(edges(t1) & edges(t2))
 
 
-class SteadyStateDeterministicCrowdingEA:
+class CrowdingEA:
     """
-    Steady-state GA with Deterministic Crowding:
+    Steady-state EA with Deterministic Crowding:
       - Tournament selection (k)
       - Edge Recombination crossover (ERX)
       - Insertion mutation
@@ -41,7 +43,7 @@ class SteadyStateDeterministicCrowdingEA:
         self.tournament_k = tournament_k
         self.population = Population.random(self.tsp, self.n)
 
-    def tournament_parents(self):
+    def get_parents(self):
         """ Tournament selection. """
         fitness_values = np.array([ind.fitness for ind in self.population.individuals])
         idxs = Selection.Tournament_Selection(fitness_values, 2, self.tournament_k)
@@ -67,7 +69,7 @@ class SteadyStateDeterministicCrowdingEA:
 
     def step(self):
         """ Steady-state GA with Deterministic Crowding. """
-        p1, p2 = self.tournament_parents()
+        p1, p2 = self.get_parents()
         idx1 = self.population.individuals.index(p1)
         idx2 = self.population.individuals.index(p2)
 
@@ -75,10 +77,10 @@ class SteadyStateDeterministicCrowdingEA:
         self.mutate(c1)
         self.mutate(c2)
 
-        d11 = edge_overlap_distance(c1.tour, p1.tour)
-        d12 = edge_overlap_distance(c1.tour, p2.tour)
-        d21 = edge_overlap_distance(c2.tour, p1.tour)
-        d22 = edge_overlap_distance(c2.tour, p2.tour)
+        d11 = overlap(c1.tour, p1.tour)
+        d12 = overlap(c1.tour, p2.tour)
+        d21 = overlap(c2.tour, p1.tour)
+        d22 = overlap(c2.tour, p2.tour)
 
         if d11 + d22 <= d12 + d21:
             pairs = [(c1, idx1), (c2, idx2)]

@@ -6,7 +6,7 @@ from selection import Selection
 import random
 
 
-class GenerationalElitistEA:
+class GenerationalEA:
     """
     Generational EA with:
       - Fitness-Proportional (roulette) selection
@@ -31,13 +31,13 @@ class GenerationalElitistEA:
         self.elite_k = max(1, int(self.n * elite_fraction))
         self.population = Population.random(self.tsp, self.n)
 
-    def select_parents(self):
+    def get_parents(self):
         """ Fitness-Proportional (roulette) selection. """
         tours = [ind.tour for ind in self.population.individuals]
         idxs = Selection.Fitness_Proportional_Selection(self.tsp, tours)
         return [self.population.individuals[i] for i in idxs]
 
-    def crossover_pair(self, p1, p2):
+    def crossover(self, p1, p2):
         """ PMX crossover. """
         if random.random() < self.crossover_rate:
             c1_tour, c2_tour = Crossovers.pmx_crossover(p1.tour, p2.tour)
@@ -59,7 +59,7 @@ class GenerationalElitistEA:
         elites = [ind.copy() for ind in self.population.individuals[: self.elite_k]]
 
         offspring = []
-        parents = self.select_parents()
+        parents = self.get_parents()
 
         for i in range(0, len(parents), 2):
             if i + 1 >= len(parents):
@@ -67,7 +67,7 @@ class GenerationalElitistEA:
                 self.mutate(child)
                 offspring.append(child)
             else:
-                c1, c2 = self.crossover_pair(parents[i], parents[i + 1])
+                c1, c2 = self.crossover(parents[i], parents[i + 1])
                 self.mutate(c1)
                 self.mutate(c2)
                 offspring.extend([c1, c2])
