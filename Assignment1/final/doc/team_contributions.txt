@@ -22,6 +22,7 @@ Programmed crossovers.py file for team
 evolutionary_modular.py        # Exercise 6
 Programmed modular / testing file for evolutionary testing 
 Found evolutionary algorithm to run against teams algs 
+Worked on algorithm_design.txt explantion for Generational alg
 
 
 Ian:

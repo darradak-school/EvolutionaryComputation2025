@@ -355,8 +355,8 @@ def test_popsizes_generations():
     tsp_instances = [
         "tsplib/eil51.tsp", "tsplib/eil76.tsp", "tsplib/eil101.tsp", 
         "tsplib/st70.tsp", "tsplib/kroa100.tsp", "tsplib/kroc100.tsp", 
-        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp", 
-        "tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
+        "tsplib/krod100.tsp", "tsplib/lin105.tsp", "tsplib/pcb442.tsp"#, 
+        #"tsplib/pr2392.tsp", "tsplib/usa13509.tsp"
     ]
     population_sizes = [20, 50, 100, 200]
     generation_checkpoints = [2000, 5000, 10000, 20000]
@@ -386,7 +386,7 @@ def test_popsizes_generations():
         f.write("Instance,Algorithm,PopSize,Generation,Fitness\n")
         for result in results:
             f.write(f"{result['instance']},{result['algorithm']},{result['population_size']},{result['generation']},{result['fitness']:.2f}\n")
-    print(f"\nResults saved to results/population_generation_test.txt")
+    print(f"\nResults saved to results/population_generation_test_missingUSA.txt")
 
 
 
@@ -480,5 +480,5 @@ if __name__ == "__main__":
     print("\nPart 3: Running Best Algorithm 30 Times")
     print("This will also take a long time - comment out if needed")
     
-    best_alg_30_times()
+    #best_alg_30_times()
     
