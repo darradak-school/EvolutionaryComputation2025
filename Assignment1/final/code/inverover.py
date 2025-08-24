@@ -200,11 +200,11 @@ def main():
             tsp = f"tsplib/{problem}.tsp"
 
             algo = InverOverAlgorithm(
-                tsp,  # TSP problem to run on
-                pop_size=POP_SIZE,  # Population size
-                generations=GENERATIONS,  # Number of generations
-                inversion=INVERSION,  # Inversion probability
-                stag_limit=STAG_LIMIT,  # Stagnation limit (None for no limit)
+                tsp,
+                pop_size=POP_SIZE,
+                generations=GENERATIONS,
+                inversion=INVERSION,
+                stag_limit=STAG_LIMIT,
             )
 
             best_individual, total_time = algo.run()
