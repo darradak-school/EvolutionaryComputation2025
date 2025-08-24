@@ -27,3 +27,4 @@ Worked on algorithm_design.txt explantion for Generational alg
 
 Ian:
 selection.py           # Exercise 5: Selection methods
+Implement the Elitist_Selection, Fitness_Proportional_Selection, Tournament_Selection
