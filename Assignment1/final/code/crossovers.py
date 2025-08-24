@@ -12,10 +12,7 @@ class Crossovers:
     # Order Crossover
     @staticmethod 
     def order_crossover(parent1, parent2):
-        """
-        Order Crossover (OX)
-        Preserves relative order of cities from parents
-        """
+        """ Preserves relative order of cities from parents. """
         size = len(parent1)
         
         # Choose random segment from parent1
@@ -53,10 +50,7 @@ class Crossovers:
     # PMX Crossover
     @staticmethod
     def pmx_crossover(parent1, parent2):
-        """
-        Partially Mapped Crossover (PMX)
-        Creates mapping between segment positions
-        """
+        """ Creates mapping between segment positions. """
         size = len(parent1)
         
         # Choose random segment 
@@ -109,7 +103,7 @@ class Crossovers:
 
     @staticmethod
     def cycle_crossover(parent1, parent2):
-        
+        """ Finds cycles in parents and copies them to children. """
         size = len(parent1)
 
         child1 = [None] * size
@@ -162,7 +156,7 @@ class Crossovers:
     # Edge Recombination
     @staticmethod
     def edge_recombination(parent1, parent2):
-        
+        """ Builds edge table and uses it to create offspring. """
         size = len(parent1)
 
         # Build edge table
@@ -256,11 +250,12 @@ class Crossovers:
 
 # Testing current crossover functions
 def is_valid_tour(tour, original_tour):
-    # Check if tour is valid permutation
+    """ Check if tour is valid permutation. """
     return sorted(tour) == sorted(original_tour) and len(tour) == len(original_tour)
 
 
 def test_crossovers():
+    """ Test the crossover functions. """
     # Sample parent tours
     parent1 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     parent2 = [9, 3, 7, 8, 2, 6, 5, 1, 4]
