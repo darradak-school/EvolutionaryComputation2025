@@ -6,7 +6,7 @@ from tsp import TSP
 
 
 class InverOverAlgorithm:
-    """Inverover algorithm for TSP with single inverover operator."""
+    """Inverover algorithm, parents only compete with offspring, uses inverover operator."""
 
     def __init__(
         self,
