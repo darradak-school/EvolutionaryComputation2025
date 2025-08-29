@@ -1,0 +1,8 @@
+In this assignment, you will work with IOHprofiler https://iohprofiler.github.io/
+which is a tool to run and analyse iterative search algorithms. A general tutorial is avail-
+able at https://github.com/IOHprofiler/IOHexperimenter/blob/master/example/
+tutorial.ipynb You will implement different algorithms for Pseudo-Boolean Optimiza-
+tion (PBO) and examine their performance with the use of IOHprofiler. IOHprofiler
+provides different benchmark problems as part of PBO problem set and a detailed de-
+scription of them can be found at https://iohprofiler.github.io/IOHproblem/PBO
+
