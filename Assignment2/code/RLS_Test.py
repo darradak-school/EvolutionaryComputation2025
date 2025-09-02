@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import ioh
 import os
 import numpy as np
-from RLS import RLS   # your RLS implementation
+from RLS import RLS 
 
 # --- Config ---
 FUNCTION_IDS = [1, 2, 3, 18, 23, 24, 25]
@@ -18,8 +18,9 @@ def run_experiment(fid, dimension, iterations, runs):
     all_traces = []
     for run in range(runs):
         print(f"Running RLS on F{fid}, run {run+1}/{runs}...")
-        trace = RLS(problem, dimension, iterations, return_trace=True)
+        trace, best = RLS(problem, dimension, iterations, return_trace=True)
         all_traces.append(trace)
+        print(f"Run {run+1} best fitness: {best}\n")
 
     all_traces = np.array(all_traces)
     mean_trace = np.mean(all_traces, axis=0)

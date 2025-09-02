@@ -14,6 +14,7 @@
 import ioh
 import random
 
+# choose s ∈ {0, 1}n randomly
 def random_solution(n):
     return [random.randint(0, 1) for _ in range(n)]
 
@@ -43,7 +44,7 @@ def RLS(problem, n, iterations, return_trace=False):
             trace.append(f_s)
 
     if return_trace:
-        return trace  # <- return full trace
+        return trace, f_s  # return full trace
     else:
-        return f_s
+        return f_s, None
     
