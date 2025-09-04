@@ -28,13 +28,13 @@ def run_experiment(fid, dimension, iterations, runs):
 
     return mean_trace, std_trace
 
-# automatically create the fixed budget plot in /plots_RLS
+# Plot mean ± standard deviation of RLS performance (fixed-budget plot)
 def plot_fixed_budget(fid, mean_trace, std_trace):
     save_dir = "plots_RLS"
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-    x = np.arange(len(mean_trace))
+    x = np.arange(len(mean_trace)) # x-axis = iterations
     plt.figure(figsize=(8, 5))
     plt.plot(x, mean_trace, label='Mean Fitness')
     plt.fill_between(x, mean_trace - std_trace, mean_trace + std_trace,
@@ -49,7 +49,8 @@ def plot_fixed_budget(fid, mean_trace, std_trace):
 
 
 
-
+# Main experiment loop:
+# Runs RLS on each benchmark function and produces plots
 def main():
     dimension = 100
     iterations = 100000
