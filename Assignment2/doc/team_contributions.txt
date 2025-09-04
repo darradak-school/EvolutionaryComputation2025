@@ -1,10 +1,10 @@
 Q1: problem_example.py run and plotted -- Tyler
 
-Q2:
+Q2: 
 
-Q3:
+Q3: Murad (Genetic Algorithm)
 
-Q4:
+Q4: 
 
 Q5:
 
