@@ -7,6 +7,3 @@ Q3: Murad (Genetic Algorithm)
 Q4: 
 
 Q5:
-
-Q6:
-
