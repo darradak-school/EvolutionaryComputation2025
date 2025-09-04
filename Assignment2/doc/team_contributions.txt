@@ -1,6 +1,6 @@
 Q1: problem_example.py run and plotted -- Tyler
 
-Q2: 
+Q2: Tyler (RLS.py, RLS_test.py, associated documentation)
 
 Q3: Murad (Genetic Algorithm)
 
