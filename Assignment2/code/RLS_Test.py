@@ -34,7 +34,7 @@ def plot_fixed_budget(fid, mean_trace, std_trace):
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-    x = np.arange(len(mean_trace)) # x-axis = iterations
+    x = np.arange(len(mean_trace)) # x-axis = iterations (10000)
     plt.figure(figsize=(8, 5))
     plt.plot(x, mean_trace, label='Mean Fitness')
     plt.fill_between(x, mean_trace - std_trace, mean_trace + std_trace,
@@ -43,6 +43,7 @@ def plot_fixed_budget(fid, mean_trace, std_trace):
     plt.ylabel('Fitness')
     plt.title(f'RLS Fixed-Budget Plot on F{fid}')
     plt.legend()
+    plt.grid(True)
     plt.tight_layout()
     plt.savefig(f"{save_dir}/F{fid}_RLS_fixed_budget.png")
     plt.close()
