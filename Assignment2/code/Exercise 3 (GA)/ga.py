@@ -17,7 +17,11 @@ class Population:
         for i in range(self.population_size):
             x = np.random.randint(2, size=self.func.meta_data.n_variables)
             self.population.append(x)
-            self.fitness.append(self.func(x))
+            fitness_val = self.func(x)
+            # Ensure fitness is a scalar value
+            if hasattr(fitness_val, 'item'):
+                fitness_val = fitness_val.item()
+            self.fitness.append(fitness_val)
     
     def uniform_crossover(self, parent1, parent2):
         """Uniform crossover - each bit comes from either parent with 50% probability"""
@@ -52,7 +56,12 @@ class Population:
     def get_best_individual(self):
         """Get the best individual and its fitness"""
         best_idx = np.argmax(self.fitness)
-        return self.population[best_idx], self.fitness[best_idx]
+        best_individual = self.population[best_idx]
+        best_fitness = self.fitness[best_idx]
+        # Ensure fitness is a scalar value
+        if hasattr(best_fitness, 'item'):
+            best_fitness = best_fitness.item()
+        return best_fitness, best_individual
 
 def ga(func, budget, population_size=20, mutation_rate=0.01):
     """
@@ -64,6 +73,9 @@ def ga(func, budget, population_size=20, mutation_rate=0.01):
     evaluations = population_size  # Initial population evaluation
     best_fitness, best_individual = pop.get_best_individual()
     optimum = func.optimum.y
+    # Ensure optimum is a scalar value
+    if hasattr(optimum, 'item'):
+        optimum = optimum.item()
     
     generation = 0
     
@@ -88,6 +100,11 @@ def ga(func, budget, population_size=20, mutation_rate=0.01):
             # Evaluate offspring
             fitness1 = func(child1)
             fitness2 = func(child2)
+            # Ensure fitness values are scalars
+            if hasattr(fitness1, 'item'):
+                fitness1 = fitness1.item()
+            if hasattr(fitness2, 'item'):
+                fitness2 = fitness2.item()
             evaluations += 2
             
             new_population.extend([child1, child2])
@@ -130,15 +147,15 @@ def main():
     """
     Run GA on all required functions and record results
     """
-    # Problem setup
+    # Problem setup - using PBO (Pseudo-Boolean Optimization) versions
     problems = {
-        'F1': ioh.get_problem(1, instance = 1, dimension = 100),
-        'F2': ioh.get_problem(2, instance = 1, dimension = 100), 
-        'F3': ioh.get_problem(3, instance = 1, dimension = 100),
-        'F18': ioh.get_problem(18, instance = 1, dimension = 100),
-        'F23': ioh.get_problem(23, instance = 1, dimension = 100),
-        'F24': ioh.get_problem(24, instance = 1, dimension = 100),
-        # 'F25': ioh.get_problem(25, instance = 1, dimension = 100)
+        'F1': ioh.get_problem(1, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO),
+        'F2': ioh.get_problem(2, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO), 
+        'F3': ioh.get_problem(3, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO),
+        'F18': ioh.get_problem(18, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO),
+        'F23': ioh.get_problem(23, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO),
+        'F24': ioh.get_problem(24, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO),
+        'F25': ioh.get_problem(25, instance = 1, dimension = 100, problem_class=ioh.ProblemClass.PBO)
     }
     
     # Run experiments
