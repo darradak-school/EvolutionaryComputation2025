@@ -2,10 +2,13 @@ import os, random
 import numpy as np
 from ioh import get_problem, logger, ProblemClass
 def Uniform_Mutation(parent, mutation_rate=None):
+    """
+    Perform uniform mutation on a binary parent solution.
+    """
     mutated = np.copy(parent)
     mutation_rate = mutation_rate or len(parent)
     return np.array([1 - mutated[i] if random.random() < (1 / mutation_rate) else mutated[i] for i in range(len(parent))])
-def Fitness_Evaluate(problem, solution):    return problem(solution)
+def Fitness_Evaluate(problem, solution):   return problem(solution)    # Evaluate solution
 def Evolutionary_Algorithm(Total_Length=16, budget=100000, Problem_Name="OneMax", Problem_ID=1):
     IOH_Logger = logger.Analyzer(root=os.getcwd(), folder_name=f"EA_{Problem_Name}", store_positions=True)
     # Create OneMax problem
@@ -18,10 +21,13 @@ def Evolutionary_Algorithm(Total_Length=16, budget=100000, Problem_Name="OneMax"
     evaluations = 1
     # Loop until budget is exhausted
     while budget > evaluations:
+        # Mutation Parent -> Children and Evaluate Children
         children = Uniform_Mutation(parent, Total_Length)
         children_fitness = Fitness_Evaluate(problem, children)
+        # Replace Parent with Children if Children is better or equal
         if children_fitness >= parent_fitness:
             parent, parent_fitness = children, children_fitness
+        # Increment Evaluation Count
         evaluations += 1
     IOH_Logger.close()
     return parent, parent_fitness
