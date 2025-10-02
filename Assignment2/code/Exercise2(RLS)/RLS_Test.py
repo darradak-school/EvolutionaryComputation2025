@@ -14,7 +14,8 @@ ITERATIONS = 100000
 
 
 def run_experiment(fid, dimension, iterations, runs):
-    problem = ioh.get_problem(fid=fid, dimension=dimension)
+   # problem = ioh.get_problem(fid=fid, dimension=dimension)
+    problem = ioh.get_problem(fid=fid, dimension=dimension, problem_class=ioh.ProblemClass.PBO)
 
     all_traces = []
     for run in range(runs):
@@ -26,18 +27,21 @@ def run_experiment(fid, dimension, iterations, runs):
     all_traces = np.array(all_traces)
     mean_trace = np.mean(all_traces, axis=0)
     std_trace = np.std(all_traces, axis=0)
+    best_trace = all_traces[np.argmax([trace[-1] for trace in all_traces])]
 
-    return mean_trace, std_trace
+
+    return mean_trace, std_trace, best_trace
 
 # Plot mean ± standard deviation of RLS performance (fixed-budget plot)
-def plot_fixed_budget(fid, mean_trace, std_trace):
+def plot_fixed_budget(fid, mean_trace, std_trace, best_trace):
     save_dir = "plots_RLS"
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
     x = np.arange(len(mean_trace)) # x-axis = iterations (10000)
     plt.figure(figsize=(8, 5))
-    plt.plot(x, mean_trace, label='Mean Fitness')
+    plt.plot(x, mean_trace, label='Mean Fitness', color='r')
+    plt.plot(x, best_trace, label='Best Run', color='g')
     plt.fill_between(x, mean_trace - std_trace, mean_trace + std_trace,
                      color='b', alpha=0.2, label='Std Dev')
     plt.xlabel('Iterations')
@@ -57,11 +61,11 @@ def main():
     dimension = 100
     iterations = 100000
     runs = 10
-    functions = [1, 2, 3, 18, 23, 24] # have not got 25 working yet
+    functions = [1, 2, 3, 18, 23, 24, 25] # have not got 25 working yet
 
     for fid in functions:
-        mean_trace, std_trace = run_experiment(fid, dimension, iterations, runs)
-        plot_fixed_budget(fid, mean_trace, std_trace)
+        mean_trace, std_trace, best_trace = run_experiment(fid, dimension, iterations, runs)
+        plot_fixed_budget(fid, mean_trace, std_trace, best_trace)
         print(f"Finished plotting F{fid}")
 
 if __name__ == "__main__":
