@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import ioh
 import os
 import numpy as np
+import sys
 from RLS import RLS 
 
 # --- Config ---
