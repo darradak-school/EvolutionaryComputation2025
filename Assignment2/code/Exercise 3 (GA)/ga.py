@@ -2,8 +2,8 @@ from ioh import get_problem, ProblemClass
 from ioh import logger
 import numpy as np
 
-def eval_fitness(func, indv):
-    """Helper function to evaluate fitness and ensure scalar value"""
+def eval(func, indv):
+    """Helper function to evaluate fitness"""
     fitness = func(indv)
     return fitness.item() if hasattr(fitness, "item") else fitness
 
@@ -20,19 +20,14 @@ def mutation(indv, generation, rate=0.1):
     mask = np.random.random(len(indv)) < mutation_rate
     return np.where(mask, 1 - indv, indv)
 
-def selection(pop, fitness, tournament_size=5):
+def selection(pop, fitness, size=5):
     """Tournament selection"""
-    idxs = np.random.choice(len(pop), tournament_size, replace=False)
+    idxs = np.random.choice(len(pop), size, replace=False)
     winner_idx = idxs[np.argmax([fitness[i] for i in idxs])]
     return pop[winner_idx]
 
-def genetic_algorithm(func, budget=None):
-    """Genetic algorithm adapted to fit the problem_example.py template"""
-    # Use fixed budget of 100,000 evaluations
-    if budget is None:
-        budget = 100000
-    
-    # GA parameters
+def ga(func, budget=100000):
+    """Genetic algorithm with uniform crossover and adaptive mutation"""
     pop_size = 20
     elite = 2
     
@@ -41,7 +36,7 @@ def genetic_algorithm(func, budget=None):
     fitness = []
     for _ in range(pop_size):
         indv = np.random.randint(2, size=func.meta_data.n_variables)
-        fit_val = eval_fitness(func, indv)
+        fit_val = eval(func, indv)
         pop.append(indv)
         fitness.append(fit_val)
 
@@ -54,22 +49,19 @@ def genetic_algorithm(func, budget=None):
     best_indv = pop[best_idx].copy()
 
     # Get optimum for early stopping
-    if func.meta_data.problem_id == 18 and func.meta_data.n_variables == 32:
-        optimum = 8
-    else:
-        optimum = func.optimum.y
-        if hasattr(optimum, "item"):
-            optimum = optimum.item()
+    optimum = func.optimum.y
+    if hasattr(optimum, "item"):
+        optimum = optimum.item()
 
-    evaluations = pop_size
+    evals = pop_size
     generation = 0
 
-    while evaluations < budget:
+    while evals < budget:
         generation += 1
         new_pop = []
         new_fitness = []
 
-        # Elitism: keep best individuals
+        # Keep best individuals
         elite_idxs = np.argsort(fitness)[-elite:]
         new_pop.extend(pop[elite_idxs])
         new_fitness.extend(fitness[elite_idxs])
@@ -86,9 +78,9 @@ def genetic_algorithm(func, budget=None):
             child2 = mutation(child2, generation)
 
             # Evaluate offspring
-            fitness1 = eval_fitness(func, child1)
-            fitness2 = eval_fitness(func, child2)
-            evaluations += 2
+            fitness1 = eval(func, child1)
+            fitness2 = eval(func, child2)
+            evals += 2
 
             new_pop.extend([child1, child2])
             new_fitness.extend([fitness1, fitness2])
@@ -111,33 +103,21 @@ def genetic_algorithm(func, budget=None):
     func.reset()
     return best_fitness, best_indv
 
-# Declaration of problems to be tested.
-f1 = get_problem(fid = 1, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f2 = get_problem(fid = 2, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f3 = get_problem(fid = 3, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f18 = get_problem(fid = 18, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f23 = get_problem(fid = 23, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f24 = get_problem(fid = 24, dimension=100, instance=1, problem_class = ProblemClass.PBO)
-f25 = get_problem(fid = 25, dimension=100, instance=1, problem_class = ProblemClass.PBO) 
-
-
 # Create default logger compatible with IOHanalyzer
-# `root` indicates where the output files are stored.
-# `folder_name` is the name of the folder containing all output. You should compress this folder and upload it to IOHanalyzer
-l = logger.Analyzer(root="data", 
-    folder_name="run", 
+l = logger.Analyzer(root="ga_data", 
+    folder_name="ga_run", 
     algorithm_name="genetic_algorithm", 
     algorithm_info="GA with tournament selection, uniform crossover, and adaptive mutation")
 
-# Run GA on all problems (10 independent runs each)
+# List of problems to be tested
 problems = [
-    ("OneMax", f1),
-    ("LeadingOnes", f2),
-    ("BinaryValue", f3),
-    ("LABS", f18),
-    ("IsingRing", f23),
-    ("IsingTorus", f24),
-    ("NQueens", f25)
+    ("OneMax", get_problem(fid=1, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("LeadingOnes", get_problem(fid=2, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("LinearFunc", get_problem(fid=3, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("LABS", get_problem(fid=18, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("NQueens", get_problem(fid=23, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("CTrap", get_problem(fid=24, dimension=100, instance=1, problem_class=ProblemClass.PBO)),
+    ("NKL", get_problem(fid=25, dimension=100, instance=1, problem_class=ProblemClass.PBO))
 ]
 
 for problem_name, problem in problems:
@@ -151,7 +131,7 @@ for problem_name, problem in problems:
     # Run 10 independent runs
     for run in range(10):
         print(f"Run {run + 1}/10")
-        f_opt, x_opt = genetic_algorithm(problem)
+        f_opt, x_opt = ga(problem)
         print(f"Best fitness: {f_opt:.4f}")
     
     # Detach logger for next problem
