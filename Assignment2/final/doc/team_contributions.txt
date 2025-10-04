@@ -1,0 +1,9 @@
+Q1: problem_example.py run and plotted -- Tyler
+
+Q2: Tyler & Ian (RLS.py, RLS_test.py, associated documentation)
+
+Q3: Murad (Genetic Algorithm)
+
+Q4: Carol & Jerry
+
+Q5: Planned to be done by Darcy
