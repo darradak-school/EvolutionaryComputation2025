@@ -104,7 +104,7 @@ def ga(func, budget=100000):
     return best_fitness, best_indv
 
 # Create default logger compatible with IOHanalyzer
-l = logger.Analyzer(root="ga_data", 
+l = logger.Analyzer(root="data", 
     folder_name="ga_run", 
     algorithm_name="genetic_algorithm", 
     algorithm_info="GA with tournament selection, uniform crossover, and adaptive mutation")
