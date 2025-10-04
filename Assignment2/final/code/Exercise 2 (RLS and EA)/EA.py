@@ -43,7 +43,7 @@ def evolutionary_algorithm(func, budget=100000):
     func.reset()
     return parent_fitness, parent
 
-# Create default logger compatible with IOHanalyzer
+# IOHanalyzer logger
 l = logger.Analyzer(root="data", 
     folder_name="ea_run", 
     algorithm_name="evolutionary_algorithm", 

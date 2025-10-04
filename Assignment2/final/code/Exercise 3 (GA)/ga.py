@@ -103,7 +103,7 @@ def ga(func, budget=100000):
     func.reset()
     return best_fitness, best_indv
 
-# Create default logger compatible with IOHanalyzer
+# IOHanalyzer logger
 l = logger.Analyzer(root="data", 
     folder_name="ga_run", 
     algorithm_name="genetic_algorithm", 

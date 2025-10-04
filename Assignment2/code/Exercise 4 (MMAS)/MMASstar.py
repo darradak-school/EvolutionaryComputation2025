@@ -51,13 +51,13 @@ def _update_pheromones(
     return p
 
 
-def mmas(
+def mmas_star(
     objective: Objective,
     cfg: MMASConfig,
     budget: int,
 ) -> Tuple[List[float], List[int], float]:
     """
-    Max-Min Ant System (MMAS): accepts non-worsening solutions (>=).
+    Max-Min Ant System* (MMAS*): accepts only improving solutions (>).
     Follows Figure 3 with the construction of Figures 1–2.
     Returns (trace of best-so-far fitness length=budget, best_solution, best_fitness).
     """
@@ -72,7 +72,7 @@ def mmas(
     f_best = float(objective(x_best.tolist()))
     trace = [f_best]
     
-    # Update pheromones
+    # Update pheromones w.r.t. x*
     p = _update_pheromones(p, x_best, cfg.rho, cfg.p_min, cfg.p_max)
     
     # Iterative improvement
@@ -81,28 +81,28 @@ def mmas(
         x = np.array(construct_solution(rng, p), dtype=int)
         fx = float(objective(x.tolist()))
         
-        # If f(x) >= f(x*) then x* := x
-        if fx >= f_best:
+        # If f(x) > f(x*) then x* := x
+        if fx > f_best:
             x_best, f_best = x, fx
         
         trace.append(f_best)
         
-        # Update pheromones
+        # Update pheromones w.r.t. x*
         p = _update_pheromones(p, x_best, cfg.rho, cfg.p_min, cfg.p_max)
 
     return trace, x_best.astype(int).tolist(), f_best
 
 
-def mmas_algorithm(func, budget=100000):
-    """MMAS algorithm"""
+def mmas_star_algorithm(func, budget=100000):
+    """MMAS* algorithm"""
     # Get problem dimension
     n = func.meta_data.n_variables
     
-    # MMAS configuration
+    # MMAS* configuration
     cfg = MMASConfig(n=n, rho=1.0/n, seed=None)
     
-    # Run MMAS and get results
-    _, x_best, f_best = mmas(func, cfg, budget)
+    # Run MMAS* and get results
+    _, x_best, f_best = mmas_star(func, cfg, budget)
     
     # Reset function for next run
     func.reset()
@@ -112,9 +112,9 @@ def mmas_algorithm(func, budget=100000):
 
 # Create default logger compatible with IOHanalyzer
 l = logger.Analyzer(root="data", 
-    folder_name="mmas_run", 
-    algorithm_name="max_min_ant_system", 
-    algorithm_info="MMAS with pheromone construction")
+    folder_name="mmas_star_run", 
+    algorithm_name="max_min_ant_system_star", 
+    algorithm_info="MMAS* with pheromone construction")
 
 # List of problems to be tested
 problems = [
@@ -127,10 +127,10 @@ problems = [
     ("NKL", get_problem(fid=25, dimension=100, instance=1, problem_class=ProblemClass.PBO))
 ]
 
-# Run MMAS on all problems (10 runs each)
+# Run MMAS* on all problems (10 runs each)
 for problem_name, problem in problems:
     print(f"\n{'='*50}")
-    print(f"Running MMAS on {problem_name}")
+    print(f"Running MMAS* on {problem_name}")
     print(f"{'='*50}")
     
     # Attach logger to the problem
@@ -139,7 +139,7 @@ for problem_name, problem in problems:
     # Run 10 independent runs
     for run in range(10):
         print(f"Run {run + 1}/10")
-        f_opt, x_opt = mmas_algorithm(problem)
+        f_opt, x_opt = mmas_star_algorithm(problem)
         print(f"Best fitness: {f_opt:.4f}")
     
     # Detach logger for next problem
