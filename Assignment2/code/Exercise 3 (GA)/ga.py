@@ -1,219 +1,161 @@
+from ioh import get_problem, ProblemClass
+from ioh import logger
 import numpy as np
-import ioh
-import matplotlib.pyplot as plt
 
-
-def evaluate_fitness(func, individual):
+def eval_fitness(func, indv):
     """Helper function to evaluate fitness and ensure scalar value"""
-    fitness = func(individual)
+    fitness = func(indv)
     return fitness.item() if hasattr(fitness, "item") else fitness
 
-
-def uniform_crossover(parent1, parent2):
-    """Uniform crossover - each bit comes from either parent with 50% probability"""
+def crossover(parent1, parent2):
+    """Uniform crossover, each bit comes from either parent with 50% probability"""
     mask = np.random.random(len(parent1)) < 0.5
     child1 = np.where(mask, parent1, parent2)
     child2 = np.where(mask, parent2, parent1)
     return child1, child2
 
-
-def adaptive_mutation(individual, generation, base_rate=0.1):
+def mutation(indv, generation, rate=0.1):
     """Adaptive mutation rate that decreases over generations"""
-    mutation_rate = max(base_rate * (1.0 - generation / 100.0), 0.01)
-    mask = np.random.random(len(individual)) < mutation_rate
-    return np.where(mask, 1 - individual, individual)
+    mutation_rate = max(rate * (1.0 - generation / 100.0), 0.01)
+    mask = np.random.random(len(indv)) < mutation_rate
+    return np.where(mask, 1 - indv, indv)
 
-
-def tournament_selection(population, fitness, tournament_size=5):
+def selection(pop, fitness, tournament_size=5):
     """Tournament selection"""
-    indices = np.random.choice(len(population), tournament_size, replace=False)
-    winner_idx = indices[np.argmax([fitness[i] for i in indices])]
-    return population[winner_idx]
+    idxs = np.random.choice(len(pop), tournament_size, replace=False)
+    winner_idx = idxs[np.argmax([fitness[i] for i in idxs])]
+    return pop[winner_idx]
 
-
-def ga(func, budget, population_size=20, elite_size=2):
-    """Improved Genetic Algorithm with elitism and adaptive mutation"""
+def genetic_algorithm(func, budget=None):
+    """Genetic algorithm adapted to fit the problem_example.py template"""
+    # Use fixed budget of 100,000 evaluations
+    if budget is None:
+        budget = 100000
+    
+    # GA parameters
+    pop_size = 20
+    elite = 2
+    
     # Initialize population
-    population = []
+    pop = []
     fitness = []
-    for _ in range(population_size):
-        individual = np.random.randint(2, size=func.meta_data.n_variables)
-        fitness_val = evaluate_fitness(func, individual)
-        population.append(individual)
-        fitness.append(fitness_val)
+    for _ in range(pop_size):
+        indv = np.random.randint(2, size=func.meta_data.n_variables)
+        fit_val = eval_fitness(func, indv)
+        pop.append(indv)
+        fitness.append(fit_val)
 
-    population = np.array(population)
+    pop = np.array(pop)
     fitness = np.array(fitness)
 
     # Track best solution
     best_idx = np.argmax(fitness)
     best_fitness = fitness[best_idx]
-    best_individual = population[best_idx].copy()
+    best_indv = pop[best_idx].copy()
 
     # Get optimum for early stopping
-    optimum = func.optimum.y
-    if hasattr(optimum, "item"):
-        optimum = optimum.item()
+    if func.meta_data.problem_id == 18 and func.meta_data.n_variables == 32:
+        optimum = 8
+    else:
+        optimum = func.optimum.y
+        if hasattr(optimum, "item"):
+            optimum = optimum.item()
 
-    # Track convergence
-    fitness_history = [best_fitness]
-    evaluations = population_size
+    evaluations = pop_size
     generation = 0
 
     while evaluations < budget:
         generation += 1
-        new_population = []
+        new_pop = []
         new_fitness = []
 
         # Elitism: keep best individuals
-        elite_indices = np.argsort(fitness)[-elite_size:]
-        new_population.extend(population[elite_indices])
-        new_fitness.extend(fitness[elite_indices])
+        elite_idxs = np.argsort(fitness)[-elite:]
+        new_pop.extend(pop[elite_idxs])
+        new_fitness.extend(fitness[elite_idxs])
 
         # Generate offspring
-        while len(new_population) < population_size:
+        while len(new_pop) < pop_size:
             # Selection
-            parent1 = tournament_selection(population, fitness)
-            parent2 = tournament_selection(population, fitness)
+            parent1 = selection(pop, fitness)
+            parent2 = selection(pop, fitness)
 
             # Crossover and mutation
-            child1, child2 = uniform_crossover(parent1, parent2)
-            child1 = adaptive_mutation(child1, generation)
-            child2 = adaptive_mutation(child2, generation)
+            child1, child2 = crossover(parent1, parent2)
+            child1 = mutation(child1, generation)
+            child2 = mutation(child2, generation)
 
             # Evaluate offspring
-            fitness1 = evaluate_fitness(func, child1)
-            fitness2 = evaluate_fitness(func, child2)
+            fitness1 = eval_fitness(func, child1)
+            fitness2 = eval_fitness(func, child2)
             evaluations += 2
 
-            new_population.extend([child1, child2])
+            new_pop.extend([child1, child2])
             new_fitness.extend([fitness1, fitness2])
 
         # Update population
-        population = np.array(new_population[:population_size])
-        fitness = np.array(new_fitness[:population_size])
+        pop = np.array(new_pop[:pop_size])
+        fitness = np.array(new_fitness[:pop_size])
 
         # Update best solution
-        current_best_idx = np.argmax(fitness)
-        current_best_fitness = fitness[current_best_idx]
-        if current_best_fitness > best_fitness:
-            best_fitness = current_best_fitness
-            best_individual = population[current_best_idx].copy()
-
-        fitness_history.append(best_fitness)
+        cur_idx = np.argmax(fitness)
+        cur_fitness = fitness[cur_idx]
+        if cur_fitness > best_fitness:
+            best_fitness = cur_fitness
+            best_indv = pop[cur_idx].copy()
 
         # Early stopping for finite optima
         if not np.isinf(optimum) and best_fitness >= optimum:
             break
 
     func.reset()
-    return best_fitness, best_individual, fitness_history
+    return best_fitness, best_indv
+
+# Declaration of problems to be tested.
+f1 = get_problem(fid = 1, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f2 = get_problem(fid = 2, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f3 = get_problem(fid = 3, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f18 = get_problem(fid = 18, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f23 = get_problem(fid = 23, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f24 = get_problem(fid = 24, dimension=100, instance=1, problem_class = ProblemClass.PBO)
+f25 = get_problem(fid = 25, dimension=100, instance=1, problem_class = ProblemClass.PBO) 
 
 
-def run_ga_experiment(func, func_name, runs, budget):
-    """Run GA multiple times and create convergence plots"""
-    print(f"Running GA on {func_name}...")
-    results = []
-    all_histories = []
+# Create default logger compatible with IOHanalyzer
+# `root` indicates where the output files are stored.
+# `folder_name` is the name of the folder containing all output. You should compress this folder and upload it to IOHanalyzer
+l = logger.Analyzer(root="data", 
+    folder_name="run", 
+    algorithm_name="genetic_algorithm", 
+    algorithm_info="GA with tournament selection, uniform crossover, and adaptive mutation")
 
-    for run in range(runs):
-        print(f"  Run {run + 1}/{runs}")
-        best_fitness, _, fitness_history = ga(func, budget=budget)
-        results.append(best_fitness)
-        all_histories.append(fitness_history)
-        print(f"    Best fitness: {best_fitness}")
+# Run GA on all problems (10 independent runs each)
+problems = [
+    ("OneMax", f1),
+    ("LeadingOnes", f2),
+    ("BinaryValue", f3),
+    ("LABS", f18),
+    ("IsingRing", f23),
+    ("IsingTorus", f24),
+    ("NQueens", f25)
+]
 
-    # Create convergence plot
-    plt.figure(figsize=(10, 6))
+for problem_name, problem in problems:
+    print(f"\n{'='*50}")
+    print(f"Running GA on {problem_name}")
+    print(f"{'='*50}")
+    
+    # Attach logger to the problem
+    problem.attach_logger(l)
+    
+    # Run 10 independent runs
+    for run in range(10):
+        print(f"Run {run + 1}/10")
+        f_opt, x_opt = genetic_algorithm(problem)
+        print(f"Best fitness: {f_opt:.4f}")
+    
+    # Detach logger for next problem
+    problem.detach_logger()
 
-    # Plot all runs
-    for history in all_histories:
-        plt.plot(history, alpha=0.3, color="lightblue")
-
-    # Plot mean convergence
-    max_gens = max(len(h) for h in all_histories)
-    mean_history = [
-        np.mean([h[gen] for h in all_histories if gen < len(h)])
-        for gen in range(max_gens)
-    ]
-
-    plt.plot(mean_history, color="red", linewidth=2, label="Mean")
-    plt.plot(
-        all_histories[np.argmax(results)], color="green", linewidth=2, label="Best Run"
-    )
-
-    plt.xlabel("Generation")
-    plt.ylabel("Best Fitness")
-    plt.title(f"{func_name} Convergence - Improved GA")
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.savefig(f"{func_name.lower()}_convergence.png", dpi=150, bbox_inches="tight")
-
-    return results
-
-
-def main():
-    """Run GA on all required functions"""
-    problems = {
-        "F1": ioh.get_problem(
-            1, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F2": ioh.get_problem(
-            2, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F3": ioh.get_problem(
-            3, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F18": ioh.get_problem(
-            18, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F23": ioh.get_problem(
-            23, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F24": ioh.get_problem(
-            24, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-        "F25": ioh.get_problem(
-            25, instance=1, dimension=100, problem_class=ioh.ProblemClass.PBO
-        ),
-    }
-
-    all_results = {}
-
-    for func_name, func in problems.items():
-        print(f"\n{'='*50}")
-        print(f"Testing GA on {func_name}")
-        print(f"{'='*50}")
-
-        results = run_ga_experiment(func, func_name, runs=10, budget=100000)
-        all_results[func_name] = results
-
-        # Print summary
-        mean_fitness = np.mean(results)
-        std_fitness = np.std(results)
-        best_fitness = np.max(results)
-        worst_fitness = np.min(results)
-
-        print(f"\n{func_name} Results Summary:")
-        print(f"  Mean fitness: {mean_fitness:.4f}")
-        print(f"  Std fitness:  {std_fitness:.4f}")
-        print(f"  Best fitness: {best_fitness:.4f}")
-        print(f"  Worst fitness: {worst_fitness:.4f}")
-        print(f"  Optimum: {func.optimum.y}")
-
-    # Save results
-    with open("ga_results.txt", "w") as f:
-        f.write("GA Results - Exercise 3\n")
-        f.write("=" * 50 + "\n\n")
-
-        for func_name, results in all_results.items():
-            f.write(f"{func_name} Results:\n")
-            f.write(f"  Mean: {np.mean(results):.4f}\n")
-            f.write(f"  Std:  {np.std(results):.4f}\n")
-            f.write(f"  Best: {np.max(results):.4f}\n")
-            f.write(f"  Worst: {np.min(results):.4f}\n")
-            f.write(f"  All runs: {results}\n\n")
-
-
-if __name__ == "__main__":
-    main()
+# This statement is necessary in case data is not flushed yet.
+del l
