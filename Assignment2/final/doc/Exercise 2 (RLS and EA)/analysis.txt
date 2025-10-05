@@ -1,5 +1,34 @@
-These results show that the (1+1) Evolutionary Algorithm (EA) and Randomized Local Search (RLS) are consistently the top-performing algorithms across the benchmark suite, with Random Search trailing significantly behind in nearly every case. Both EA and RLS achieve the optimum in F1, F2, and F3, demonstrating their strength on linear and unimodal problems. In F18, a more deceptive and noisy landscape, EA slightly outperforms RLS, suggesting its mutation strategy offers better robustness in complex terrains. For F23 and F24, both EA and RLS again outperform Random Search, with EA showing a slight edge in final fitness. In F25, EA achieves the best result, with RLS close behind, while Random Search fails to meaningfully improve.
+F1:
 
-Judging by these results, EA appears to be the most consistently effective algorithm, particularly on rugged or deceptive problems. RLS is highly competitive and often reaches its highest fitness faster than the EA, but often falls short of the EA’s final fitness on account of its single-bit mutation strategy. Random Search, while simple, lacks the exploitation mechanisms necessary to perform well on structured problems and consistently underperforms.
+All three algorithms—RLS, (1+1) EA, and Random Search—were tested on the OneMax problem with 100,000 evaluations. Both RLS and EA consistently reached the optimal value of 100, while Random Search plateaued significantly lower. 
+LS and EA benefit from their ability to preserve and improve solutions incrementally. Random Search, lacking any exploitation mechanism, fails to consistently improve and shows high variability across runs.
 
-Overall, EA and RLS are both well-suited for optimization tasks where solution quality and convergence reliability are important. EA’s adaptive mutation gives it a slight edge in complex landscapes, while RLS remains a strong option. Random Search, though useful for exploratory baselines, is not competitive in this context. These results reinforce the importance of guided search strategies in evolutionary computation, especially when tackling high-dimensional or deceptive problems.
+F2:
+
+RLS and EA again reached the optimal value of 100, with RLS showing slightly faster convergence. Random Search performed poorly.
+Random Search struggles to build fitness and shows wide performance variability.
+
+F3: 
+
+EA and RLS both reached the optimal value of 5050. EA showed faster convergence, while RLS took longer. Random search plateaued relatively quickly. 
+
+F18: 
+
+EA and RLS achieved best-so-far values around 4.3, with EA slightly outperforming RLS, albeit reaching peak fitness slower than RLS. Random Search stagnated early and showed high variability.
+
+F23: 
+
+Both RLS and the (1+1) Evolutionary Algorithm demonstrate strong performance, converging to a best-so-far function value of approximately 10. The RLS algorithm shows slightly faster convergence than EA. Random search makes no meaningful progress in this problem.
+Both EA and RLS are able to exploit this problem structure effectively through iterative improvement, while Random Search lacks the feedback mechanism to build on partial solutions. The (1+1) EA benefits from its probabilistic bit-flip strategy, allowing it to escape local optima and explore more diverse configurations.
+
+F24: 
+
+RLS clearly outperforms both the (1+1) Evolutionary Algorithm and Random Search, reaching a similar fitness to EA but at a faster rate. 
+While EA eventually reaches a competitive fitness level, its convergence is slower than RLS. This suggests that its broader mutation strategy may be less efficient in tightly structured problems where small, precise changes are more beneficial.
+
+F25: 
+
+F25 is a rugged, epistatic optimization problem where each bit’s contribution to the fitness depends on its interaction with others. In this landscape, the (1+1) Evolutionary Algorithm (EA) — represented by the green solid line — performs best, converging to a best-so-far value close to –0.3. RLS (red dashed line) follows closely, reaching a similar final value but with slightly slower convergence. Random Search (black dashed line) performs worst. 
+EA’s probabilistic mutation allows it to flip multiple bits occasionally, helping it escape local optima and explore more diverse regions of the search space. This gives it a clear edge in convergence speed and final performance.
+Despite its single-bit mutation strategy, RLS steadily improves and reaches a comparable final fitness. However, its slower convergence suggests that it struggles more with the deceptive nature of the problem landscape.
+Without any exploitation mechanism, Random Search fails to adapt to the problem’s complexity.
