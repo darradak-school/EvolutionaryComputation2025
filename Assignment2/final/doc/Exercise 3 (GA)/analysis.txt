@@ -1,1 +1,19 @@
+F1: OneMax
+The RLS, EA and GA all reach the optimum, with the RLS converging the fastest and the EA and GA coming second and third. The Random Search performs by far the worst, and fails to reach the optimum before running out of budget. RLS seems to dominate on OneMax because its hill climbing nature perfectly suits linear, separable landscapes such as this.
+
+F2: LeadingOnes
+Once again the RLS, EA and GA all achieve the optimum result, and while the GA seems to converge the fastest at first, it is overtaken by the RLS, leaving the GA secnond to converge to the optimum, and EA third. Once again, the Random Search fails to reach the optimum, and stagnates leaving it last. 
+
+F3
+
+F18
+
+F23
+
+F24
+
+F25
+
+
+- Analysis -
 These results show that the Genetic Algorithm (GA) is among the best performing out of those tested here. It consistently produces either the best or second best results when compared to the Random Local Search (RLS), Evolutionary Algorithm (EA), and Random Search algorithms. It matches the EA and RLS in achieving the optimum in F1, F2, and F3, achieves the best result in F8, second best in F23 (losing to the EA), best in F24, and achieves a very close second to the EA in F25. Judging by these results, we can see that the GA performs better than the rest, and in a similar tier as the EA, however a drawback of the GA is that it seems to converge to the optimum / best result at a slower rate than the others. With the exception of F2 where the GA is faster, it is slower to converge than all the other algorithms other than Random Search. The GA's slower convergence can be viewed as a deliberate design implication of the algorithm that prioritizes solution quality over speed of results. While it takes longer to reach good solutions, it consistently finds better final results on complex problems, suggesting superior exploration capabilities when compared to the other algorithms tested. This makes the GA particularly suitable for problems where solution quality is more important than quick convergence, or for landscapes where the global optimum is difficult to locate. All in all, it seems that the slower convergence is a worthy tradeoff to achieve the improved results that the GA provides.
