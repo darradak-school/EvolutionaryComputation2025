@@ -24,3 +24,17 @@ Pr[failure] ≥ 1 − e^(−Ω(n))
 
 Random Search requires at least 2^(n/2) fitness evaluations to reach the optimum of the F1 function with probability at least 1 − e^(−Ω(n)). 
 This shows that Random Search is exponentially unlikely to succeed within a sub-exponential budget.
+
+
+PROOF 2
+
+RLS flips exactly one bit per iteration and accepts non-worsening moves. At each step, the probability of flipping a 0 to 1 is proportional to the number of 
+0s remaining. The expected time to flip each 0 to 1 is n/k, where k is the number of remaining 0s. Summing over all k from 1 to n gives a total expected runtime of
+O(n log n). Since RLS always accepts improvements and never regresses, the probability of reaching the optimum in this time is bounded below by a constant, i.e., Ω(1).
+
+The (1+1) EA flips each bit independently with probability 1/n. The probability of flipping exactly one 0 to 1 and no other bits is 
+approximately (n−k)/n · (1−1/n)ⁿ⁻¹ ≈ (n−k)/(n·e), where k is the number of 1s in the current bitstring. The expected time to increase the number of 1s by one
+is O(n/(n−k)), and summing over all k yields an expected runtime of O(n log n). Like RLS, the (1+1) EA uses elitist selection and avoids regressions, so the 
+probability of achieving this runtime is also Ω(1).
+
+both algorithms reach the optimal search point for F3 in O(n log n) fitness evaluations with probability Ω(1).
