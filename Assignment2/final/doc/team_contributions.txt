@@ -1,9 +1,9 @@
 Q1: problem_example.py run and plotted -- Tyler
 
-Q2: Tyler & Ian (RLS.py, RLS_test.py, associated documentation)
+Q2: Tyler(Tyler McKinley - a1716769) & Ian(Chak Yui wan - a1870877) (RLS.py, RLS_test.py, associated documentation)
 
-Q3: Murad (Genetic Algorithm)
+Q3: Murad(Abdullah Murad Ertaskin, a1803154) (Genetic Algorithm) 
 
-Q4: Carol & Jerry
+Q4: Carol(Ke Li, a1829917) & Jerry(Siyu Ran, a1845552)
 
-Q5: Planned to be done by Darcy
+Q5: Darcy(a1850193) (aco.py - ACO / ACO to MMAS comparison)
