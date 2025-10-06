@@ -2,18 +2,23 @@ F1: OneMax
 The RLS, EA and GA all reach the optimum, with the RLS converging the fastest and the EA and GA coming second and third. The Random Search performs by far the worst, and fails to reach the optimum before running out of budget. RLS seems to dominate on OneMax because its hill climbing nature perfectly suits linear, separable landscapes such as this.
 
 F2: LeadingOnes
-Once again the RLS, EA and GA all achieve the optimum result, and while the GA seems to converge the fastest at first, it is overtaken by the RLS, leaving the GA secnond to converge to the optimum, and EA third. Once again, the Random Search fails to reach the optimum, and stagnates leaving it last. 
+Once again the RLS, EA and GA all achieve the optimum result, and while the GA seems to converge the fastest at first, it is overtaken by the RLS, leaving the GA secnond to converge to the optimum, and EA third. Once again, the Random Search fails to reach the optimum, and stagnates leaving it last amongst the four. The sequential dependency in LeadingOnes punishes crossover and random variations present in the EA and GA. RLS excels because it flips only one bit at a time, allowing it to maintain prefix integrity.
 
-F3
+F3: Linear Function with Harmonic Weights
+In this problem, there is a similar pattern as the last two, as the RLS reaches the optimum first, however in this problem the EA is close behind, converging second just behind the RLS, while the GA is quite a bit slower, finishing after almost 10x the ammount of function evaluations. Once again, the Random Search trails behind the rest, failing to reach the optimum. This problem is still mostly unimodal and simple, so hill climbing strategy dominates. RLSs deterministic improvements make it most efficient.
 
-F18
+F18: Low Autocorrelation Binary Sequences (LABS)
+In this problem, the RLS starts strong, however it maxes out around 1000 function evaluations in and stagnates, getting stuck in a local optima. The EA and GA, while slower to converge, manage to overtake the RLS, and achieve superior results, with the GA getting the best result and the EA getting the second best. The RLS once again produces the worst result of the four. This problem seems to reward exploration. The GAs crossover helps escape local optima by recombining partially good solutions, while RLS cannot easily escape a local optima. EA provides a middle ground, mutation driven exploration allows gradual escape but is slower than recombination.
 
-F23
 
-F24
+F23: N Queens Problem
+For this problem, the EA seems to perform the best, with the GA getting the second best result, and the RLS coming last out of those that got a result, with Random Search failing to produce a valid result. RLS finds a solution first, but gets trapped in a local optima, while the EA and GA manage to escape. The problem seems to favor algorithms with global exploration capacity, allowing it to escape local optima and continue improving.
 
-F25
+F24: Concatenated Trap
+For this problem, the RLS and EA converge faster, but both get trapped in a local optima at the same fitness value, while the GA continues to improve but gets stuck in a higher local optima. The Random Search produces a result this time, however it is significantly behind the other algorithms. The populations recombination enables global learning across deceptive subfunctions, exactly what RLS and (1+1) EA struggle with. RLSs greedy local behavior guarantees premature convergence.
 
+F25: NK Landscapes
+Finally, for this problem the RLS seems to converge faster after the first dozen function evaluations, slowly improving until it hits a local optima at which point it stalls out. The EA is second fastest to converge, and achieves a very slightly higher result when compared to the GA, which is somewhat slower to converge. Both the EA and GA seem to have been continuing to improve even towards the end of the budget, showing that they were adequatley escaping local optima and showing improvement, as compared to the RLS which plateaus. The Random Search once again is at the bottom of the pack, with the worst results. The GAs strength on NK landscapes stems from its balance of exploration and exploitation. Mutation alone in the EA is still competitive, but RLSs local scope severely limits its adaptability.
 
 - Analysis -
 These results show that the Genetic Algorithm (GA) is among the best performing out of those tested here. It consistently produces either the best or second best results when compared to the Random Local Search (RLS), Evolutionary Algorithm (EA), and Random Search algorithms. It matches the EA and RLS in achieving the optimum in F1, F2, and F3, achieves the best result in F8, second best in F23 (losing to the EA), best in F24, and achieves a very close second to the EA in F25. Judging by these results, we can see that the GA performs better than the rest, and in a similar tier as the EA, however a drawback of the GA is that it seems to converge to the optimum / best result at a slower rate than the others. With the exception of F2 where the GA is faster, it is slower to converge than all the other algorithms other than Random Search. The GA's slower convergence can be viewed as a deliberate design implication of the algorithm that prioritizes solution quality over speed of results. While it takes longer to reach good solutions, it consistently finds better final results on complex problems, suggesting superior exploration capabilities when compared to the other algorithms tested. This makes the GA particularly suitable for problems where solution quality is more important than quick convergence, or for landscapes where the global optimum is difficult to locate. All in all, it seems that the slower convergence is a worthy tradeoff to achieve the improved results that the GA provides.
