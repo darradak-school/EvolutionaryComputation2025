@@ -1,5 +1,5 @@
 """
-Complete code for Exercise 5: ACO Algorithm
+Complete code for Exercise 5: ACO Algorithm - Darcy Lisk (a1850193)
 """
 
 from ioh import get_problem, ProblemClass
@@ -51,8 +51,6 @@ class StandardACO:
         1. Evaporate all pheromones (toward 0)
         2. Add pheromone ONLY to bits that are 1 in solutions
         3. Weight by fitness
-        
-        This is the key difference: NO subtraction!
         """
         n_vars = len(self.tau)
         
@@ -139,7 +137,7 @@ class StandardACO:
 
 class FinalACO:
     """
-    Final ACO for Exercise 5 with all features:
+    Final custom ACO for Exercise 5
     - Standard pheromone update 
     - Elitist strategy
     - Local search
@@ -213,7 +211,7 @@ class FinalACO:
                 if solution[i] == 1:
                     self.tau[i] += deposit
         
-        # Elitist: add from best-ever (stronger weight)
+        # Elitist
         if best_ever_sol is not None:
             deposit_best = (best_ever_fit / 100.0) * self.elitist_weight
             for i in range(n_vars):
@@ -293,7 +291,7 @@ class FinalACO:
 
 
 def test_single_run():
-    """Test on F2 for debug issues."""
+    """Test on F2 for debugging weird score issue."""
     
     problem = get_problem(fid=2, dimension=100, instance=1, problem_class=ProblemClass.PBO)
     
