@@ -10,3 +10,13 @@ the rapid improvement on comparison plots. On complex landscapes (F18, F23-F25),
 perform betterdue to their carefully tuned parameter strategies for specific problem structures, 
 our specific ACO implementation outperformed MMAS/MMAS* on F24 whilst underperforming in F18, 
 F23 and F25.
+
+summary:
+
+On unimodal functions (F1–F3), both RLS and the (1+1) EA demonstrate clear advantages through rapid 
+and consistent convergence, outperforming Random Search by effectively exploiting the fitness gradient. 
+On more complex, epistatic landscapes (F18, F23–F25), performance differences become more nuanced. 
+While Random Search consistently underperforms due to its lack of exploitation, EA and RLS show varying 
+strengths depending on the problem structure. EA’s probabilistic mutation enables broader exploration, 
+giving it an edge on rugged landscapes like F25, whereas RLS excels in tightly structured problems such as F24
+ due to its precise, single-bit mutation.
