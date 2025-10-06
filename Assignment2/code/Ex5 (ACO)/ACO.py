@@ -9,7 +9,7 @@ import os
 
 
 class CustomACO:
-    """Custom ACO following lecture specifications (slides 18-35)."""
+    """Custom ACO following lecture specifications """
     
     def __init__(self, n_ants=15, rho=0.1, alpha=1.0, beta=2.0, 
                  elitist_weight=5, local_search=True):
@@ -21,7 +21,7 @@ class CustomACO:
         self.use_local_search = local_search
         
     def initialize_pheromones(self, n_vars):
-        """Initialize pheromone values (slide 18)."""
+        """Initialize pheromone values """
         self.tau = np.ones(n_vars) * 0.5
         self.tau_min = 0.01
         self.tau_max = 0.99
@@ -32,8 +32,8 @@ class CustomACO:
         
     def construct_solution(self, n_vars):
         """
-        Construct solution using formula from slide 32:
-        p(c_i,j | sp) = [τ_i,j]^α · [η(c_i,j)]^β / Σ [τ_k,l]^α · [η(c_k,l)]^β
+        Construct a solution by sampling each variable based on pheromone 
+        and greedy information.
         """
         solution = np.zeros(n_vars, dtype=int)
         
@@ -83,9 +83,7 @@ class CustomACO:
         return solution, current_fitness
     
     def apply_pheromone_update(self, S_iter, best_solution_ever, best_fitness_ever):
-        """
-        Pheromone update 
-        """
+        """Pheromone update """
         n_vars = len(self.tau)
         
         # Evaporation
