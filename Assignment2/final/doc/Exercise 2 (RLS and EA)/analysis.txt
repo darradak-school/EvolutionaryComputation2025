@@ -32,3 +32,13 @@ F25 is a rugged, epistatic optimization problem where each bit’s contribution 
 EA’s probabilistic mutation allows it to flip multiple bits occasionally, helping it escape local optima and explore more diverse regions of the search space. This gives it a clear edge in convergence speed and final performance.
 Despite its single-bit mutation strategy, RLS steadily improves and reaches a comparable final fitness. However, its slower convergence suggests that it struggles more with the deceptive nature of the problem landscape.
 Without any exploitation mechanism, Random Search fails to adapt to the problem’s complexity.
+
+summary:
+
+On unimodal functions (F1–F3), both RLS and the (1+1) EA demonstrate clear advantages through rapid 
+and consistent convergence, outperforming Random Search by effectively exploiting the fitness gradient. 
+On more complex, epistatic landscapes (F18, F23–F25), performance differences become more nuanced. 
+While Random Search consistently underperforms due to its lack of exploitation, EA and RLS show varying 
+strengths depending on the problem structure. EA’s probabilistic mutation enables broader exploration, 
+giving it an edge on rugged landscapes like F25, whereas RLS excels in tightly structured problems such as F24
+ due to its precise, single-bit mutation.
