@@ -1,5 +1,9 @@
 """
 Complete code for Exercise 5: ACO Algorithm - Darcy Lisk (a1850193)
+
+Requires ioh, numpy
+
+Run with 'python aco.py'
 """
 
 from ioh import get_problem, ProblemClass
