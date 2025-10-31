@@ -120,22 +120,22 @@ class GSEMO:
         return best_sol, best_obj
 
 if __name__ == "__main__":
-    # 創建GSEMO
+    # Create GSEMO instance
     gsemo = GSEMO(
-        problem_id=2100,  # MaxCoverage2100
-        dimension=100,  # 要check problem嘅實際dimension
+        problem_id=2100,
+        dimension=100,
         budget=10000
     )
 
-    # 運行演算法
+    # Run GSEMO
     pareto_front = gsemo.run()
 
-    # 睇結果
+    # show results
     print(f"Final Pareto front size: {len(pareto_front)}")
     best_sol, best_obj = gsemo.get_best_solution()
     print(f"Best solution: f1={best_obj[0]}, f2={best_obj[1]}")
 
-    # Trade-off plot可以咁畫
+    # Trade-off plot
     f1_values = [obj[0] for sol, obj in pareto_front]
     f2_values = [obj[1] for sol, obj in pareto_front]
 
