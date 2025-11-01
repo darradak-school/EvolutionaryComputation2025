@@ -1,6 +1,7 @@
 import random
 import numpy as np
 from Multi_Objective_Fitness_Function import MultiObjectiveFitness
+
 class GSEMO:
     def __init__(self, problem_id, dimension, budget=10000):
         """
@@ -13,8 +14,9 @@ class GSEMO:
         self.fitness_func = MultiObjectiveFitness(problem_id)
         self.dimension = dimension
         self.budget = budget
-        self.population = []  # 儲[(solution, (f1, f2))]
+        self.population = []
         self.evaluations = 0
+
     def initialize(self):
         """
         Initial population with one Random solution
@@ -27,6 +29,7 @@ class GSEMO:
 
         # Add population
         self.population.append((initial_solution.copy(), (f1, f2)))
+
     def mutate(self, solution):
         """
         Standard bit-flip mutation
@@ -46,6 +49,7 @@ class GSEMO:
                 offspring[i] = 1 - offspring[i]  # flip bit
 
         return offspring
+    
     def is_dominated(self, obj1, obj2):
         """
         Check if obj1 is dominated by obj2
@@ -53,9 +57,9 @@ class GSEMO:
             True if obj2 dominates obj1
         """
         return self.fitness_func.dominates(obj2, obj1)
+    
     def update_population(self, offspring, offspring_obj):
         """
-        更新population with新offspring
         Update population with new offspring
         Args:
             offspring: solution
@@ -78,6 +82,7 @@ class GSEMO:
 
             # add offspring
             self.population.append((offspring, offspring_obj))
+
     def run(self):
         """
         Run GSEMO algorithm
@@ -90,7 +95,7 @@ class GSEMO:
 
         # Main loop
         while self.evaluations < self.budget:
-            # 1. 隨機揀parent
+            # 1. parent
             parent, parent_obj = random.choice(self.population)
 
             # 2. Mutate
@@ -109,6 +114,7 @@ class GSEMO:
                       f"Population size: {len(self.population)}")
 
         return self.population
+    
     def get_best_solution(self):
         """
         Returns the highest f1 solution (pure coverage/influence)
