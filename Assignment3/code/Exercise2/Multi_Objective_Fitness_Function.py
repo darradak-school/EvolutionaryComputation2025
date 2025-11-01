@@ -30,7 +30,7 @@ class MultiObjectiveFitness:
         for minimize f2 and maximize f1:
         obj1 dominates obj2 if:
         - obj1.f1 >= obj2.f1 AND obj1.f2 <= obj2.f2
-        - 而且至少有一個係strictly better
+        - And at least one of them is strictly better
         - and at least one objective is strictly better
         Args:
             obj1: (f1, f2) tuple
