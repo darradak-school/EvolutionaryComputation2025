@@ -1,5 +1,5 @@
 import ioh
-from ioh import logger, ProblemClass
+from ioh import logger
 import numpy as np
 import random
 
@@ -46,7 +46,7 @@ def comp():
             print("-" * 40)
 
             # Get the problem instance
-            problem = ioh.get_problem(id, problem_class=ProblemClass.GRAPH)
+            problem = ioh.get_problem(id, problem_class=ioh.ProblemClass.GRAPH)
 
             # Run each algorithm
             for alg_name, alg_func in algorithms.items():
