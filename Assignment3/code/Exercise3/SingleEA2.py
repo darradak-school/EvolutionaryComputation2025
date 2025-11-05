@@ -178,37 +178,25 @@ def single_objective_ea(problem_id=2100, pop_size=20, budget=10,
 # ---------------- quick demo ----------------
 
 if __name__ == "__main__":
-    # quick-test driver across both problem sets
-    problem_ids = {
-        "MaxCoverage": [2100, 2101, 2102, 2103],
-        "MaxInfluence": [2200, 2201, 2202, 2203]
-    }
-
+    # experiment config (adjust for full experiments)
+    problem_id = 2100
+    problem_type = "MaxCoverage"
+    budget = 10
     runs = 1          # set to 30 for full experiment
     max_evals = 1000  # set to 10000 for full experiment
-    budget = 10
     pop_sizes = [10, 20, 50]
 
-    for problem_type, ids in problem_ids.items():
-        for pid in ids:
-            for run_index in range(runs):
-                for pop_size in pop_sizes:
-                    print(f"\n=== Running SingleEA: type={problem_type}, id={pid}, pop={pop_size}, run={run_index+1} ===")
-                    population, fitnesses, best_so_far, folder = single_objective_ea(
-                        problem_id=pid,
-                        pop_size=pop_size,
-                        budget=budget,
-                        run_index=run_index,
-                        problem_type=problem_type,
-                        max_evals=max_evals,
-                        run_folder_root="data"
-                    )
-                    print(f"Finished: {problem_type} f{pid} pop{pop_size} run{run_index+1}")
-                    print(f"  Run folder: {folder}")
-                    # quick check of files created in run folder
-                    try:
-                        files = os.listdir(folder)
-                        print(f"  Files in run folder: {files}")
-                    except Exception as e:
-                        print(f"  Could not list run folder: {e}")
-                    print(f"  Best at end: {best_so_far[-1] if best_so_far else None}")
+    for run_index in range(runs):
+        for pop_size in pop_sizes:
+            print(f"\n=== Running SingleEA: problem={problem_id}, pop={pop_size}, run={run_index+1} ===")
+            population, fitnesses, best_so_far, folder = single_objective_ea(
+                problem_id=problem_id,
+                pop_size=pop_size,
+                budget=budget,
+                run_index=run_index,
+                problem_type=problem_type,
+                max_evals=max_evals,
+                run_folder_root="data"
+            )
+            print(f"Finished pop={pop_size}, run={run_index+1}, run folder: {folder}")
+            print(f"Best at end: {best_so_far[-1] if best_so_far else None}")
