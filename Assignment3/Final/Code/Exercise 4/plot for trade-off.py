@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import os
 
-# The path to Json files -> change to your path
+# The path to Json files
 file_path = "C:/Users/25738/Desktop/Exercise 4/GSEMO_json"  
 
 # The names of Json files

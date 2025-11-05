@@ -201,7 +201,7 @@ Due to algorithmic failure, Pareto fronts for PackWhileTravel (if any solutions 
 2. EA / RLS
 3. GSEMO (failed completely)
 
-### 4.2 Algorithm Selection Guidelines
+### 4.2 Algorithm Selection
 
 **Choose GSEMO when:**
 - Problem exhibits monotone submodularity
@@ -223,7 +223,7 @@ Due to algorithmic failure, Pareto fronts for PackWhileTravel (if any solutions 
 
 ---
 
-## 5. Conclusions and Recommendations
+## 5. Conclusions
 
 ### 5.1 Key Findings
 
@@ -235,20 +235,8 @@ Due to algorithmic failure, Pareto fronts for PackWhileTravel (if any solutions 
 
 4. **Implementation Sensitivity**: Success requires careful problem analysis and potentially problem-specific modifications to initialization, dominance relations, and operators.
 
-### 5.2 Future Research Directions
 
-**For Monotone Problems:**
-- Hybrid approaches combining GSEMO's early exploration with single-objective exploitation
-- Adaptive selection pressure mechanisms that increase focus on primary objective over time
-- Pareto front size limiting to maintain efficiency and increase selection pressure
-
-**For Non-Monotone Problems:**
-- Problem-aware initialization strategies (greedy, heuristic-based)
-- Modified dominance relations incorporating feasibility and constraint satisfaction
-- Constraint-handling techniques (penalties, repair operators, feasibility preservation)
-- Integration with local search for refinement within feasible regions
-
-### 5.3 Assignment Insights
+### 5.2 Insights
 
 The experimental results provide several important insights for evolutionary algorithm design:
 

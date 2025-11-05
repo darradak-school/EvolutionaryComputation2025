@@ -1,0 +1,14 @@
+#### MaxCoverage Problems (2100 - 2103) ####
+For the MaxCoverage problems, the multi-objective evolutionary algorithms clearly outperform the single-objective EA across all instances. The multi-EAs consistently place in the top three positions due to their ability to maintain diverse non-dominated solutions and naturally balance coverage and set size. This broader exploration allows them to escape plateaus earlier and discover high-quality coverage combinations more reliably.
+
+In contrast, the single-objective EA performs noticeably worse. Despite using diversity-aware selection, it converges prematurely and struggles to navigate the plateau-heavy MaxCoverage landscape, resulting in slower progress and significantly lower final fitness values.
+
+Overall, MaxCoverage strongly favours the multi-objective approach, whose Pareto-based selection provides both better exploration and more stable convergence under the fixed evaluation budget.
+
+
+#### MaxInfluence Problems (2200 - 2203) ####
+For the MaxInfluence problems, the multi-objective EAs once again achieve the strongest overall performance, consistently outperforming every other algorithm across all population sizes. Their Pareto-based selection maintains diverse influence patterns and preserves high-value structural components, allowing them to make the large, coordinated improvements required in these highly interdependent network-based problems. As a result, the multi-EAs converge quickly and reliably to the highest fitness values in all four instances.
+
+The single-objective EAs also perform very well on MaxInfluence, ranking just below the multi-objective variants and clearly outperforming the traditional algorithms (RLS, (1+1) EA, GA). Their diversity-aware survivor selection helps them maintain multiple promising influence sets during the run, preventing premature convergence and enabling them to exploit incremental improvements effectively. While they lack the breadth of exploration provided by the multi-objective approach, they remain robust and competitive, especially in the later stages once key influencer combinations emerge.
+
+Overall, MaxInfluence strongly favours population-based evolutionary strategies that maintain high diversity and can adapt to the strong dependency structure of influence spread. Multi-objective EAs benefit most from this, while single-objective EAs still achieve strong results thanks to their balanced exploration and exploitation. Simpler algorithms, which rely on local changes or single-solution dynamics, struggle to match this level of coordinated improvement.
