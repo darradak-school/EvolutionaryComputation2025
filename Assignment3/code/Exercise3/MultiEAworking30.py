@@ -1,12 +1,13 @@
 # opulation-based multi-objective evolutionary algorithm
 
-# Multi-objective evolutionary algorithm for Exercise 3
-# Two objectives: maximize f(S), minimize |S|
+# Multi-Objective EA for Exercise 3
+# Simple implementation of a multi-objective EA
+# two objectives: maximize f(S), minimize |S|
 # Tournament selection (size 3)
 # Uniform crossover (90% rate)
 # Bit-flip mutation (1/n rate)
 # Simple non-dominated sorting for selection
-# Population sizes: 10, 20, 50
+# Population sizes: 10, 20, 50 (20 works best)
 
 import os
 import random
@@ -200,8 +201,8 @@ def select_next_generation(population, objectives, pop_size):
     return selected_pop, selected_objs
 
 
-def run_experiments():
-    """Run the experiments once per instance (test run)."""
+def run_full_experiments(runs_per_instance=30):
+    """Run full experiments with multiple runs per instance."""
     print("Running Multi-Objective EA Experiments")
     print("="*50)
 
@@ -220,22 +221,27 @@ def run_experiments():
             print(f"\n  Problem {problem_id}:")
             results[problem_type][problem_id] = {}
             for pop_size in pop_sizes:
-                print(f"    Pop {pop_size} (1 run)...")
-                random.seed(42)
-                np.random.seed(42)
-                pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
-                    problem_id=problem_id,
-                    pop_size=pop_size,
-                    run_index=0,
-                    problem_type=problem_type
-                )
-                best_f = max(obj[0] for obj in objs)
-                pareto_size = len(pareto_front)
-                results[problem_type][problem_id][pop_size] = {
-                    'best_f': best_f,
-                    'pareto_size': pareto_size
-                }
-                print(f"      Best f={best_f:.1f}, Pareto size={pareto_size}")
+                print(f"    Pop {pop_size} ({runs_per_instance} runs)...")
+                results[problem_type][problem_id][pop_size] = []
+
+                for run_index in range(runs_per_instance):
+                    random.seed(42 + run_index)
+                    np.random.seed(42 + run_index)
+                    pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
+                        problem_id=problem_id,
+                        pop_size=pop_size,
+                        run_index=run_index,
+                        problem_type=problem_type
+                    )
+                    best_f = max(obj[0] for obj in objs)
+                    pareto_size = len(pareto_front)
+                    results[problem_type][problem_id][pop_size].append({
+                        'run': run_index + 1,
+                        'best_f': best_f,
+                        'pareto_size': pareto_size
+                    })
+                    print(f"      Run {run_index+1}: Best f={best_f:.1f}, Pareto size={pareto_size}")
+
     return results
 
 
@@ -243,7 +249,7 @@ if __name__ == "__main__":
     print("Multi-Objective EA for Exercise 3")
     print("-" * 50)
 
-    # Quick test on one problem
+    # Quick test on one problem (run 1)
     random.seed(42)
     np.random.seed(42)
     population, objectives, history, pareto_front, pareto_objs = multi_objective_ea(
@@ -253,10 +259,10 @@ if __name__ == "__main__":
         problem_type="MaxCoverage"
     )
 
-    print(f"\nResults:")
+    print(f"\nResults of quick test:")
     print(f"  Final population size: {len(population)}")
     print(f"  Best f(S): {max(obj[0] for obj in objectives):.1f}")
     print(f"  Pareto front size: {len(pareto_front)}")
 
-    print("\nRunning full experiments (1 run each)...")
-    results = run_experiments()
+    print("\nRunning full experiments (30 runs each)...")
+    full_results = run_full_experiments(runs_per_instance=30)
