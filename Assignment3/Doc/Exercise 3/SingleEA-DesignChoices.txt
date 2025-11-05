@@ -1,0 +1,53 @@
+Created a Single‑Objective Evolutionary Algorithm that maximizes ￼ 
+under a uniform constraint using population‑based search and diversity maintenance.
+
+Tournament Selection (Size 3):
+
+•  Provides balanced selection pressure
+•  Simple to implement
+•  Ensures fitter individuals are more likely to reproduce
+
+Uniform Crossover (90% rate):
+
+•  Promotes exploitation of good building blocks
+•  Each bit has equal chance from each parent
+•  Avoids bias toward specific solution sizes
+
+Bit‑flip Mutation (1/n rate):
+
+•  Standard rate for binary encodings
+•  Provides fine‑grained exploration
+•  Maintains genetic diversity
+
+Diversity‑aware Survivor Selection:
+
+•  Combines parents and offspring
+•  Greedily selects individuals by fitness and Hamming distance
+•  Prevents premature convergence and preserves diversity
+
+Population Size 20:
+
+•  Size 10: too small, limited diversity
+•  Size 20: OPTIMAL – balances convergence and exploration
+•  Size 50: too large for 10,000 evaluations
+
+Key Advantages of Our Approach:
+
+•  Simplicity: straightforward operators and selection
+•  Robustness: works across all MaxCoverage and MaxInfluence instances
+•  Efficiency: diversity mechanism avoids wasted evaluations
+•  Focus: directly maximizes the primary objective
+
+Key Points:
+
+•  Tested population sizes: 10, 20, 50 (as required)
+•  Population size 20 works best
+•  Diversity‑aware selection improves robustness
+•  Works consistently on MaxCoverage and MaxInfluence
+
+Results:
+
+The single‑objective EA performs strongly on maximizing fitness, often 
+reaching higher single‑objective values than the multi‑objective approach. 
+However, it does not provide Pareto fronts or explicit trade‑offs, making it a 
+focused optimizer rather than an exploratory one.
