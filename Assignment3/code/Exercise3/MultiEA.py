@@ -10,52 +10,53 @@
 # Population sizes: 10, 20, 50 (20 works best)
 
  
-
+import os
 import random
 import numpy as np
-from ioh import get_problem, ProblemClass, logger
+from ioh import get_problem, ProblemClass, logger, analyzer
 
-def multi_objective_ea(problem_id=2100, pop_size=20):
+def multi_objective_ea(problem_id=2100, pop_size=20, run_index=0):
     """
     Multi-objective EA using f(S) and -|S| as objectives.
-    Much simpler than the overcomplicated version.
+    Includes correct IOH logging setup.
     """
+
+    # Unique folder name for each run (prevents overwriting)
+    algo_name = f"MultiEA_pop{pop_size}_run{run_index+1}"
+    
     # Create logger
     l = logger.Analyzer(
-        root="data",  # Store data in 'data' folder
+        root="data",  # Folder where logs are stored
         folder_name="MultiEA_Exercise3",
-        algorithm_name=f"MultiEA_pop{pop_size}",
-        store_positions=True
+        algorithm_name=algo_name,
+        store_positions=True,
+        merge_output=False
     )
     
     # Get problem and attach logger
     problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
     problem.attach_logger(l)
 
-
     # Setup
-    problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
     n = problem.meta_data.n_variables
     max_evals = 10000
     mutation_rate = 1.0 / n
     
-    # Initialize population with different cardinalities
+    # Initialize population
     population = []
     objectives = []
     
     for i in range(pop_size):
-        # Create solutions with random number of 1s
         num_ones = random.randint(0, n)
         individual = np.zeros(n, dtype=int)
         if num_ones > 0:
             indices = random.sample(range(n), num_ones)
-            for idx in indices:
-                individual[idx] = 1
+            individual[indices] = 1
         population.append(individual)
         
-        # Evaluate
+        # Evaluate and log automatically via problem()
         f_val = problem(individual)
-        if f_val < 0:  # Handle constraint violation
+        if f_val < 0:
             f_val = 0
         objectives.append((f_val, -np.sum(individual)))
     
@@ -64,25 +65,18 @@ def multi_objective_ea(problem_id=2100, pop_size=20):
     
     # Main loop
     while evals < max_evals:
-        # Create offspring
         offspring = []
         offspring_objs = []
         
         for _ in range(pop_size):
-            # Tournament selection (simple version)
             parent1 = tournament_select(population, objectives)
             parent2 = tournament_select(population, objectives)
             
-            # Crossover
-            if random.random() < 0.9:
-                child = crossover(parent1, parent2)
-            else:
-                child = parent1.copy()
-            
-            # Mutation
+            # Crossover and mutation
+            child = crossover(parent1, parent2) if random.random() < 0.9 else parent1.copy()
             child = mutate(child, mutation_rate)
             
-            # Evaluate
+            # Evaluate through IOH problem
             f_val = problem(child)
             if f_val < 0:
                 f_val = 0
@@ -94,31 +88,26 @@ def multi_objective_ea(problem_id=2100, pop_size=20):
             if evals >= max_evals:
                 break
         
-        # Combine parent and offspring
-        combined_pop = population + offspring
-        combined_objs = objectives + offspring_objs
+        # Combine and select next generation
+        population, objectives = select_next_generation(
+            population + offspring, objectives + offspring_objs, pop_size
+        )
         
-        # Select next generation (simple truncation based on dominance)
-        population, objectives = select_next_generation(combined_pop, combined_objs, pop_size)
-        
-        # Track best f(S) for logging
         best_f = max(obj[0] for obj in objectives)
         best_f_history.append(best_f)
     
-    # Get final pareto front
-    pareto_front = []
-    pareto_objs = []
+    # Compute Pareto front
+    pareto_front, pareto_objs = [], []
     for i in range(len(population)):
-        is_dominated = False
-        for j in range(len(population)):
-            if i != j and dominates(objectives[j], objectives[i]):
-                is_dominated = True
-                break
-        if not is_dominated:
+        if not any(dominates(objectives[j], objectives[i]) for j in range(len(population)) if i != j):
             pareto_front.append(population[i])
             pareto_objs.append(objectives[i])
-    
+
+    # Detach logger to finalize .dat files
+    problem.detach_logger(l)
+
     return population, objectives, best_f_history, pareto_front, pareto_objs
+
 
 def dominates(obj1, obj2):
     """Check if obj1 dominates obj2."""
@@ -214,9 +203,9 @@ def select_next_generation(population, objectives, pop_size):
     return selected_pop, selected_objs
 
 def run_experiments():
-    """Run the required experiments."""
+    """Run the required experiments and export to CSV automatically."""
     print("Running Multi-Objective EA Experiments")
-    print("="*50)
+    print("=" * 50)
     
     # Test problems
     problem_ids = {
@@ -225,7 +214,6 @@ def run_experiments():
     }
     
     pop_sizes = [10, 20, 50]
-    
     results = {}
     
     for problem_type, ids in problem_ids.items():
@@ -238,32 +226,50 @@ def run_experiments():
             
             for pop_size in pop_sizes:
                 results[problem_type][problem_id][pop_size] = []
-            
+                
                 for i in range(30):  # Run 30 times
                     print(f"    Run {i+1}/30 for Pop {pop_size}...")
-                
-                    # Reset the seeds for each run to ensure the same random sequence for each
-                    random.seed(42)
-                    np.random.seed(42)
-                
+                    
+                    # Use slightly different seeds per run
+                    random.seed(i + 42)
+                    np.random.seed(i + 42)
+                    
                     pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
                         problem_id=problem_id,
-                        pop_size=pop_size
+                        pop_size=pop_size,
+                        run_index=i  # unique logger name per run
                     )
-                
+                    
                     best_f = max(obj[0] for obj in objs)
                     pareto_size = len(pareto_front)
-                
-                    # Collect results for this run
+                    
                     results[problem_type][problem_id][pop_size].append({
                         'best_f': best_f,
                         'pareto_size': pareto_size
                     })
-                
+                    
                     print(f"    Run {i+1}/30: Best f={best_f:.1f}, Pareto size={pareto_size}")
-
+    
+    # ---------------------------------------------------
+    # 🧾 AUTOMATIC CSV EXPORT SECTION
+    # ---------------------------------------------------
+    print("\nExporting all IOH logs to CSV...")
+    
+    ioh_data_path = "data/MultiEA_Exercise3"
+    csv_output_path = "data/MultiEA_Exercise3_csv"
+    os.makedirs(csv_output_path, exist_ok=True)
+    
+    analyzer.IOHAnalyzer(
+        root=ioh_data_path,
+        output_directory=csv_output_path,
+        convert_to_csv=True
+    )
+    
+    print(f"\n✅ CSV files saved to: {os.path.abspath(csv_output_path)}")
+    print("You can now open them in IOHAnalyzer or any spreadsheet tool.")
     
     return results
+
 
 if __name__ == "__main__":
     print("Multi-Objective EA for Exercise 3")
