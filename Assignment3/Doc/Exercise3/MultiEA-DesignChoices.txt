@@ -1,0 +1,66 @@
+Utilising the allowance of generative AI, an AI was prompted to compare and recommend a population-based 
+multi-objective evolutionary algorithm. To do this two different AIs were prompted to create an algorithm based 
+upon the Exercise3 specifications. 
+
+After testing responses and checking rationale from the AIs the code and algorithm produced by Claudes's Opus 4.1
+model performed best and was utilised for plotting in the assignment.
+
+Algorithm Design Rationale as copied from Claude Response:
+Created a Multi-Objective Evolutionary Algorithm that handles the constraint naturally
+by using two objectives: maximize f(S) and minimize |S|
+
+Tournament Selection (Size 3):
+Balances selection pressure and diversity
+Simple to implement
+Works well with Pareto dominance
+
+
+Uniform Crossover (90% rate):
+High rate promotes exploitation of good building blocks
+Each bit has equal chance from each parent
+No bias toward specific cardinalities
+
+
+Bit-flip Mutation (1/n rate):
+Standard rate for binary representations
+Provides fine-grained exploration
+Maintains genetic diversity
+
+
+Environmental Selection:
+Non-dominated sorting identifies Pareto fronts
+Selects entire fronts when possible
+Uses diversity (cardinality spread) when a front doesn't fit
+Ensures best solutions survive
+
+
+Population Size 20:
+Size 10: Too small, limited diversity
+Size 20: OPTIMAL - balances diversity and convergence
+Size 50: Too large for 10,000 evaluations
+
+
+Key Advantages of Our Approach:
+Simplicity: No constraint handling code needed
+Robustness: Works on all problem instances
+Information: Provides full Pareto front
+Efficiency: Natural selection pressure toward good solutions
+
+
+Utilising the models ability to perform deep thinking and evaluate code it has produced it provided the following 
+information regarding the abilities of its algorithm.
+
+Key Points:
+-----------
+- Tested population sizes: 10, 20, 50 (as required)
+- Population size 20 works best
+- Multi-objective approach doesn't need constraint handling
+- Provides Pareto front showing trade-offs
+- Works on all MaxCoverage and MaxInfluence instances
+
+
+Results:
+--------
+The multi-objective EA performs competitively with single-objective EA
+but provides additional information (Pareto front) and doesn't need
+repair mechanisms for constraint handling.
