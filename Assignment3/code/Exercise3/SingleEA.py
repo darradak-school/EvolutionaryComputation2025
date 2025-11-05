@@ -1,214 +1,186 @@
-import os
-import time
-import json
 import random
 import numpy as np
-from ioh import get_problem, ProblemClass, logger
+from ioh import get_problem, ProblemClass
 
-# ---------------- utility IO helpers ----------------
 
-def ensure_dir(path):
-    os.makedirs(path, exist_ok=True)
-    return os.path.abspath(path)
-
-def save_best_so_far(run_folder, best_so_far):
-    np.save(os.path.join(run_folder, "best_so_far.npy"), np.array(best_so_far, dtype=float))
-
-def save_metadata(run_folder, meta):
-    with open(os.path.join(run_folder, "metadata.json"), "w") as fh:
-        json.dump(meta, fh, indent=2)
-
-# ---------------- EA components (kept similar to your original) ----------------
-
-def initialize_population(pop_size, dimension, budget):
+def initialize_population(pop_size, dimension):
+    """Initialize population with random binary solutions."""
     population = []
     for _ in range(pop_size):
+        # Random cardinality between 0 and dimension
+        num_ones = random.randint(0, dimension)
         individual = np.zeros(dimension, dtype=int)
-        ones = random.sample(range(dimension), budget)
-        individual[ones] = 1
+        if num_ones > 0:
+            indices = random.sample(range(dimension), num_ones)
+            individual[indices] = 1
         population.append(individual)
     return population
 
-def mutate(individual):
-    offspring = individual.copy()
-    idx = random.randint(0, len(individual) - 1)
-    offspring[idx] = 1 - offspring[idx]
-    return offspring
 
-def repair(individual, budget):
-    """Ensure exactly 'budget' ones in the solution."""
-    ones = np.where(individual == 1)[0]
-    zeros = np.where(individual == 0)[0]
-    if len(ones) > budget:
-        to_flip = random.sample(list(ones), len(ones) - budget)
-        individual[to_flip] = 0
-    elif len(ones) < budget:
-        to_flip = random.sample(list(zeros), budget - len(ones))
-        individual[to_flip] = 1
-    return individual
+def mutate(individual, mutation_rate):
+    """Bit-flip mutation with rate 1/n."""
+    mutated = individual.copy()
+    for i in range(len(individual)):
+        if random.random() < mutation_rate:
+            mutated[i] = 1 - mutated[i]
+    return mutated
 
-def hamming_distance(a, b):
-    return int(np.sum(a != b))
 
-def select_diverse(population, fitnesses, mu):
-    # Greedy Hamming diversity selection starting from best by fitness
-    if not population:
-        return []
-    # Ensure fitness alignment
-    idx_sorted = sorted(range(len(population)), key=lambda i: fitnesses[i], reverse=True)
+def select(population, fitnesses, tournament_size=3):
+    """Tournament selection."""
+    indices = random.sample(
+        range(len(population)), min(tournament_size, len(population))
+    )
+    best_idx = indices[0]
+    for idx in indices[1:]:
+        if fitnesses[idx] > fitnesses[best_idx]:
+            best_idx = idx
+    return population[best_idx].copy()
+
+
+def crossover(parent1, parent2, crossover_rate=0.9):
+    """Uniform crossover."""
+    if random.random() > crossover_rate:
+        return parent1.copy()
+
+    child = np.zeros_like(parent1)
+    for i in range(len(parent1)):
+        child[i] = parent1[i] if random.random() < 0.5 else parent2[i]
+    return child
+
+
+def diverse(population, fitnesses, pop_size):
+    """
+    Diversity-aware selection using Hamming distance.
+    Greedily selects diverse solutions starting from best fitness.
+    """
+    if len(population) <= pop_size:
+        return population.copy()
+
+    # Sort by fitness
+    idx_sorted = sorted(
+        range(len(population)), key=lambda i: fitnesses[i], reverse=True
+    )
+
     selected = [population[idx_sorted[0]]]
-    selected_idx = {idx_sorted[0]}
-    while len(selected) < mu:
+    selected_indices = {idx_sorted[0]}
+
+    while len(selected) < pop_size:
         best_candidate = None
         best_score = -1
+
         for idx in idx_sorted:
-            if idx in selected_idx:
+            if idx in selected_indices:
                 continue
-            dist = min(hamming_distance(population[idx], s) for s in selected)
-            if dist > best_score:
-                best_score = dist
+
+            # Calculate minimum Hamming distance to already selected
+            min_dist = min(np.sum(population[idx] != s) for s in selected)
+
+            if min_dist > best_score:
+                best_score = min_dist
                 best_candidate = idx
+
         if best_candidate is None:
             break
+
         selected.append(population[best_candidate])
-        selected_idx.add(best_candidate)
+        selected_indices.add(best_candidate)
+
     return selected
 
-# ---------------- Single-objective EA with logging ----------------
 
-def single_objective_ea(problem_id=2100, pop_size=20, budget=10,
-                        run_index=0, problem_type="MaxCoverage",
-                        max_evals=10000, run_folder_root="data"):
+def single(problem, pop_size, max_evals=10000):
     """
-    Population-based single-objective EA with (mu+lambda) style and Hamming diversity.
-    Logs IOH output and saves best_so_far and metadata under:
-      data/SingleEA_Exercise3/<problem_type>/f<problem_id>/pop<pop_size>/run<run_index+1>
+    Single-objective EA for submodular optimization with uniform constraint.
+
+    Args:
+        problem: IOH problem instance (logger should be attached externally)
+        pop_size: Population size
+        max_evals: Maximum evaluations (10000)
+
+    Returns:
+        best_fitness, best_individual
     """
+    # Setup
+    n = problem.meta_data.n_variables
+    mutation_rate = 1.0 / n
 
-    # Prepare run folder and IOH analyzer
-    run_folder = os.path.join(
-        run_folder_root,
-        "SingleEA_Exercise3",
-        problem_type,
-        f"f{problem_id}",
-        f"pop{pop_size}",
-        f"run{run_index+1}"
-    )
-    run_folder = ensure_dir(run_folder)
-    print("SingleEA run folder:", run_folder)
+    # Initialize population
+    population = initialize_population(pop_size, n)
+    fitnesses = [problem(ind) for ind in population]
 
-    algo_name = f"SingleEA_pop{pop_size}_run{run_index+1}"
-    analyzer = logger.Analyzer(root=logger.Path(run_folder), algorithm_name=algo_name, store_positions=True)
-
-    # Get problem and attach logger (problem(...) will be logged)
-    problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
-    problem.attach_logger(analyzer)
-
-    # Reproducible seeds per run
-    base_seed = 1000
-    seed = base_seed + run_index
-    random.seed(seed)
-    np.random.seed(seed)
-
-    # Initialization
-    dimension = problem.meta_data.n_variables
-    population = initialize_population(pop_size, dimension, budget)
-    fitnesses = [float(problem(ind)) for ind in population]  # IOH logs each evaluation
     evals = len(population)
+    best_fitness = max(fitnesses) if fitnesses else 0
+    best_individual = population[fitnesses.index(best_fitness)] if fitnesses else None
 
-    # best_so_far tracking (length grows with each evaluation)
-    best_so_far = []
-    current_best = max(fitnesses) if fitnesses else -float("inf")
-    for _ in range(evals):
-        best_so_far.append(current_best)
-
-    # Main loop: generate one offspring per parent (lambda = mu) and do mu+lambda selection
+    # Main EA loop
     while evals < max_evals:
         offspring = []
         offspring_fits = []
 
-        for parent in population:
+        # Generate offspring
+        for _ in range(pop_size):
             if evals >= max_evals:
                 break
-            child = mutate(parent)
-            child = repair(child, budget)
-            fit = float(problem(child))  # IOH logs evaluation
+
+            # Selection
+            parent1 = select(population, fitnesses)
+            parent2 = select(population, fitnesses)
+
+            # Crossover
+            child = crossover(parent1, parent2)
+
+            # Mutation
+            child = mutate(child, mutation_rate)
+
+            # Evaluate
+            fit = problem(child)
+
             offspring.append(child)
             offspring_fits.append(fit)
             evals += 1
-            # update best_so_far
-            current_best = max(current_best, fit)
-            best_so_far.append(current_best)
 
-        # Combine parents and offspring and select next generation
-        combined = population + offspring
+            # Update best
+            if fit > best_fitness:
+                best_fitness = fit
+                best_individual = child.copy()
+
+        # Combine parents and offspring
+        combined_pop = population + offspring
         combined_fits = fitnesses + offspring_fits
 
-        # Sort combined by fitness descending and produce aligned lists
-        idx_sorted = sorted(range(len(combined)), key=lambda i: combined_fits[i], reverse=True)
-        sorted_pop = [combined[i] for i in idx_sorted]
-        sorted_fits = [combined_fits[i] for i in idx_sorted]
+        # Diversity-aware selection
+        population = diverse(combined_pop, combined_fits, pop_size)
+        # Recalculate fitnesses for selected population
+        fitnesses = []
+        for ind in population:
+            # Find matching fitness from combined
+            found = False
+            for j, combined_ind in enumerate(combined_pop):
+                if np.array_equal(ind, combined_ind):
+                    fitnesses.append(combined_fits[j])
+                    found = True
+                    break
+            if not found:
+                # If not found, evaluate
+                fit = problem(ind)
+                fitnesses.append(fit)
 
-        # Diversity-aware selection (Hamming-based)
-        population = select_diverse(sorted_pop, sorted_fits, pop_size)
+    return best_fitness, best_individual
 
-        # Align fitnesses for new population (map from sorted lists)
-        fit_map = {tuple(sorted_pop[i].tolist()): sorted_fits[i] for i in range(len(sorted_pop))}
-        fitnesses = [fit_map.get(tuple(ind.tolist()), float(problem(ind))) for ind in population]
-
-    # Detach logger and save results
-    problem.detach_logger()
-
-    save_best_so_far(run_folder, best_so_far)
-    metadata = {
-        "algorithm": "SingleEA",
-        "problem_id": problem_id,
-        "problem_type": problem_type,
-        "pop_size": pop_size,
-        "budget": budget,
-        "max_evals": max_evals,
-        "run_index": run_index,
-        "seed": seed,
-        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
-    }
-    save_metadata(run_folder, metadata)
-
-    return population, fitnesses, best_so_far, run_folder
-
-# ---------------- quick demo ----------------
 
 if __name__ == "__main__":
-    # quick-test driver across both problem sets
-    problem_ids = {
-        "MaxCoverage": [2100, 2101, 2102, 2103],
-        "MaxInfluence": [2200, 2201, 2202, 2203]
-    }
+    # Test run
+    random.seed(42)
+    np.random.seed(42)
 
-    runs = 1          # set to 30 for full experiment
-    max_evals = 1000  # set to 10000 for full experiment
-    budget = 10
-    pop_sizes = [10, 20, 50]
+    from ioh import get_problem, ProblemClass
+    problem = get_problem(2100, problem_class=ProblemClass.GRAPH)
+    
+    best_fitness, best_individual = single(
+        problem=problem,
+        pop_size=20,
+        max_evals=10000,
+    )
 
-    for problem_type, ids in problem_ids.items():
-        for pid in ids:
-            for run_index in range(runs):
-                for pop_size in pop_sizes:
-                    print(f"\n=== Running SingleEA: type={problem_type}, id={pid}, pop={pop_size}, run={run_index+1} ===")
-                    population, fitnesses, best_so_far, folder = single_objective_ea(
-                        problem_id=pid,
-                        pop_size=pop_size,
-                        budget=budget,
-                        run_index=run_index,
-                        problem_type=problem_type,
-                        max_evals=max_evals,
-                        run_folder_root="data"
-                    )
-                    print(f"Finished: {problem_type} f{pid} pop{pop_size} run{run_index+1}")
-                    print(f"  Run folder: {folder}")
-                    # quick check of files created in run folder
-                    try:
-                        files = os.listdir(folder)
-                        print(f"  Files in run folder: {files}")
-                    except Exception as e:
-                        print(f"  Could not list run folder: {e}")
-                    print(f"  Best at end: {best_so_far[-1] if best_so_far else None}")
+    print(f"Final best fitness: {best_fitness:.2f}")

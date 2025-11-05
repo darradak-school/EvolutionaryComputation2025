@@ -8,129 +8,51 @@
 # Simple non-dominated sorting for selection
 # Population sizes: 10, 20, 50
 
-import os
 import random
 import numpy as np
-from ioh import get_problem, ProblemClass, logger
+from ioh import get_problem, ProblemClass
 
-def multi_objective_ea(problem_id=2100, pop_size=20, run_index=0, problem_type="Unknown"):
-    """
-    Multi-objective EA using f(S) and -|S| as objectives.
-    Structured IOH logging: data/MultiEA_Exercise3/<problem_type>/f<id>/pop<pop_size>/run<run_index>
-    """
-    algo_name = f"MultiEA_pop{pop_size}_run{run_index+1}"
 
-    # Build hierarchical folder path
-    run_folder = os.path.join(
-        "data",
-        "MultiEA_Exercise3",
-        problem_type,
-        f"f{problem_id}",
-        f"pop{pop_size}"
-    )
-    os.makedirs(run_folder, exist_ok=True)
-
-    # Create logger
-    l = logger.Analyzer(
-        root=logger.Path(run_folder),
-        algorithm_name=algo_name,
-        store_positions=True
-    )
-
-    # Get problem and attach logger
-    problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
-    problem.attach_logger(l)
-
-    # Setup
-    n = problem.meta_data.n_variables
-    max_evals = 10000
-    mutation_rate = 1.0 / n
-
-    # Initialize population with random cardinalities
+def initialize(pop_size, dimension):
+    """Initialize population with random binary solutions."""
     population = []
-    objectives = []
-    for i in range(pop_size):
-        num_ones = random.randint(0, n)
-        individual = np.zeros(n, dtype=int)
+    for _ in range(pop_size):
+        # Random cardinality between 0 and dimension
+        num_ones = random.randint(0, dimension)
+        individual = np.zeros(dimension, dtype=int)
         if num_ones > 0:
-            indices = random.sample(range(n), num_ones)
-            for idx in indices:
-                individual[idx] = 1
+            indices = random.sample(range(dimension), num_ones)
+            individual[indices] = 1
         population.append(individual)
-        f_val = problem(individual)
-        if f_val < 0:  # Handle constraint violation
-            f_val = 0
-        objectives.append((f_val, -np.sum(individual)))
+    return population
 
-    evals = pop_size
-    best_f_history = []
 
-    # Main loop
-    while evals < max_evals:
-        offspring = []
-        offspring_objs = []
-
-        for _ in range(pop_size):
-            parent1 = tournament_select(population, objectives)
-            parent2 = tournament_select(population, objectives)
-
-            # Crossover
-            if random.random() < 0.9:
-                child = crossover(parent1, parent2)
-            else:
-                child = parent1.copy()
-
-            # Mutation
-            child = mutate(child, mutation_rate)
-
-            # Evaluate
-            f_val = problem(child)
-            if f_val < 0:
-                f_val = 0
-
-            offspring.append(child)
-            offspring_objs.append((f_val, -np.sum(child)))
-            evals += 1
-            if evals >= max_evals:
-                break
-
-        # Combine parent and offspring
-        combined_pop = population + offspring
-        combined_objs = objectives + offspring_objs
-
-        # Select next generation
-        population, objectives = select_next_generation(combined_pop, combined_objs, pop_size)
-
-        # Track best f(S)
-        best_f = max(obj[0] for obj in objectives)
-        best_f_history.append(best_f)
-
-    # Get final Pareto front
-    pareto_front = []
-    pareto_objs = []
-    for i in range(len(population)):
-        is_dominated = False
-        for j in range(len(population)):
-            if i != j and dominates(objectives[j], objectives[i]):
-                is_dominated = True
-                break
-        if not is_dominated:
-            pareto_front.append(population[i])
-            pareto_objs.append(objectives[i])
-
-    problem.detach_logger()
-
-    return population, objectives, best_f_history, pareto_front, pareto_objs
+def mutate(individual, mutation_rate):
+    """Bit-flip mutation with rate 1/n."""
+    mutated = individual.copy()
+    for i in range(len(individual)):
+        if random.random() < mutation_rate:
+            mutated[i] = 1 - mutated[i]
+    return mutated
 
 
 def dominates(obj1, obj2):
-    """Check if obj1 dominates obj2."""
-    return obj1[0] >= obj2[0] and obj1[1] >= obj2[1] and (obj1[0] > obj2[0] or obj1[1] > obj2[1])
+    """
+    Check if obj1 dominates obj2.
+    obj = (f(S), -|S|) where we maximize f(S) and maximize -|S| (minimize |S|)
+    """
+    return (
+        obj1[0] >= obj2[0]
+        and obj1[1] >= obj2[1]
+        and (obj1[0] > obj2[0] or obj1[1] > obj2[1])
+    )
 
 
-def tournament_select(population, objectives, tournament_size=3):
-    """Simple tournament selection."""
-    indices = random.sample(range(len(population)), min(tournament_size, len(population)))
+def select(population, objectives, tournament_size=3):
+    """Tournament selection for multi-objective."""
+    indices = random.sample(
+        range(len(population)), min(tournament_size, len(population))
+    )
     best_idx = indices[0]
     for idx in indices[1:]:
         if dominates(objectives[idx], objectives[best_idx]):
@@ -138,125 +60,167 @@ def tournament_select(population, objectives, tournament_size=3):
     return population[best_idx].copy()
 
 
-def crossover(parent1, parent2):
+def crossover(parent1, parent2, crossover_rate=0.9):
     """Uniform crossover."""
+    if random.random() > crossover_rate:
+        return parent1.copy()
+
     child = np.zeros_like(parent1)
     for i in range(len(parent1)):
         child[i] = parent1[i] if random.random() < 0.5 else parent2[i]
     return child
 
 
-def mutate(individual, rate):
-    """Bit flip mutation."""
-    child = individual.copy()
-    for i in range(len(individual)):
-        if random.random() < rate:
-            child[i] = 1 - child[i]
-    return child
+def sorting(population, objectives):
+    """
+    Non-dominated sorting for diversity maintenance.
+    Returns fronts (list of lists of indices).
+    """
+    fronts = []
+    remaining = set(range(len(population)))
 
-
-def select_next_generation(population, objectives, pop_size):
-    """Select next generation based on non-dominated sorting."""
-    selected_pop = []
-    selected_objs = []
-    remaining_indices = list(range(len(population)))
-
-    while len(selected_pop) < pop_size and remaining_indices:
-        non_dom_indices = []
-        for i in remaining_indices:
+    while remaining:
+        front = []
+        for i in remaining:
             is_dominated = False
-            for j in remaining_indices:
+            for j in remaining:
                 if i != j and dominates(objectives[j], objectives[i]):
                     is_dominated = True
                     break
             if not is_dominated:
-                non_dom_indices.append(i)
+                front.append(i)
 
-        if non_dom_indices:
-            if len(selected_pop) + len(non_dom_indices) > pop_size:
-                sorted_indices = sorted(non_dom_indices, key=lambda i: objectives[i][1])
-                step = max(1, len(sorted_indices) // (pop_size - len(selected_pop)))
-                for i in range(0, len(sorted_indices), step):
-                    if len(selected_pop) < pop_size:
-                        idx = sorted_indices[i]
-                        selected_pop.append(population[idx])
-                        selected_objs.append(objectives[idx])
-            else:
-                for idx in non_dom_indices:
-                    selected_pop.append(population[idx])
-                    selected_objs.append(objectives[idx])
-            for idx in non_dom_indices:
-                if idx in remaining_indices:
-                    remaining_indices.remove(idx)
-        else:
+        if not front:
             break
 
-    while len(selected_pop) < pop_size and remaining_indices:
-        idx = random.choice(remaining_indices)
+        fronts.append(front)
+        remaining -= set(front)
+
+    return fronts
+
+
+def generation(population, objectives, pop_size):
+    """
+    Select next generation using non-dominated sorting.
+    Maintains diversity by selecting from multiple fronts.
+    """
+    fronts = sorting(population, objectives)
+
+    selected_pop = []
+    selected_objs = []
+
+    # Fill from fronts
+    for front in fronts:
+        if len(selected_pop) + len(front) <= pop_size:
+            # Add entire front
+            for idx in front:
+                selected_pop.append(population[idx])
+                selected_objs.append(objectives[idx])
+        else:
+            # Fill remaining slots from this front
+            remaining = pop_size - len(selected_pop)
+            # Sort by second objective (cardinality) for diversity
+            front_sorted = sorted(front, key=lambda i: objectives[i][1])
+            for idx in front_sorted[:remaining]:
+                selected_pop.append(population[idx])
+                selected_objs.append(objectives[idx])
+            break
+
+        if len(selected_pop) >= pop_size:
+            break
+
+    # Fill remaining slots randomly if needed
+    while len(selected_pop) < pop_size:
+        idx = random.choice(range(len(population)))
         selected_pop.append(population[idx])
         selected_objs.append(objectives[idx])
-        remaining_indices.remove(idx)
 
-    return selected_pop, selected_objs
+    return selected_pop[:pop_size], selected_objs[:pop_size]
 
 
-def run_experiments():
-    """Run the experiments once per instance (test run)."""
-    print("Running Multi-Objective EA Experiments")
-    print("="*50)
+def multi(problem, pop_size, max_evals=10000):
+    """
+    Multi-objective EA for submodular optimization.
+    Objectives: maximize f(S) and minimize |S|
 
-    problem_ids = {
-        'MaxCoverage': [2100, 2101, 2102, 2103],
-        'MaxInfluence': [2200, 2201, 2202, 2203]
-    }
+    Args:
+        problem: IOH problem instance (logger should be attached externally)
+        pop_size: Population size
+        max_evals: Maximum evaluations (10000)
 
-    pop_sizes = [10, 20, 50]
-    results = {}
+    Returns:
+        best_f, best_individual
+    """
 
-    for problem_type, ids in problem_ids.items():
-        print(f"\nTesting {problem_type}:")
-        results[problem_type] = {}
-        for problem_id in ids:
-            print(f"\n  Problem {problem_id}:")
-            results[problem_type][problem_id] = {}
-            for pop_size in pop_sizes:
-                print(f"    Pop {pop_size} (1 run)...")
-                random.seed(42)
-                np.random.seed(42)
-                pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
-                    problem_id=problem_id,
-                    pop_size=pop_size,
-                    run_index=0,
-                    problem_type=problem_type
-                )
-                best_f = max(obj[0] for obj in objs)
-                pareto_size = len(pareto_front)
-                results[problem_type][problem_id][pop_size] = {
-                    'best_f': best_f,
-                    'pareto_size': pareto_size
-                }
-                print(f"      Best f={best_f:.1f}, Pareto size={pareto_size}")
-    return results
+    # Setup
+    n = problem.meta_data.n_variables
+    mutation_rate = 1.0 / n
+
+    # Initialize population
+    population = initialize(pop_size, n)
+    objectives = []
+    for ind in population:
+        f_val = problem(ind)
+        # Objectives: (f(S), -|S|) - maximize both
+        cardinality = -np.sum(ind)  # Negative for minimization
+        objectives.append((f_val, cardinality))
+
+    evals = len(population)
+
+    # Main EA loop
+    while evals < max_evals:
+        offspring = []
+        offspring_objs = []
+
+        # Generate offspring
+        for _ in range(pop_size):
+            if evals >= max_evals:
+                break
+
+            # Selection
+            parent1 = select(population, objectives)
+            parent2 = select(population, objectives)
+
+            # Crossover
+            child = crossover(parent1, parent2)
+
+            # Mutation
+            child = mutate(child, mutation_rate)
+
+            # Evaluate
+            f_val = problem(child)
+            cardinality = -np.sum(child)  # Negative for minimization
+
+            offspring.append(child)
+            offspring_objs.append((f_val, cardinality))
+            evals += 1
+
+        # Combine parents and offspring
+        combined_pop = population + offspring
+        combined_objs = objectives + offspring_objs
+
+        # Select next generation using non-dominated sorting
+        population, objectives = generation(combined_pop, combined_objs, pop_size)
+
+    # Extract best f(S) from final population
+    best_f = max(obj[0] for obj in objectives) if objectives else 0
+    best_idx = max(range(len(objectives)), key=lambda i: objectives[i][0]) if objectives else None
+    best_individual = population[best_idx] if best_idx is not None else None
+
+    return best_f, best_individual
 
 
 if __name__ == "__main__":
-    print("Multi-Objective EA for Exercise 3")
-    print("-" * 50)
-
-    # Quick test on one problem
+    # Test run
     random.seed(42)
     np.random.seed(42)
-    population, objectives, history, pareto_front, pareto_objs = multi_objective_ea(
-        problem_id=2100,
+
+    problem = get_problem(2100, problem_class=ProblemClass.GRAPH)
+    
+    best_f, best_individual = multi(
+        problem=problem,
         pop_size=20,
-        run_index=0,
-        problem_type="MaxCoverage"
+        max_evals=10000,
     )
 
-    print(f"\nResults:")
-    print(f"  Final population size: {len(population)}")
-    print(f"  Best f(S): {max(obj[0] for obj in objectives):.1f}")
-    print(f"  Pareto front size: {len(pareto_front)}")
-
-    print("\nRunning full experiments (1 run each)...")
-    results = run_experiments()
+    print(f"Best f(S): {best_f:.2f}")

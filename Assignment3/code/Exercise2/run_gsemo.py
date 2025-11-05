@@ -16,7 +16,7 @@ def main():
 
     # Fixed budget of 10,000 fitness evaluations
     budget = 10000
-    runs = 5
+    runs = 30
 
     # Set up logging
     gsemo_logger = logger.Analyzer(
