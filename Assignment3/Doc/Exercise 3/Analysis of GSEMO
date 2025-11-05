@@ -1,0 +1,10 @@
+The X-axis is the cost of GSEMO, as the number of selected elements in each instance, and the Y-axis shows the fitness of GSEMO in each instance. Unfortunately, we have a limitation of time for running, we can only compare single cost-fitness points rather than plotting the full parato front, but the trade-off plot allows us to visually identify instance difficulty and overall performance characteristics of GSEMO.
+
+Across all instances, GSEMO successfully finds solutions that reveal a clear
+cost–benefit relationship: MaxCoverage instances achieve significantly higher
+objective values under the same cost compared with MaxInfluence instances,
+indicating a higher return per selected element.
+
+For two types of instances, the MaxCoverage is better than MaxInfluence, that means GSEMO is better in covered submodular optimization. 
+In the instances of MaxCoverage 2100-2103, the cost is all in the 10, and the related fitness is on the 420 - 680，that means in Maxcoverage, GSEMO tend to get better showing to same cost. 
+In the MaxInfluence, the cost changes is rapid, between 3 -11, but the fitness is all smaller than 300 though the cost becomes greater one in different instance, that means GSEMO is not adaptive to influenced submodular optimization. 
