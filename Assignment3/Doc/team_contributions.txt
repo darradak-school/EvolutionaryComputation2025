@@ -3,6 +3,8 @@ Q1: Murad
 Q2: Jerry, Ian
 
 Q3: Tyler, Darcy
+MultiEA files completed by Darcy
+SingleEA files completed by Tyler
 
 Q4: **Wait for Q2,3 completion** Carol
 
