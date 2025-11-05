@@ -1,0 +1,19 @@
+pseudocode: 
+
+choose x ∈ {0, 1}n uniformly at random
+2 determine g(x)
+3 P ← {x}
+    4 repeat
+    5 choose x ∈ P uniformly at random
+    6 create x
+    ′ by flipping each bit xi of x with probability 1/n
+    7 determine g(x
+    ′
+    )
+    8 if x
+    ′   is not strictly dominated by any other search point in P then
+    9 include x
+    ′   into P
+    10 delete all other solutions z ∈ P with g(z) ≤ g(x
+    ′
+    ) from P
