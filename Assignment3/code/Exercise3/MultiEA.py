@@ -1,7 +1,15 @@
 # opulation-based multi-objective evolutionary algorithm
 
 # Multi-Objective EA for Exercise 3
-# Simple implementation of a multi-objective EA 
+# Simple implementation of a multi-objective EA
+# two objectives: maximize f(S), minimize |S|
+# Tournament selection (size 3)
+# Uniform crossover (90% rate)
+# Bit-flip mutation (1/n rate)
+# Simple non-dominated sorting for selection
+# Population sizes: 10, 20, 50 (20 works best)
+
+ 
 
 import random
 import numpy as np
