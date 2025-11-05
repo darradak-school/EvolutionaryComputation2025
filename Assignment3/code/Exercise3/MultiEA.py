@@ -13,13 +13,26 @@
 
 import random
 import numpy as np
-from ioh import get_problem, ProblemClass
+from ioh import get_problem, ProblemClass, logger
 
 def multi_objective_ea(problem_id=2100, pop_size=20):
     """
     Multi-objective EA using f(S) and -|S| as objectives.
     Much simpler than the overcomplicated version.
     """
+    # Create logger
+    l = logger.Analyzer(
+        root="data",  # Store data in 'data' folder
+        folder_name="MultiEA_Exercise3",
+        algorithm_name=f"MultiEA_pop{pop_size}",
+        store_positions=True
+    )
+    
+    # Get problem and attach logger
+    problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
+    problem.attach_logger(l)
+
+
     # Setup
     problem = get_problem(problem_id, problem_class=ProblemClass.GRAPH)
     n = problem.meta_data.n_variables
@@ -224,24 +237,31 @@ def run_experiments():
             results[problem_type][problem_id] = {}
             
             for pop_size in pop_sizes:
-                # Run once (should run 30 times for real experiment)
-                random.seed(42)
-                np.random.seed(42)
+                results[problem_type][problem_id][pop_size] = []
+            
+                for i in range(30):  # Run 30 times
+                    print(f"    Run {i+1}/30 for Pop {pop_size}...")
                 
-                pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
-                    problem_id=problem_id,
-                    pop_size=pop_size
-                )
+                    # Reset the seeds for each run to ensure the same random sequence for each
+                    random.seed(42)
+                    np.random.seed(42)
                 
-                best_f = max(obj[0] for obj in objs)
-                pareto_size = len(pareto_front)
+                    pop, objs, history, pareto_front, pareto_objs = multi_objective_ea(
+                        problem_id=problem_id,
+                        pop_size=pop_size
+                    )
                 
-                results[problem_type][problem_id][pop_size] = {
-                    'best_f': best_f,
-                    'pareto_size': pareto_size
-                }
+                    best_f = max(obj[0] for obj in objs)
+                    pareto_size = len(pareto_front)
                 
-                print(f"    Pop {pop_size}: Best f={best_f:.1f}, Pareto size={pareto_size}")
+                    # Collect results for this run
+                    results[problem_type][problem_id][pop_size].append({
+                        'best_f': best_f,
+                        'pareto_size': pareto_size
+                    })
+                
+                    print(f"    Run {i+1}/30: Best f={best_f:.1f}, Pareto size={pareto_size}")
+
     
     return results
 
