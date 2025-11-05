@@ -34,7 +34,7 @@ def multi_objective_ea(problem_id=2100, pop_size=20, run_index=0, problem_type="
     # Create logger
     l = logger.Analyzer(
         root=logger.Path(run_folder),
-        folder_name="",  # prevent IOH from auto-appending "-1"
+        folder_name="run",  
         algorithm_name=algo_name,
         store_positions=True
     )
@@ -119,6 +119,8 @@ def multi_objective_ea(problem_id=2100, pop_size=20, run_index=0, problem_type="
         if not is_dominated:
             pareto_front.append(population[i])
             pareto_objs.append(objectives[i])
+
+    problem.detach_logger()
 
     return population, objectives, best_f_history, pareto_front, pareto_objs
 
