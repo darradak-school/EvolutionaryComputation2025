@@ -1,21 +1,29 @@
 import random
 import numpy as np
+import ioh
+from ioh import logger
 from Multi_Objective_Fitness_Function import MultiObjectiveFitness
 
 class GSEMO:
-    def __init__(self, problem_id, dimension, budget=10000):
+    def __init__(self, problem_id, dimension, budget=10000, logger_obj=None):
         """
         Initialize GSEMO
         Args:
             problem_id: IOH problem ID (e.g., 2100)
             dimension: length of the solution (number of nodes)
             budget: budget for fitness evaluations
+            logger_obj: IOH logger object for data logging
             """
         self.fitness_func = MultiObjectiveFitness(problem_id)
         self.dimension = dimension
         self.budget = budget
         self.population = []
         self.evaluations = 0
+        self.logger = logger_obj
+        
+        # Attach logger if provided
+        if self.logger is not None:
+            self.fitness_func.attach_logger(self.logger)
 
     def initialize(self):
         """
@@ -115,6 +123,12 @@ class GSEMO:
 
         return self.population
     
+    def cleanup(self):
+        """Detach logger and reset problem"""
+        if self.logger is not None:
+            self.fitness_func.detach_logger()
+        self.fitness_func.reset()
+    
     def get_best_solution(self):
         """
         Returns the highest f1 solution (pure coverage/influence)
@@ -126,20 +140,38 @@ class GSEMO:
         return best_sol, best_obj
 
 if __name__ == "__main__":
-    # Create GSEMO instance
+    # Example: Run GSEMO with logging
+    problem_id = 2100
+    dimension = 450  # Should match the problem dimension
+    
+    # Create logger
+    gsemo_logger = logger.Analyzer(
+        root="data",
+        folder_name="gsemo_submodular",
+        algorithm_name="GSEMO",
+        algorithm_info="GSEMO for multi-objective submodular optimization",
+    )
+    
+    # Create GSEMO instance with logger
     gsemo = GSEMO(
-        problem_id=2100,
-        dimension=100,
-        budget=10000
+        problem_id=problem_id,
+        dimension=dimension,
+        budget=10000,
+        logger_obj=gsemo_logger
     )
 
     # Run GSEMO
     pareto_front = gsemo.run()
 
-    # show results
+    # Cleanup
+    gsemo.cleanup()
+    del gsemo_logger
+
+    # Show results
     print(f"Final Pareto front size: {len(pareto_front)}")
     best_sol, best_obj = gsemo.get_best_solution()
-    print(f"Best solution: f1={best_obj[0]}, f2={best_obj[1]}")
+    if best_obj:
+        print(f"Best solution: f1={best_obj[0]}, f2={best_obj[1]}")
 
     # Trade-off plot
     f1_values = [obj[0] for sol, obj in pareto_front]

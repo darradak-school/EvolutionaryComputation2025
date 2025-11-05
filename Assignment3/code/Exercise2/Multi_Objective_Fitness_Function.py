@@ -8,6 +8,18 @@ class MultiObjectiveFitness:
         1st objective: submodular function value (maximize)
         """
         self.problem = ioh.get_problem(problem_id, problem_class=ioh.ProblemClass.GRAPH)
+    
+    def attach_logger(self, logger):
+        """Attach IOH logger to the underlying problem"""
+        self.problem.attach_logger(logger)
+    
+    def detach_logger(self):
+        """Detach IOH logger from the underlying problem"""
+        self.problem.detach_logger()
+    
+    def reset(self):
+        """Reset the underlying problem"""
+        self.problem.reset()
     def evaluate(self, solution):
         """
         Evaluate One Solution
