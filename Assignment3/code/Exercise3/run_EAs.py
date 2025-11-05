@@ -19,7 +19,7 @@ def run_single():
     }
 
     pop_sizes = [10, 20, 50]
-    runs = 3
+    runs = 30
     max_evals = 10000
 
     # Set up logging for each population size
@@ -84,7 +84,7 @@ def run_multi():
     }
 
     pop_sizes = [10, 20, 50]
-    runs = 3
+    runs = 30
     max_evals = 10000
 
     # Set up logging for each population size
